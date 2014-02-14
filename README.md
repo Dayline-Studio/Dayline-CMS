@@ -1,4 +1,0 @@
-CMS-Shop
-========
-
-Shop-CMS
