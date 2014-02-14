@@ -16,12 +16,12 @@
 		return $file_content;
 	}
 	
-	function getFile($path,$file)
-	{
-		$filePath = $path."/".$file.".html";
-		//if (file_exists ($filePath)) return $filePath;
-		return $filePath;
+	function db ($input, $fetch, $rows)
+	{	
+			//Moe INPUT HIER
 	}
+	
+
 	/*
 	//-> MySQL-Datenbankangaben
 	$prefix = $sql_prefix;                      
