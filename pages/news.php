@@ -37,5 +37,4 @@ else
 	//content without parms or content with forwarding href
 }
 */
-?><br/>
-Debug successful Finished
+?>

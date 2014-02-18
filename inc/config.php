@@ -22,11 +22,10 @@
 	$STEAM_API_KEY = "90245BB467E201DE99CF36C6FD1ED9FA";
 	 
 //Sprachfiles und funktionen einsetzten die benötigt werden	
-	includeFile($file['style_index']);
 	includeFile($file['mysql']);
 	includeFile($file['functions']);
 	includeFile($file['init']);
-	init("{test2}test{ztetsa}");
+	init($file['style_index']);
 	//echo show($file['style'], init());
 	//$qry = db("SELECT * FROM ".$db['settings']."");
 	//$settings = _fetch($qry);	
@@ -43,7 +42,21 @@
 			error("File not found -".$file);
 			$r = false;
 		}
-		return r;
+		return $r;
+	}
+	function getFile($file)
+	{
+		$r = true;
+		if (file_exists ( $file )) 
+		{
+			return file_get_contents($file);
+		}
+		else 
+		{
+			error("File not found -".$file);
+			$r = false;
+		}
+		return $r;
 	}
 	
 	function error($this_error)

@@ -2,10 +2,8 @@
 
 
 	//Dateipfad und Tags[array] werden übergeben
-	function show($file, $tags)
+	function show($file_content, $tags)
 	{
-		//Datei wird ausgelesen
-		$file_content = file_get_contents($file);
 		//Tags werden gesplittet einzeln durchgeführt
 		foreach($tags as $name => $value)
 		  {

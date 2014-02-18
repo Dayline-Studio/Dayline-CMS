@@ -1,5 +1,0 @@
-<?
-  include "mysql.php";
-  
-  
-?>
