@@ -7,7 +7,7 @@ function init($content)
 	//Loading Plugin Folder
 	$plugins=opendir($path['plugins']);
 	
-	//Get Main the File for this Page (index.html)
+	//Get the Main File for this Page (index.html)
 	$output = getFile($content);
 	
 	//Loading the Plugins
