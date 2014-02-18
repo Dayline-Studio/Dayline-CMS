@@ -1,22 +1,40 @@
 <?
-
+$debug = "";
 function init($content)
 {
-	
-	//$content = $path['style_index'];
+	//Loading plugin modules
+	global $path;
+	$plugins=opendir($path['plugins']);
+	while ($plugin = readdir($plugins)) {
+	 //Loading File funktion
+	 if ($plugin != ".." && $plugin != ".") 
+	 {
+		debug("loading $plugin");
+	    includeFile($path['plugins'].$plugin);
+		$plugin = substr($plugin,0,-4);
+		debug("[".ucwords($plugin)."] - checked and loaded");
+     }
+	}
+	closedir($plugins);
+	echo debugOutput();
+}
 
-	//Funktionen aus Style auslesen:
-	preg_match_all('/\{(.+?)\}/',$content,$loading);
-	
-	//for ($i = 0;$i < sizeOf($loading); $i++)
-	//{
-	//	echo $loading[0][0];
-	//}
-	//print_r ($content);
-	echo $loading[0][0][0];
-	//Ausgabe
-	//echo errorDisplay();
-	//echo $content;
+function debugOutput()
+{
+	global $debug;
+	$output = "Log:<br>";
+	$output .= $debug;
+	$output .= "Errors:<br>";
+	if (errorDisplay() != "") $output .=  errorDisplay();
+	else $output .= "keine Errors :D";
+	$output .= "<hr>";
+	return $output;
+}
+
+function debug($add)
+{
+	global $debug;
+	$debug .= "[".gmdate("H:i:s", time())."] - ".$add."<br/>";
 }
 ?> 
   

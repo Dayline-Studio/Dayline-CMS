@@ -13,6 +13,7 @@
 	$path['style'] = "../style/".$style."/";
 	$file['style_index'] = $path['style']."index.html";
 	$path['images'] = $path['include']."images/"; 
+	$path['plugins'] = "../plugins/"; 
 	//$file['actions'] = "../pages/".$page."/index.php";
 	//$file['language'] = "../inc/language/".$language.".php";
 	$file['mysql'] = $path['include']."mysql.php";
@@ -27,7 +28,6 @@
 	includeFile($file['init']);
 	init("{test2}test{ztetsa}");
 	//echo show($file['style'], init());
-	
 	//$qry = db("SELECT * FROM ".$db['settings']."");
 	//$settings = _fetch($qry);	
 
@@ -49,7 +49,7 @@
 	function error($this_error)
 	{
 		global $error;
-		$error .= $this_error;
+		$error .= $this_error."<br>";
 	}
 	
 	function errorDisplay()	
