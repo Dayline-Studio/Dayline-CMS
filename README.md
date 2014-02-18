@@ -1,4 +1,5 @@
 CMS-Shop
 ========
 
-Shop-CMS
+TGI-1 GSL: Shop-CMS
+
