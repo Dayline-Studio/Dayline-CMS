@@ -4,6 +4,7 @@
 	//Dateipfad und Tags[array] werden übergeben
 	function show($file_content, $tags)
 	{
+		//$tags = array("test1" => "testetststs");
 		//Tags werden gesplittet einzeln durchgeführt
 		foreach($tags as $name => $value)
 		  {
@@ -16,7 +17,15 @@
 	
 	function db ($input, $fetch, $rows)
 	{	
+			//$input ='SELECT * FROM artikel';
 			//Moe INPUT HIER
+			//global mysql;
+			
+			//mysql_conncet ([$mysql['host'][$mysql['user']$mysql['password']]]);
+			
+			
+			
+			
 	}
 	
 

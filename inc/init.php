@@ -5,7 +5,7 @@ function init($content)
 	global $path;
 	
 	//Loading Plugin Folder
-	$plugins=opendir($path['plugins']);
+	$plugins = opendir($path['plugins']);
 	
 	//Get the Main File for this Page (index.html)
 	$output = getFile($content);
@@ -19,10 +19,10 @@ function init($content)
 			debug("loading $plugin");
 			//Import plugin function
 			includeFile($path['plugins'].$plugin);
-			//Remove .php
+			//Remove .php (-4 chars)
 			$plugin = substr($plugin,0,-4);
 			//Replace the Tag with the returning content from the plugin
-			$output = show($output, array( $plugin => $plugin()));
+			$output = show($output, array( $plugin => $plugin() ));
 			debug("[".ucwords($plugin)."] - checked and loaded");
 		}
 	}
@@ -40,8 +40,11 @@ function debugOutput()
 	$output = "Log:<br>";
 	$output .= $debug;
 	$output .= "Errors:<br>";
-	if (errorDisplay() != "") $output .=  errorDisplay();
-	else $output .= "Jawoll keine Errors!";
+	if (errorDisplay() != "") 
+	{
+		$output .=  '<font color="#ff0000">'.errorDisplay().'</font>';
+	}
+	else $output .= '<font color="#47ff00">keine Errors!</font>';
 	$output .= "<hr>Output:<hr>";
 	return $output;
 }

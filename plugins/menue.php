@@ -1,5 +1,6 @@
 <?
 function menue(){
-	return "MenueOutput";
+
+
+return "menue";
 }
-?>

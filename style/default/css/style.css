@@ -1,7 +1,32 @@
 body{
 
 }
+#wrapper{
+	width: 500px;
+	background: #F3E2A9
+}
+#right{
+	width: 40%;
+	float: right;
+	background: #01A9DB;
+}
 
+#menue{
+ width: 100%;
+
+}
+#content{
+	width: 60%;
+	background: #D7DF01;
+}
+#foot{
+	width: 100%;
+	background: #9A2EFE
+}
+#head{
+	width: 100%;
+	background: #DF7401
+}
 
 
 
@@ -13,13 +38,14 @@ width: 100%;
 margin-bottom: 2px
 }
 
+
 #ucp {
 
 
 }
 
 .box_r {
-width: 300px;
+width: 100%;
 background: #FFD6E1;
 padding: 10px;
 margin-bottom: 10px

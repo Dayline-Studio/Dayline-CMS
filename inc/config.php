@@ -11,6 +11,7 @@
 	$error = "";
 	$path['include'] = "../inc/";
 	$path['style'] = "../style/".$style."/";
+	$path['css'] = $path['style']."/css/";
 	$file['style_index'] = $path['style']."index.html";
 	$path['images'] = $path['include']."images/"; 
 	$path['plugins'] = "../plugins/"; 
@@ -19,8 +20,7 @@
 	$file['mysql'] = $path['include']."mysql.php";
 	$file['functions'] = $path['include']."functions.php";
 	$file['init'] = $path['include']."init.php";
-	$STEAM_API_KEY = "90245BB467E201DE99CF36C6FD1ED9FA";
-	 
+	
 //Sprachfiles und funktionen einsetzten die benötigt werden	
 	includeFile($file['mysql']);
 	includeFile($file['functions']);
