@@ -15,6 +15,7 @@
 	$file['style_index'] = $path['style']."index.html";
 	$path['images'] = $path['include']."images/"; 
 	$path['plugins'] = "../plugins/"; 
+	$path['panels'] = "../panels/"; 
 	//$file['actions'] = "../pages/".$page."/index.php";
 	//$file['language'] = "../inc/language/".$language.".php";
 	$file['mysql'] = $path['include']."mysql.php";
@@ -25,7 +26,9 @@
 	includeFile($file['mysql']);
 	includeFile($file['functions']);
 	includeFile($file['init']);
-	init($file['style_index']);
+	init();
+	
+	echo "test";
 	//echo show($file['style'], init());
 	//$qry = db("SELECT * FROM ".$db['settings']."");
 	//$settings = _fetch($qry);	

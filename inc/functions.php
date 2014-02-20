@@ -1,11 +1,15 @@
 <?
 
-
 	//Dateipfad und Tags[array] werden übergeben
-	function show($file_content, $tags)
+	function show($file_content, $tags, $isPath = false)
 	{
+		global $path;
 		//$tags = array("test1" => "testetststs");
 		//Tags werden gesplittet einzeln durchgeführt
+		if ($isPath)
+		{
+			$file_content = getFile($path['style']."/".$file_content.".html");		
+		}
 		foreach($tags as $name => $value)
 		  {
 			 //Tags der Datei werden ersetzt durch funktionen und Sprachelemente

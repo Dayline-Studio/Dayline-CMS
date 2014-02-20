@@ -1,0 +1,6 @@
+<?
+function menue(){
+
+
+return "menue";
+}
