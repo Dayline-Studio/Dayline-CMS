@@ -1,6 +1,7 @@
 <?
 include "../inc/config.php";
-$file = "news";
+init("test");
+
 //echo getFile($path['style'],$file)."<br>";
 
 /*if (isset($_GET['action']))

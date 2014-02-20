@@ -1,15 +1,23 @@
 <?
 function init($content)
 {
-	//Global Path Variable
-	global $path,$file;
-	$content = $file['style_index'];
 	debug("start init content");
+	display(show(loadingPanels(),array("content" => $content)));
+}
+
+function display($content)
+{
+	debug("Ausgabe");
+	echo $content;
+}
+function loadingPanels()
+{
+	//Global Path Variable
+	global $path;
 	//Loading panel Folder
 	$panels = opendir($path['panels']);
-	
 	//Get the Main File for this Page (index.html)
-	$output = getFile($content);
+	$output = getFile($path['style_index']);
 	
 	debug("loading panels");
 	//Loading the panels
@@ -31,8 +39,8 @@ function init($content)
 	closedir($panels);
 	
 	//Output Debug, Errors and Content
-	echo debugOutput();
-	echo $output;
+	$output = debugOutput().$output;
+	return $output;
 }
 
 function debugOutput()

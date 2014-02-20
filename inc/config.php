@@ -12,7 +12,7 @@
 	$path['include'] = "../inc/";
 	$path['style'] = "../style/".$style."/";
 	$path['css'] = $path['style']."/css/";
-	$file['style_index'] = $path['style']."index.html";
+	$path['style_index'] = $path['style']."index.html";
 	$path['images'] = $path['include']."images/"; 
 	$path['plugins'] = "../plugins/"; 
 	$path['panels'] = "../panels/"; 
@@ -26,8 +26,6 @@
 	includeFile($file['mysql']);
 	includeFile($file['functions']);
 	includeFile($file['init']);
-	init();
-	
 	echo "test";
 	//echo show($file['style'], init());
 	//$qry = db("SELECT * FROM ".$db['settings']."");

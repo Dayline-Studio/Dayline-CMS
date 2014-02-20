@@ -4,10 +4,12 @@
 	function show($file_content, $tags, $isPath = false)
 	{
 		global $path;
+
 		//$tags = array("test1" => "testetststs");
 		//Tags werden gesplittet einzeln durchgeführt
 		if ($isPath)
 		{
+			debug($path['style'].$file_content.".html");
 			$file_content = getFile($path['style']."/".$file_content.".html");		
 		}
 		foreach($tags as $name => $value)
@@ -31,6 +33,8 @@
 			
 			
 	}
+	
+	
 	
 
 	/*
