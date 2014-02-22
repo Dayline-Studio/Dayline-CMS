@@ -1,8 +1,13 @@
 <?
 function init($content)
 {
+	global $path;
 	debug("start init content");
-	display(show(loadingPanels(),array("content" => $content)));
+	$init = show(loadingPanels(),array("content" => $content));
+	$init = show($init,array("css" => $path['css'],
+							 "js"  => $path['js']));
+	display($init);
+	
 }
 
 function display($content)
@@ -32,8 +37,15 @@ function loadingPanels()
 			//Remove .php (-4 chars)
 			$panel = substr($panel,0,-4);
 			//Replace the Tag with the returning content from the panel
-			$output = show($output, array( $panel => $panel() ));
-			debug("[".ucwords($panel)."] - checked and loaded");
+			if (!function_exists ($panel))
+			{
+				debug('<font color="#FF4000">failed loading '.$panel.'</font>');
+			}
+			else
+			{
+				$output = show($output, array( $panel => $panel() ));
+				debug('<font color="#2ECCFA">['.ucwords($panel)."]</font> - checked and loaded");
+			}
 		}
 	} 
 	closedir($panels);
@@ -62,6 +74,6 @@ function debug($add)
 {
 	//function to add Debug inputs
 	global $debug;
-	$debug .= "[".gmdate("H:i:s", time())."] - ".$add."<br/>";
+	$debug .= '<font color="#FE9A2E">'."[".gmdate("H:i:s", time())."]</font> - ".$add."<br/>";
 }
 ?>

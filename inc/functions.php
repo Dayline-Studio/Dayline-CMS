@@ -1,12 +1,13 @@
 <?
 
 	//Dateipfad und Tags[array] werden übergeben
-	function show($file_content, $tags, $isPath = false)
+	function show($file_content, $tags)
 	{
 		global $path;
 
 		//Tags werden gesplittet einzeln durchgeführt
-		if ($isPath)
+
+        if(file_exists($path['style']."/".$file_content.".html"))
 		{
 			debug($path['style'].$file_content.".html");
 			$file_content = getFile($path['style']."/".$file_content.".html");		

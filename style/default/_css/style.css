@@ -1,5 +1,8 @@
+@import url(http://fonts.googleapis.com/css?family=Pontano+Sans);
+
 body{
 	background-image: linear-gradient(to bottom, #D8D8D8 0%, #FAFAFA 100%);
+	font-family: 'Pontano Sans', sans-serif
 }
 #wrapper{
 	width: 1200px;
@@ -14,7 +17,7 @@ body{
 	background: #01A9DB;
 }
 
-#menue{
+#menu{
 	background-image: linear-gradient(to bottom, #D8D8D8 0%, #FAFAFA 100%);
 	width: 100%;
 }

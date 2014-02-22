@@ -11,20 +11,18 @@
 	$error = "";
 	$path['include'] = "../inc/";
 	$path['style'] = "../style/".$style."/";
-	$path['css'] = $path['style']."/css/";
+	$path['css'] = $path['style']."_css/";
+	$path['js'] = $path['style']."_js/";
 	$path['style_index'] = $path['style']."index.html";
 	$path['images'] = $path['include']."images/"; 
 	$path['plugins'] = "../plugins/"; 
 	$path['panels'] = "../panels/"; 
 	$file['functions'] = $path['include']."functions.php";
 	$file['init'] = $path['include']."init.php";
-	
-	$db_con['host']='localhost';
-	$db_con['db'] = 'usr_db31_1';
-	$db_con['user']= 'db31';
-	$db_con['pass'] = 'wZYfdsm4T2tY';
+	$file['mysql'] = $path['include']."mysql.php";
 	
 //Sprachfiles und funktionen einsetzten die benötigt werden	
+	include($file['mysql']);
 	includeFile($file['functions']);	
 	includeFile($file['init']);
 
