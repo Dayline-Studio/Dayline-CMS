@@ -5,7 +5,6 @@
 	{
 		global $path;
 
-		//$tags = array("test1" => "testetststs");
 		//Tags werden gesplittet einzeln durchgeführt
 		if ($isPath)
 		{
@@ -21,48 +20,34 @@
 		return $file_content;
 	}
 	
-	function db ($input, $fetch, $rows)
-	{	
-			//$input ='SELECT * FROM artikel';
-			//Moe INPUT HIER
-			//global mysql;
-			
-			//mysql_conncet ([$mysql['host'][$mysql['user']$mysql['password']]]);
-			
-			
-			
-			
+	function dbConnect()
+	{
+	
+		global $db_con;
+//		echo($db_con['host']);
+		debug("Connecting to db");
+		if($db_con['host'] != '' && $db_con['user'] != '' && $db_con['pass'] != '' && $db_con['db'] != '')
+		{
+			if(!$db_link = mysqli_connect($db_con['host'],$db_con['user'],$db_con['pass'], $db_con['db'])) error("Fehler beim Zugriff auf die Datenbank!");
+			else return $db_link;
+		}
+		else error("Es wurden nicht alle Datenbank Daten zur Verbindung angegeben");
+		debug("Database Connected");
+		return false;
 	}
 	
-	
-	
-
-	/*
-	//-> MySQL-Datenbankangaben
-	$prefix = $sql_prefix;                      
-	$db = array("host" =>           $DB_HOST,
-				"user" =>           $DB_USER,
-				"pass" =>           $DB_PASS,
-				"db" =>             $DB_NAME,
-				//"artikel" =>        $prefix."artikel",
-				);
-
-	if($db['host'] != '' && $db['user'] != '' && $db['pass'] != '' && $db['db'] != '')
+	function db($input = "", $rows = false, $fetch = false)
 	{
-		if(!$msql = mysql_connect($db['host'],$db['user'],$db['pass'])) die("Fehler beim Zugriff auf die Datenbank!");
-		if(!mysql_select_db($db['db'],$msql)) die("Die angegebene Datenbank ".$db['db']." existiert nicht!");
+		global $db_con;     
+		//$db_link = mysqli_connect($db_con['host'],$db_con['user'],$db_con['pass'],$db_con['db']);
+		if(!$qry = mysqli_query( dbConnect(), $input )) error('<b>Query</b>   = '.str_replace($path['prefix'],'',$input).'</ul>');
+		
+	if ($rows && !$fetch)     return mysqli_num_rows($qry);
+	else if($fetch && $rows)  return mysqli_fetch_array($qry);
+	else if($fetch && !$rows) return mysqli_fetch_assoc($qry);
+	
+	return ($qry);
 	}
-	else die("Es wurden nicht alle Datenbank Daten zur Verbindung angegeben");
-	
-	function db($db)
-	{
-	  global $prefix;
-	  if(!$qry = mysql_query($db)) die('<b>MySQL-Query failed:</b><br /><br /><ul>'.
-									   '<li><b>ErrorNo</b> = '.str_replace($prefix,'',mysql_errno()).
-									   '<li><b>Error</b>   = '.str_replace($prefix,'',mysql_error()).
-									   '<li><b>Query</b>   = '.str_replace($prefix,'',$db).'</ul>');
-	  return $qry;
-	}*/
 
 
 ?>

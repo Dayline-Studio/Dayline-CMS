@@ -1,6 +1,7 @@
 <?
 include "../inc/config.php";
-init("test");
+
+init($content);
 
 //echo getFile($path['style'],$file)."<br>";
 

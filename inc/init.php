@@ -39,7 +39,7 @@ function loadingPanels()
 	closedir($panels);
 	
 	//Output Debug, Errors and Content
-	$output = debugOutput().$output;
+	$output = $output.debugOutput();
 	return $output;
 }
 
@@ -47,7 +47,7 @@ function debugOutput()
 {
 	//Display alle Errors and the Log
 	global $debug;
-	$output = "Log:<br>";
+	$output = "<hr>Log:<br>";
 	$output .= $debug;
 	$output .= "Errors:<br>";
 	if (errorDisplay() != "") 
@@ -55,7 +55,6 @@ function debugOutput()
 		$output .=  '<font color="#ff0000">'.errorDisplay().'</font>';
 	}
 	else $output .= '<font color="#47ff00">keine Errors!</font>';
-	$output .= "<hr>Output:<hr>";
 	return $output;
 }
 

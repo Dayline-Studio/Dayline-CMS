@@ -16,20 +16,17 @@
 	$path['images'] = $path['include']."images/"; 
 	$path['plugins'] = "../plugins/"; 
 	$path['panels'] = "../panels/"; 
-	//$file['actions'] = "../pages/".$page."/index.php";
-	//$file['language'] = "../inc/language/".$language.".php";
-	$file['mysql'] = $path['include']."mysql.php";
 	$file['functions'] = $path['include']."functions.php";
 	$file['init'] = $path['include']."init.php";
 	
+	$db_con['host']='localhost';
+	$db_con['db'] = 'usr_db31_1';
+	$db_con['user']= 'db31';
+	$db_con['pass'] = 'wZYfdsm4T2tY';
+	
 //Sprachfiles und funktionen einsetzten die benötigt werden	
-	includeFile($file['mysql']);
-	includeFile($file['functions']);
+	includeFile($file['functions']);	
 	includeFile($file['init']);
-	echo "test";
-	//echo show($file['style'], init());
-	//$qry = db("SELECT * FROM ".$db['settings']."");
-	//$settings = _fetch($qry);	
 
 	function includeFile($file)
 	{
