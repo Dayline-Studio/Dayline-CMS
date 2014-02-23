@@ -18,6 +18,7 @@
 	$path['plugins'] = "../plugins/"; 
 	$path['panels'] = "../panels/"; 
 	$file['functions'] = $path['include']."functions.php";
+	$file['auth'] = $path['include']."auth.php";-
 	$file['init'] = $path['include']."init.php";
 	$file['mysql'] = $path['include']."mysql.php";
 	

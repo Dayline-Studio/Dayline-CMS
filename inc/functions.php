@@ -49,6 +49,41 @@
 	
 	return ($qry);
 	}
-
-
+	
+	function randomstring($length = 6) 
+	{
+		$chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+		srand((double)microtime()*1000000);
+		$i = 0;
+		while ($i < $length) 
+		{
+			$num = rand() % strlen($chars);
+			$tmp = substr($chars, $num, 1);
+			$pass = $pass . $tmp;
+			$i++;
+		}
+		return $pass;
+	}
+	
+	function customHasher($pw, $salt, $rounds)
+	{
+		$hash = $pw;
+		for ($i = 0; $i < $rounds; $i++)
+		{
+			if (!($i%3.5))
+				$hash = sha1($hash.$salt);
+			else
+				$hash = md5($salt.$hash);
+		}
+		sha1($hash); 
+		return $hash;
+	}
+	
+	function sqlString($param) {
+		return (NULL === $param ? "NULL" : '"'.mysql_real_escape_string($param).'"');
+	}
+ 
+	function sqlInt($param) {
+		return (NULL === $param ? "NULL" : intVal ($param));
+	}
 ?>

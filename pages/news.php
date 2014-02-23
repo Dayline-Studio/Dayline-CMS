@@ -1,6 +1,5 @@
 <?
 include "../inc/config.php";
-
 init($content);
 
 //echo getFile($path['style'],$file)."<br>";

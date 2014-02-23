@@ -1,10 +1,11 @@
-<form>
+<form action="login.php?do=login" method="post">
 	<table>
 		<tr>
-			<td> Name: </td><td><input type="text" value="Name" /></td>
+			<td> Name: </td><td><input type="text" value="Name" name="username"/></td>
 		</tr>
 		<tr>
-			<td> Passwort: </td><td><input type="password" value="" /></td>
+			<td> Passwort: </td><td><input type="password" value="" name="passwort"/></td>
 		</tr>
 	</table>
+	<input type="submit" value="Login" />
 </form>
