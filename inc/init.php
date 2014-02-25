@@ -51,7 +51,10 @@ function loadingPanels()
 	closedir($panels);
 	
 	//Output Debug, Errors and Content
-	$output = $output.debugOutput();
+	$handle = fopen('../debug/log.html', "w");
+	fwrite($handle, debugOutput()); 				
+	fclose($handle);
+
 	return $output;
 }
 
@@ -59,7 +62,12 @@ function debugOutput()
 {
 	//Display alle Errors and the Log
 	global $debug;
-	$output = "<hr>Log:<br>";
+	$output = '<meta http-equiv="refresh" content="3"> <iframe src="../debug/error_log" width="100%" height="200px" name="SELFHTML_in_a_box">
+  <p>Ihr Browser kann leider keine eingebetteten Frames anzeigen:
+  Sie k&ouml;nnen die eingebettete Seite &uuml;ber den folgenden Verweis
+  aufrufen: <a href="../../../index.htm">SELFHTML</a></p>
+</iframe>';
+	$output .= "<hr>Log:<br>";
 	$output .= $debug;
 	$output .= "Errors:<br>";
 	if (errorDisplay() != "") 

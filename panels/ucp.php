@@ -4,11 +4,14 @@
 	if (!$_SESSION['loggedin'])
 	{
 		$login_panel = show("panels/login");
-	}
+	} 
 	else
 	{
-		$login_panel = "Willkommen ".$_SESSION['name'];
+		$gravatar = get_gravatar($_SESSION['email'], 100, true);
+		$login_panel = show("panels/ucp_main", array( "user" => $_SESSION['name'],
+													   "Gravatar" => $gravatar));
 	}
+	
 	
 
 	

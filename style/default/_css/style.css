@@ -1,38 +1,46 @@
 @import url(http://fonts.googleapis.com/css?family=Pontano+Sans);
 
 body{
-	background-image: linear-gradient(to bottom, #D8D8D8 0%, #FAFAFA 100%);
+	background: url(http://shop.d4ho.de/style/default/images/background.jpg);
+	background-repeat: repeat;
+	background-position: top left;
 	font-family: 'Pontano Sans', sans-serif
 }
 #wrapper{
+	height: auto;
 	width: 1200px;
-	background: #F3E2A9;
+	background: #FAFAFA;
 	margin-left: auto ;
 	margin-right: auto;
-	box-shadow: 0px 0px 2px 1px #888
+	box-shadow: 0px 0px 20px 2px #fff
 }
 #right{
 	width: 300px;
 	float: right;
-	background: #01A9DB;
+	background: #FAFAFA; 
 }
 
 #menu{
 	width: 100%;
 }
+
 #content{
-	width: 100%;
+	height: auto;
+	padding: 10px;
+	width: 880px;
 	background: #fff
 }
+
 #foot{
 	width: 100%;
-	background: #9A2EFE;
-	height: 150px
+	background: #4cb6ea;
+	height: 150px;
+	text-align: center
 }
 #head{
+	background: #E6E6E6;
 	width: 100%;
-	background: #DF7401;
-	height: 200px
+	height: 300px
 }
 
 
@@ -60,4 +68,8 @@ margin-bottom: 2px
 .box_r {
 	padding: 5px;
 	background: #FFD6E1;
+}
+.center
+{
+text-align: center;
 }
