@@ -8,6 +8,7 @@
 			$_SESSION['group'] = 'gast';
       }
 	  //Last Site:
+	  $_SESSION['back_site'] = $_SESSION['last_site'];
 	  $_SESSION['last_site'] = $_SESSION['current_site'];
 	  $_SESSION['current_site'] = getCurrentUrl();
 	  

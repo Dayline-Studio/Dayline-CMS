@@ -118,4 +118,14 @@
 		if ($list_news == "") $list_news = "Keine News Gefunden";
 		return $list_news;
 	}
+	
+	function setBackSite()
+	{
+		$_SESSION['back_site'] = getCurrentUrl();
+	}
+	
+	function permTo($permission)
+	{
+		return	mysqli_fetch_object(db("SELECT ".$permission." From groups WHERE id = ".sqlInt($_SESSION['group_main_id'])))->$permission;
+	}
 ?>

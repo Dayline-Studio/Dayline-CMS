@@ -1,12 +1,12 @@
  <?
 	include("../inc/auth.php");
- 	$handle = fopen('../debug/error_log', "w");
-	fwrite($handle, ""); 				
-	fclose($handle);
+ 	//$handle = fopen('../debug/error_log', "w");
+	//fwrite($handle, ""); 				
+	//fclose($handle);
  //Parameter auslesen für allegemeine Settings
  	if (isset($_GET['s'])) $style = $_GET['s'];
 	else $style = "default";
-	if (isset($_GET['l'])) $style = $_GET['l']; 
+	if (isset($_GET['l'])) $language = $_GET['l']; 
 	else $language = "de";
 	if (isset($_GET['do'])) $do = $_GET['do'];
 	else $do = "";
@@ -42,15 +42,15 @@
 	
 	$lang_dir = opendir($path['lang'].$language);
 	
-	debug("loading language");
+	//debug("loading language");
 	//Loading the panels
-	if ( $language != 'de' | 'en') $language = 'de'; //ToDo Language aus Settings (database)
+	if ( $language != 'de') $language = 'de'; //ToDo Language aus Settings (database)
 	
 	while ($lang_file = readdir($lang_dir)) 
 	{
 		if ($lang_file != ".." && $lang_file != ".") 
 		{
-			debug("loading $lang_file");
+			//debug("loading $lang_file");
 			//Import panel function
 			includeFile($path['lang'].$language."/".$lang_file);
 		}

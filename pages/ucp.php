@@ -15,7 +15,6 @@ switch ($show)
 												"lastname" => $user->lastname,
 												"country" => $user->country,
 												"street" => $user->street));
-	$_SESSION['back_site'] = getCurrentUrl();
 	break;
 	default:
 	$content = getNews($_SESSION['group_main_id']);
@@ -27,8 +26,8 @@ switch ($do)
 		
 		$user = mysqli_fetch_object(db("Select email,street,firstname,lastname,country,salt,pass,rounds from users where id = ".$_SESSION['userid']));
 		$passwd = customHasher($_POST['pass'],$user->salt,$user->rounds);
-		if ($_POST['passwd'] != $_POST['cpasswd'] & !empty($_POST['passwd'])) msg(1);
-		else if ($passwd != $user->pass) msg(2);
+		if ($_POST['passwd'] != $_POST['cpasswd'] & !empty($_POST['passwd'])) msg('pass_dont_match');
+		else if ($passwd != $user->pass) msg('pass_wrong');
 		else 
 		{
 			db ('Update users Set 
@@ -39,7 +38,7 @@ switch ($do)
 				country = '.sqlString($_POST['country']).',
 				street = '.sqlString($_POST['street']).' 				
 				Where id ='.$_SESSION['userid']);
-			msg(4);
+			msg('change_sucessful');
 		}
 	break;
 }
