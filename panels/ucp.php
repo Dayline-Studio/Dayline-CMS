@@ -1,4 +1,4 @@
- <?
+ <?php
  function ucp(){
  
 	if (!$_SESSION['loggedin'])
@@ -19,4 +19,3 @@
 	
 	return $login_panel;
  }
- ?>

@@ -1,4 +1,4 @@
-<?
+<?php
 
 	//Dateipfad und Tags[array] werden übergeben
 	function show($file_content = "", $tags = array(null => null))
@@ -9,7 +9,6 @@
 
         if(file_exists($path['style']."/".$file_content.".html"))
 		{
-			debug($path['style'].$file_content.".html");
 			$file_content = getFile($path['style']."/".$file_content.".html");		
 		}
 		foreach($tags as $name => $value)
@@ -25,27 +24,45 @@
 	{
 	
 		global $db_con;
-		debug("Reading database");
 		if($db_con['host'] != '' && $db_con['user'] != '' && $db_con['pass'] != '' && $db_con['db'] != '')
 		{
-			if(!$db_link = mysqli_connect($db_con['host'],$db_con['user'],$db_con['pass'], $db_con['db'])) error("Fehler beim Zugriff auf die Datenbank!");
-			else return $db_link;
+			if(!$db_link = mysqli_connect($db_con['host'],$db_con['user'],$db_con['pass'], $db_con['db'])) {
+                            error("Fehler beim Zugriff auf die Datenbank!");
+                        }
+			else {
+                            return $db_link;
+                        }
 		}
-		else error("Es wurden nicht alle Datenbank Daten zur Verbindung angegeben");
-		return false;
+		else {
+                    error("Es wurden nicht alle Datenbank Daten zur Verbindung angegeben");
+                }
+                return false;
 	}
 	
 	function db($input = "", $rows = false, $fetch = false)
 	{
-		global $db_con, $path;     
-		//$db_link = mysqli_connect($db_con['host'],$db_con['user'],$db_con['pass'],$db_con['db']);
-		if(!$qry = mysqli_query( dbConnect(), $input )) error('<b>Query</b>   = '.str_replace($path['prefix'],'',$input).'</ul>');
-		
-		if ($rows && !$fetch)     return mysqli_num_rows($qry);
-		else if($fetch && $rows)  return mysqli_fetch_array($qry);
-		else if($fetch && !$rows) return mysqli_fetch_assoc($qry);
-		
+		global $path;     
+		if(!$qry = mysqli_query( dbConnect(), $input )) {
+                    error('<b>Query</b>   = '.str_replace($path['prefix'],'',$input).'</ul>');
+                }
+		if ($rows && !$fetch)     {
+                    return mysqli_num_rows($qry);
+                }
+		else if($fetch && $rows)  {
+                    return mysqli_fetch_array($qry);
+                }
+		else if($fetch && !$rows) {
+                    return mysqli_fetch_assoc($qry);
+                }
 		return ($qry);
+	}
+	
+	function up($input = "")
+	{
+		if(!mysqli_query( dbConnect(), $input )) {
+                    return false;
+                }
+		return true;
 	}
 	
 	function randomstring($length = 6) 
@@ -68,10 +85,12 @@
 		$hash = $pw;
 		for ($i = 0; $i < $rounds; $i++)
 		{
-			if (!($i%3.5))
-				$hash = sha1($hash.$salt);
-			else
-				$hash = md5($salt.$hash);
+			if (!($i%3.5)){
+                            $hash = sha1($hash.$salt);
+                        }
+			else {
+                            $hash = md5($salt.$hash);
+                        }
 		}
 		sha1($hash); 
 		return $hash;
@@ -99,14 +118,15 @@
 		return $url;
 	}
 
-	function msg($id,$back)
+	function msg($id)
 	{
-		header('Location: '.$path['pages'].'msg.php?id='.$id);
+                global $path;
+		header('Location: '.$path['pages'].'../pages/msg.php?id='.$id);
 	}
 	
 	function getNews($groupid = 0)
 	{
-		$news_posts = db("Select * From news where grp = ".$groupid);
+		$news_posts = db("Select * From news where public_show = 1 AND grp = ".$groupid);
 		$list_news = "";
 		while ($get_news = mysqli_fetch_assoc($news_posts))
 		{
@@ -115,17 +135,13 @@
 												"news_content"	=>	$get_news['post']
 											));
 		}
-		if ($list_news == "") $list_news = "Keine News Gefunden";
+		if ($list_news == ""){
+                    $list_news = _news_not_found;
+                }
 		return $list_news;
-	}
-	
-	function setBackSite()
-	{
-		$_SESSION['back_site'] = getCurrentUrl();
 	}
 	
 	function permTo($permission)
 	{
 		return	mysqli_fetch_object(db("SELECT ".$permission." From groups WHERE id = ".sqlInt($_SESSION['group_main_id'])))->$permission;
 	}
-?>

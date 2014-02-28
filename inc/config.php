@@ -1,22 +1,21 @@
- <?
+<?php
 	include("../inc/auth.php");
- 	//$handle = fopen('../debug/error_log', "w");
-	//fwrite($handle, ""); 				
-	//fclose($handle);
- //Parameter auslesen für allegemeine Settings
- 	if (isset($_GET['s'])) $style = $_GET['s'];
-	else $style = "default";
-	if (isset($_GET['l'])) $language = $_GET['l']; 
-	else $language = "de";
-	if (isset($_GET['do'])) $do = $_GET['do'];
-	else $do = "";
-	if (isset($_GET['action'])) $action = $_GET['action'];
-	else $action = "";
-	if (isset($_GET['show'])) $show = $_GET['show'];
-	else $show = "";
+
+//Parameter auslesen für allegemeine Settings
+        if (isset($_GET['s'])) { $style = $_GET['s']; }
+        else { $style = "default"; }
+        if (isset($_GET['l'])) { $language = $_GET['l']; } 
+        else { $language = "de"; }
+        if (isset($_GET['do'])) { $do = $_GET['do']; }
+        else { $do = ""; }
+        if (isset($_GET['action'])) { $action = $_GET['action']; }
+	else { $action = "";}
+	if (isset($_GET['show'])) { $show = $_GET['show']; }
+        else { $show = ""; }
 
 //Allegmeine Pfade setzten durch Resultat der Parameter 
 	$error = "";
+	$path['dir'] = '/test/';
 	$path['include'] = "../inc/";
 	$path['style'] = "../style/".$style."/";
 	$path['css'] = $path['style']."_css/";
@@ -42,15 +41,15 @@
 	
 	$lang_dir = opendir($path['lang'].$language);
 	
-	//debug("loading language");
 	//Loading the panels
-	if ( $language != 'de') $language = 'de'; //ToDo Language aus Settings (database)
-	
+	if ( $language != 'de' || $language != 'en') 
+        {
+            $language = 'de'; //ToDo Language aus Settings (database)
+        }
 	while ($lang_file = readdir($lang_dir)) 
 	{
 		if ($lang_file != ".." && $lang_file != ".") 
 		{
-			//debug("loading $lang_file");
 			//Import panel function
 			includeFile($path['lang'].$language."/".$lang_file);
 		}
@@ -60,12 +59,10 @@
 	function includeFile($file)
 	{
 		$r = true;
-		if (file_exists ( $file )) 
-		{
+		if (file_exists ( $file )) {
 			return include($file);
 		}
-		else 
-		{
+		else {
 			error("File not found -".$file);
 			$r = false;
 		}
@@ -74,12 +71,10 @@
 	function getFile($file)
 	{
 		$r = true;
-		if (file_exists ( $file )) 
-		{
+		if (file_exists ( $file )) {
 			return file_get_contents($file);
 		}
-		else 
-		{
+		else {
 			error("File not found -".$file);
 			$r = false;
 		}
@@ -97,4 +92,3 @@
 		global $error;
 		return $error;
 	}
- ?>

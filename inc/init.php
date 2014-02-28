@@ -1,5 +1,5 @@
-<?
-function init($content = "", $meta)
+<?php
+function init($content = "", $meta = null)
 {
 	global $path, $language; 
 	//debug("start init content");
@@ -32,64 +32,23 @@ function loadingPanels()
 	//Get the Main File for this Page (index.html)
 	$output = getFile($path['style_index']);
 	
-	//debug("loading panels");
 	//Loading the panels
 	while ($panel = readdir($panels)) 
 	{
 		//Loading panel functions
 		if ($panel != ".." && $panel != ".") 
 		{
-			//debug("loading $panel");
 			//Import panel function
 			includeFile($path['panels'].$panel);
 			//Remove .php (-4 chars)
 			$panel = substr($panel,0,-4);
 			//Replace the Tag with the returning content from the panel
-			if (!function_exists ($panel))
-			{
-				//debug('<font color="#FF4000">failed loading '.$panel.'</font>');
-			}
-			else
-			{
-				$output = show($output, array( $panel => $panel() ));
-				//debug('<font color="#2ECCFA">['.ucwords($panel)."]</font> - checked and loaded");
-			}
+			if (function_exists($panel)){
+                            $output = show($output, array( $panel => $panel() ));
+                        }
 		}
 	} 
 	closedir($panels);
-	
-	//Output Debug, Errors and Content
-	//$handle = fopen('../debug/log.html', "w");
-	//fwrite($handle, debugOutput()); 				
-	//fclose($handle);
-
+        
 	return $output;
 }
-
-function debugOutput()
-{
-	//Display alle Errors and the Log
-	global $debug;
-	$output = '<meta http-equiv="refresh" content="3"> <iframe src="../debug/error_log" width="100%" height="200px" name="SELFHTML_in_a_box">
-	  <p>Ihr Browser kann leider keine eingebetteten Frames anzeigen:
-	  Sie k&ouml;nnen die eingebettete Seite &uuml;ber den folgenden Verweis
-	  aufrufen: <a href="../../../index.htm">SELFHTML</a></p>
-	</iframe>';
-	$output .= "<hr>Log:<br>";
-	$output .= $debug;
-	$output .= "Errors:<br>";
-	if (errorDisplay() != "") 
-	{
-		$output .=  '<font color="#ff0000">'.errorDisplay().'</font>';
-	}
-	else $output .= '<font color="#47ff00">keine Errors!</font>';
-	return $output;
-}
-
-function debug($add)
-{
-	//function to add Debug inputs
-	global $debug;
-	//$debug .= '<font color="#FE9A2E">'."[".gmdate("H:i:s", time())."]</font> - ".$add."<br/>";
-}
-?>

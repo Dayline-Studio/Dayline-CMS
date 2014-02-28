@@ -2,7 +2,7 @@
   include "../inc/config.php";
 if (!$_SESSION['loggedin'])
 {
-	header('Location: /');
+	header('Location: ../');
 }
 $content = "";
 switch ($show)

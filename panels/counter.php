@@ -1,4 +1,4 @@
-<?
+<?php
 function counter() {
 
 	//GET User IP
@@ -33,4 +33,3 @@ function counter() {
 
 	return $output;
 }
-?>
