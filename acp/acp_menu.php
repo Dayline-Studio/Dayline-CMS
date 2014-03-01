@@ -29,4 +29,4 @@ switch($action){
 
 
 
-init($output);
+init($output,$meta);
