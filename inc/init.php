@@ -2,21 +2,20 @@
 function init($content = "", $meta = null)
 {
 	global $path, $language; 
-	//debug("start init content");
 	$init = show(loadingPanels(),array("content" => $content));
 	$settings = mysqli_fetch_object(db("Select * from settings where id = 1"));
-	$init = show($init,array(	"title" =>				$meta['title'],
-								"language_content" =>	$language,
-								"author" =>				$meta['author'],
-								"publisher" =>			$settings->publisher,
-								"copyright" =>			$settings->copyright,
-								"keywords" =>			$meta['keywords'],
-								"description" =>		$meta['description'],
-								"language" =>			$settings->language,
-								"css" => 				$path['css'],
-								"js"  => 				$path['js']));
-	display($init);
-	
+	$init = show($init,array("title" =>                     $meta['title'],
+                                 "language_content" =>          $language,
+                                 "author" =>                    $meta['author'],
+                                 "publisher" =>	                $settings->publisher,
+                                 "copyright" =>                 $settings->copyright,
+                                 "keywords" =>                  $meta['keywords'],
+                                 "description" =>               $meta['description'],
+                                 "language" =>                  $settings->language,
+                                 "css" =>                       $path['css'],
+                                 "style" =>                     $path['style'],
+                                 "js"  =>                       $path['js']));
+        display($init);
 }
 
 function display($content)
