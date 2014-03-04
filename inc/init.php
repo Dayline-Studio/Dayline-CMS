@@ -14,7 +14,7 @@ function init($content = "", $meta = null)
                                  "language" =>                  $settings->language,
                                  "css" =>                       $path['css'],
                                  "style" =>                     $path['style'],
-                                 "js"  =>                       $path['js']));
+                                 "js" =>                        $path['js']));
         display($init);
 }
 
