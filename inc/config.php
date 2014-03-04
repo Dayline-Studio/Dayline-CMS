@@ -1,6 +1,13 @@
 <?php
+        require_once("../inc/ErrorHandler.php");
+        require_once("../inc/DirControl.php");
 	include("../inc/auth.php");
-
+        require_once 'cachesystem/fastcache.php';
+        
+        $cmsError = new ErrorHandler();
+        $cmsDir = new DirControl();
+        echo $cmsDir->getPath('include');
+                
 //Parameter auslesen für allegemeine Settings
         if (isset($_GET['s'])) { $style = $_GET['s']; }
         else { $style = "default"; }
@@ -14,32 +21,31 @@
         else { $show = ""; }
 
 //Allegmeine Pfade setzten durch Resultat der Parameter 
-	$error = "";
-	$path['dir'] = '/test/';
-	$path['include'] = "../inc/";
-	$path['style'] = "../style/".$style."/";
-	$path['css'] = $path['style']."_css/";
-	$path['js'] = $path['style']."_js/";
-	$path['style_index'] = $path['style']."index.html";
-	$path['images'] = $path['include']."images/"; 
-	$path['plugins'] = "../plugins/"; 
-	$path['pages'] = "../pages/"; 
-	$path['panels'] = "../panels/"; 
-	$file['functions'] = $path['include']."functions.php";
-	$file['auth'] = $path['include']."auth.php";
-	$file['init'] = $path['include']."init.php";
-	$path['lang'] = $path['include']."language/";
-	$file['mysql'] = $path['include']."mysql.php";
+        $path['dir'] = '/test/';
+        $path['include'] = "../inc/";
+        $path['style'] = "../style/".$style."/";
+        $path['css'] = $path['style']."_css/";
+        $path['js'] = $path['style']."_js/";
+        $path['style_index'] = $path['style']."index.html";
+        $path['images'] = $path['include']."images/"; 
+        $path['plugins'] = "../plugins/"; 
+        $path['pages'] = "../pages/"; 
+        $path['panels'] = "../panels/"; 
+        $file['functions'] = $path['include']."functions.php";
+        $file['auth'] = $path['include']."auth.php";
+        $file['init'] = $path['include']."init.php";
+        $path['lang'] = $path['include']."language/";
+        $file['mysql'] = $path['include']."mysql.php";
 	
 	//Loading functions and init
-	include($file['mysql']);
-	includeFile($file['functions']);	
-	includeFile($file['init']);
+	include($cmsDir->getFile('mysql'));
+	include($cmsDir->getFile('functions'));	
+	include($cmsDir->getFile('init'));
 	
 	//Loading Language
 	includeFile($path['lang']."global.php");	
 	
-	$lang_dir = opendir($path['lang'].$language);
+	$lang_dir = opendir($cmsDir->getPath('lang').$language);
 	
 	//Loading the panels
 	if ( $language != 'de' || $language != 'en') 
@@ -51,7 +57,7 @@
 		if ($lang_file != ".." && $lang_file != ".") 
 		{
 			//Import panel function
-			includeFile($path['lang'].$language."/".$lang_file);
+			includeFile($lang_dir.$language."/".$lang_file);
 		}
 	} 
 	closedir($lang_dir);
@@ -63,7 +69,7 @@
 			return include($file);
 		}
 		else {
-			error("File not found -".$file);
+                        $cmsError->addError("File not found -".$file);
 			$r = false;
 		}
 		return $r;
@@ -75,20 +81,8 @@
 			return file_get_contents($file);
 		}
 		else {
-			error("File not found -".$file);
+			$cmsError->addError("File not found -".$file);
 			$r = false;
 		}
 		return $r;
-	}
-	
-	function error($this_error)
-	{
-		global $error;
-		$error .= $this_error."<br>";
-	}
-	
-	function errorDisplay()	
-	{
-		global $error;
-		return $error;
 	}

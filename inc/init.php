@@ -38,7 +38,7 @@ function loadingPanels()
 		if ($panel != ".." && $panel != ".") 
 		{
 			//Import panel function
-			includeFile($path['panels'].$panel);
+			require_once ($path['panels'].$panel);
 			//Remove .php (-4 chars)
 			$panel = substr($panel,0,-4);
 			//Replace the Tag with the returning content from the panel
