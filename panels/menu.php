@@ -1,22 +1,28 @@
 <?php
+
 function menu()
 {
-	//Mainmenu content items
-	$items = generator();
-	//User Menu
-	if ($_SESSION['loggedin'])
-	{
-		$items .= generator(0,1);
-	}
-        if (permTo("menu_acp"))
-	{
-		$items .= generator(0,2);
-	}
-	
-	$menu =  show("panels/menu",array( 'items' => $items,
-								  'link_index' => '#'
-								));
-								
+       // $items = __c("files")->get('menu');
+      //  if ($items == null)
+       // {
+            //Mainmenu content items
+            $items = generator();
+            //__c("files")->set('menu',$items, 600);
+      //  }
+            //User Menu
+            if ($_SESSION['loggedin'])
+            {
+                    $items .= generator(0,1);
+            }
+            if (permTo("menu_acp"))
+            {
+                    $items .= generator(0,2);
+            }
+
+            $menu =  show("panels/menu",array( 'items' => $items,
+                                                                      'link_index' => '../'
+                                                                    ));	
+			
 	return $menu;
 }
 
@@ -26,7 +32,7 @@ function generator($subfrom = 0, $part = 0)
 	$menu ="";
 	while  ($get = mysqli_fetch_assoc($qury)) 
 	{
-		$issub = db('SELECT subfrom FROM menu WHERE subfrom = '.$get['id'], true);
+		$issub = db('SELECT subfrom FROM menu WHERE subfrom = '.$get['id'], 'rows');
 		if (!$issub)
 		{
 			if ($get['newtab']) {

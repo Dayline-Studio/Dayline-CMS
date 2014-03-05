@@ -7,7 +7,7 @@
 	} 
 	else
 	{
-		$gravatar = get_gravatar($_SESSION['email'], 100, true);
+		$gravatar = get_gravatar($_SESSION['email'], 100, false);
 		$login_panel = show("panels/ucp_main", array( "user" => $_SESSION['name'],
 													   "Gravatar" => $gravatar));
 	}

@@ -30,12 +30,13 @@ switch ($do)
 {
     case  'update':
         if (permTo('site_edit')){
-        if (db("update sites Set title = '".$_POST['mce_0']."', content = '".$_POST['mce_2']."' where id = ".sqlInt($show))){
-                msg('change_sucessful');
-            }
+        if (up("update sites Set title = '".$_POST['mce_0']."', content = '".$_POST['mce_2']."' where id = ".sqlInt($show))){
+                $content = msg('change_sucessful');
+        }
+        else $content = msg('change_failed');
         }
         else{
-            msg('change_failed');
+           $content = msg('change_failed');
         }
         break;
 }

@@ -3,7 +3,7 @@
 /**--**/ include "../inc/config.php";
 //------------------------------------------------
 // Site Informations
-/**--**/  $meta['title'] = "News";
+/**--**/  $meta['title'] = "Login";
 //------------------------------------------------
 
 if ($_SESSION['loggedin'])
@@ -12,14 +12,25 @@ if ($_SESSION['loggedin'])
 }
 
 $content = "";
-switch ($show)
+if ($do == "")
 {
-	default: 
-
-	break;
-	case 'register':
-
-	break;
+	switch ($show)
+	{
+		case 'register':
+		
+		if (!isset($_POST['agree']) ||  !isset($_SESSION['agree']))
+			{
+			$content = show("ucp/terms");
+			$_SESSION['agree'] = true;
+			
+			}
+		else {
+		$content = show("ucp/register");
+		}		
+		break;
+			default:  
+				 $content = show("ucp/login");
+	}
 }
 switch ($do)
 {
@@ -41,12 +52,12 @@ switch ($do)
                          $_SESSION['group_main_id'] = $user->main_group;
                          header('Location: ../pages/ucp.php');
                          exit;
-                 } else msg('login_failed');
+                 } else $content = msg('login_failed');
         }
-        else msg('login_failed');
+        else $content = msg('login_failed');
         break;
     case 'register':
-
+			$content = print_r($_POST,true); 
         break;
     case 'logout':
         session_destroy();

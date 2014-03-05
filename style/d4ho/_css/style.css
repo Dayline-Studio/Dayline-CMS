@@ -1,0 +1,115 @@
+ #d4ho_head_image {
+ 	height: 300px;
+}
+#d4ho_content_wrapper {
+	position: absolute;
+	top:415px;
+	width: 1200px;
+}
+body {
+	color: #000000;
+	font-family: 'Istok Web', sans-serif;
+
+	background-color: #ffffff;
+	background-image: url(http://shop.d4ho.de/style/d4ho/images/bg_1.jpg);
+	background-repeat: repeat;
+	background-position: top;
+	margin: 0;
+	padding: 12px 0;
+}
+hr {
+
+ color:#c9e5ff;
+}
+    iframe {
+      border: none;
+    }
+     
+
+th{
+ color:#c9e5ff;
+ text-align: left;
+}
+h2, h3, h4, h1{
+ color:#c9e5ff;
+}
+
+#d4ho_wrapper {
+
+	width: 1200px;
+	height: 100%;
+	margin: 0px auto;
+}
+.d4ho_style_content{
+	background-image: url(http://shop.d4ho.de/style/d4ho/images/bg_content.png);
+}
+
+.d4ho_menu {
+	width: 1200px;
+	z-index:1;
+}
+.center
+{
+text-align: center;
+}
+.right 
+{
+float: right;
+}
+
+a:link	{ color: #7FB2FF; 
+text-decoration: none;} 
+a:visited	{ color: #105289; }
+a:hover	{ color: #00BFFF; }
+a:active	{ color: #368AD2; }
+
+
+#d4ho_header {
+ 	height: 33px;
+
+}
+#d4ho_page_name {
+	width: 0px;
+}
+#d4ho_login {
+        padding: 2px;
+        text-align: right;
+	width: 100%;
+        height: 33px;
+}
+#d4ho_forum {
+ font-size: 0.7em;
+ }
+
+
+#d4ho_content_menue {
+	margin: 10px;
+	width: 100%;
+}
+#d4ho_content {
+	margin: 50px;
+	width: 1100px;
+}
+#d4ho_footer {
+	width: 1200px;
+	height: 100px;
+	text-align: center;
+	color: #ffffff;
+}
+#support_menue{
+	float: left;
+	width: 180px;
+}
+#support_all{
+	width: 100%;
+	height: auto;
+}
+#support_content{
+
+	width: auto;
+	margin-left: 180px;
+}
+
+.support_ticket_head{
+	width: 100%;
+}

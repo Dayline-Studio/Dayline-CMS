@@ -1,12 +1,5 @@
-<?php
-        require_once("../inc/ErrorHandler.php");
-        require_once("../inc/DirControl.php");
-	include("../inc/auth.php");
-        require_once 'cachesystem/fastcache.php';
-        
-        $cmsError = new ErrorHandler();
-        $cmsDir = new DirControl();
-        echo $cmsDir->getPath('include');
+<?php	
+        require_once("../inc/auth.php");
                 
 //Parameter auslesen für allegemeine Settings
         if (isset($_GET['s'])) { $style = $_GET['s']; }
@@ -21,12 +14,8 @@
         else { $show = ""; }
 
 //Allegmeine Pfade setzten durch Resultat der Parameter 
-        $path['dir'] = '/test/';
+        $path['dir'] = './';
         $path['include'] = "../inc/";
-        $path['style'] = "../style/".$style."/";
-        $path['css'] = $path['style']."_css/";
-        $path['js'] = $path['style']."_js/";
-        $path['style_index'] = $path['style']."index.html";
         $path['images'] = $path['include']."images/"; 
         $path['plugins'] = "../plugins/"; 
         $path['pages'] = "../pages/"; 
@@ -37,15 +26,24 @@
         $path['lang'] = $path['include']."language/";
         $file['mysql'] = $path['include']."mysql.php";
 	
-	//Loading functions and init
-	include($cmsDir->getFile('mysql'));
-	include($cmsDir->getFile('functions'));	
-	include($cmsDir->getFile('init'));
-	
+	require_once($file['mysql']);
+        if ($_SESSION['pageswich'] == 'd4ho') {
+            $db_con['db'] = 'usr_db31_2';
+        }
+        $settings = db("select * from settings",'object');
+        $style = $settings->style;
+        
+        $path['style'] = "../style/".$style."/";
+        $path['css'] = $path['style']."_css/";
+        $path['js'] = $path['style']."_js/";
+        $path['style_index'] = $path['style']."index.html";
+        
+	require_once($file['functions']);
+
 	//Loading Language
 	includeFile($path['lang']."global.php");	
 	
-	$lang_dir = opendir($cmsDir->getPath('lang').$language);
+	$lang_dir = opendir($path['lang'].$language);
 	
 	//Loading the panels
 	if ( $language != 'de' || $language != 'en') 
@@ -57,11 +55,11 @@
 		if ($lang_file != ".." && $lang_file != ".") 
 		{
 			//Import panel function
-			includeFile($lang_dir.$language."/".$lang_file);
+			include($path['lang'].$language.'/'.$lang_file);
 		}
 	} 
+        
 	closedir($lang_dir);
-
 	function includeFile($file)
 	{
 		$r = true;
@@ -69,7 +67,7 @@
 			return include($file);
 		}
 		else {
-                        $cmsError->addError("File not found -".$file);
+                        addError("File not found -".$file);
 			$r = false;
 		}
 		return $r;
@@ -81,8 +79,75 @@
 			return file_get_contents($file);
 		}
 		else {
-			$cmsError->addError("File not found -".$file);
+			addError("File not found -".$file);
 			$r = false;
 		}
 		return $r;
 	}
+        
+        
+            function dbConnect()
+    {
+    
+            global $db_con;
+            if($db_con['host'] != '' && $db_con['user'] != '' && $db_con['pass'] != '' && $db_con['db'] != '')
+            {
+                    if(!$db_link = mysqli_connect($db_con['host'],$db_con['user'],$db_con['pass'], $db_con['db'])) {
+                        error("Fehler beim Zugriff auf die Datenbank!");
+                    }
+                    else {
+                        return $db_link;
+                    }
+            }
+            else {
+                error("Es wurden nicht alle Datenbank Daten zur Verbindung angegeben");
+            }
+            return false;
+    }
+    
+    function db($input = "", $mysqli_action = null)
+    {
+            if(!$qry = mysqli_query( dbConnect(), $input )) {
+                error('<b>Query</b>   = '.str_replace($path['prefix'],'',$input).'</ul>');
+            }           
+
+            if ($mysqli_action != null)
+            {
+                switch ($mysqli_action)
+                {
+                    case 'array':
+                        $qry = mysqli_fetch_array($qry);
+                        break;
+                    case 'rows':
+                        $qry = mysqli_num_rows($qry);
+                        break;
+                    case 'object':
+                        $qry = mysqli_fetch_object($qry);
+                        break;
+                    case 'assoc':
+                        $qry = mysqli_fetch_assoc($qry);
+                        break; 
+                }
+            } 
+            return ($qry);
+    }
+
+    function up($input = "")
+    {
+            if(!mysqli_query( dbConnect(), $input )) {
+                return false;
+            }
+            return true;
+    }
+    
+        function error($error)
+    {
+        global $errors;
+        $errors .= $error."<br>";
+    }
+    
+    function getErrors()
+    {
+        global $errors;
+        return $errors;
+    }
