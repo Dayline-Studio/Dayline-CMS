@@ -11,8 +11,8 @@
         if (isset($_GET['action'])) { $action = $_GET['action']; }
 	else { $action = "";}
 	if (isset($_GET['show'])) { $show = $_GET['show']; }
-        else { $show = ""; }
-
+        else { $show = ""; }        
+        
 //Allegmeine Pfade setzten durch Resultat der Parameter 
         $path['dir'] = './';
         $path['include'] = "../inc/";
@@ -104,6 +104,14 @@
             }
             return false;
     }
+    
+    function _assoc($fetch)
+{
+    if(array_key_exists('_stmt_rows_', $fetch))
+        return $fetch[0];
+    else
+        return $fetch->fetch_assoc();
+}
     
     function db($input = "", $mysqli_action = null)
     {
