@@ -132,9 +132,6 @@
                     case 'object':
                         $qry = mysqli_fetch_object($qry);
                         break;
-                    case 'assoc':
-                        $qry = mysqli_fetch_assoc($qry);
-                        break; 
                 }
             } 
             return ($qry);

@@ -12,44 +12,79 @@
 
 	<link href="[css]style.css" rel="stylesheet" type="text/css">
 	<link href="[css]menu.css" rel="stylesheet" type="text/css">
-        <link rel="stylesheet" href="[style]_css/slider.css">
+    <link rel="stylesheet" href="[css]slider.css">
         
-	<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.min.js"></script>
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 	<script src="[js]menu_jquery.js"></script>
         <script src="[style]_js/jquery.slides.js"></script>
         
 </head>
 <body>
-	<div id="wrapper">
-		<div id="head">
-                        [slider]
-		</div>
-		<div id="menu">
-			[menu]
-		</div>
-		<div id="main">
-			<div id="right">
-				<div class="box_h"> Ucp-Panel</div>
-				<div class="box_r">							
-					[ucp]
-				</div>
-				<div class="box_h"> Clock</div>
-				<div class="box_r">							
-					[clock]
-				</div>
-				<div class="box_h"> Counter</div>
-				<div class="box_r">							
-					[counter]
-				</div>
-			</div>
-			<div id="content">
-				[content]
-			</div>		
-			<div style="clear:both;"></div>
-		</div>
-		<div id="foot">
-		<br>
-			<font color="#fff">[copyright]</font>
-		</div>
-	</div>
+    <div id="wrapper">
+        <div id="head">
+                [slider]
+        </div>
+        <div id="menu">
+                [menu]
+        </div>
+        <div id="main">
+            <div id="right">
+                <div class="box_h"> Ucp-Panel</div>
+                <div class="box_r">							
+                        [ucp]
+                </div>
+                <div class="box_h">Navigation</div>
+                <div class="box_r">
+                    <div id="navi">
+                        [navi]
+                    </div>
+                </div>
+                <div class="box_h"> Share this Site</div>
+                <div class="box_r">							
+                        [share]
+                </div>
+            </div>
+            <div id="content">
+                [content]
+            </div>		
+            <div style="clear:both;"></div>
+            <div id="footbar">
+                <span class="inlineblock" style="width:300px;heigth:300px">
+                    <a class="twitter-timeline"  href="https://twitter.com/tune389"  data-widget-id="441542949550059520">Tweets von @tune389</a>
+                    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+                </span>
+                <hr class="inlineblock v-hr" />
+                <div class="inlineblock" style="width:300px;heigth:300px;align: center">
+                    <span id="hbox">Star this Project
+                    </span>
+                    <br><br>
+                    <iframe 
+                        src="http://hd-gamers.de/github/github-btn.html?user=tune389&repo=cms&type=watch&count=true&size=large" 
+                        allowtransparency="true" 
+                        frameborder="0" 
+                        scrolling="0" 
+                        width="152" 
+                        height="30">
+                    </iframe>
+                    <br><br>
+                    <iframe 
+                        src="http://hd-gamers.de/github/github-btn.html?user=Tune389&type=follow&count=true&size=large" 
+                        allowtransparency="true" 
+                        frameborder="0" 
+                        scrolling="0" 
+                        width="246" 
+                        height="30">
+                    </iframe>            
+                    </div>
+                <hr class="inlineblock v-hr" />
+                <div class="inlineblock" style="width:300px;heigth:300px">
+                    [counter]
+                </div>
+            </div>
+        </div>
+        <div id="foot">
+            <br>
+            <font color="#fff">[copyright]</font>
+        </div>
+    </div>
 </body> 

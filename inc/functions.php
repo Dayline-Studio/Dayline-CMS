@@ -170,3 +170,17 @@
     {
             return	mysqli_fetch_object(db("SELECT ".$permission." From groups WHERE id = ".sqlInt($_SESSION['group_main_id'])))->$permission;
     }
+
+    function con($txt) {
+    $txt = stripslashes($txt);
+    $txt = str_replace("& ","&amp; ",$txt);
+    $txt = str_replace("[","&#91;",$txt);
+    $txt = str_replace("]","&#93;",$txt);
+    $txt = str_replace("\"","&#34;",$txt);
+    $txt = str_replace("<","&#60;",$txt);
+    $txt = str_replace(">","&#62;",$txt);
+    $txt = str_replace("(", "&#40;", $txt);
+    $txt = str_replace("'", "&lsquo;", $txt);
+    $txt = str_replace("(", "&#40;", $txt);
+    return str_replace(")", "&#41;", $txt);
+}
