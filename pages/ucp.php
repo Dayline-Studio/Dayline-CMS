@@ -1,4 +1,4 @@
-<?
+<?php
   include "../inc/config.php";
 if (!$_SESSION['loggedin'])
 {
@@ -7,7 +7,7 @@ if (!$_SESSION['loggedin'])
 $content = "";
 switch ($show)
 {
-	case  "profile":
+	case  "profile_edit":
 	
 	$user = mysqli_fetch_object(db("Select email,street,firstname,lastname,country from users where id = ".$_SESSION['userid']));
 	$content = show("ucp/edit_profile", array(	"firstname" => $user->firstname,
@@ -17,7 +17,7 @@ switch ($show)
 												"street" => $user->street));
 	break;
 	default:
-	$content = getNews($_SESSION['group_main_id']);
+            $content = getNews($_SESSION['group_main_id']);
 	break;
 	}
 switch ($do)
@@ -43,4 +43,3 @@ switch ($do)
 	break;
 }
 init($content);
-?>

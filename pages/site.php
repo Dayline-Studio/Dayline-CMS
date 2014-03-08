@@ -20,6 +20,8 @@ if ($do == "")
             $content = show($content, array(
                 "title" => 	$get_site->title,
                 "site_id" => 	$show,
+                "date" => 	date("F j, Y, g:i a",$get_site->date),
+                "author" => 	$get_site->author,
                 "content" => 	$get_site->content));
             //Loading Meta
             $meta['title'] 			=	$get_site->title;
@@ -30,7 +32,7 @@ if ($do == "")
     else {
         $content = msg('site_not_found');
     }
-     $content = show("site/site_ul", array("li" => getSites(0))).$content;
+    // $content = show("site/site_ul", array("li" => getSites(0))).$content;
 }
 else {
     switch ($do)

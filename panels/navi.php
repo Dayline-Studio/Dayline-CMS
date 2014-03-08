@@ -2,15 +2,17 @@
 function navi()
 {
     global $show;
+    $title = "Navigation";
     switch(substr(basename($_SERVER["PHP_SELF"]),0,-4))
     {
         case 'site':
                 $site = db("SELECT id from sites where title like ".sqlString(str_replace("_"," ",$show)),'object');
-                return siteNaviBackward($site->id);
+                $content =  siteNaviBackward($site->id);
                 break;
         default:
-            return ucfirst(substr(basename($_SERVER["PHP_SELF"]),0,-4));
+            $content = ucfirst(substr(basename($_SERVER["PHP_SELF"]),0,-4));
    }
+   return show("panels/box", array("content" => $content, "title" => $title, "name" => __FUNCTION__));
 }
 
 
@@ -22,5 +24,5 @@ function siteNaviBackward($id)
     {
         $oversite = siteNaviBackward($site->subfrom).' >> ';
     }
-    return $oversite.'<a href="../pages/site.php?show='.str_replace(" ","_",$site->title).'">'.$site->title.'</a>';;
+    return $oversite.'<a href="../pages/site.php?show='.str_replace(" ","_",$site->title).'">'.$site->title.'</a>';
 }
