@@ -1,10 +1,14 @@
 <?php
 function site_navi()
 {
-  global $show;
-  $site = db("SELECT id FROM sites where title LIKE ".sqlString($show), 'object');
-  return show("panels/box", array("content" => baumOut($site->id)));
-}
+    global $meta;
+    if ($meta['page_id'] == 3)
+    {
+       global $show;
+       $site = db("SELECT id FROM sites where title LIKE ".sqlString($show), 'object');
+       return show("panels/box", array("content" => baumOut($site->id)));
+    }
+ }
 
 function siteNaviBackwardList($id, $baum)
 {

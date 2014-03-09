@@ -1,5 +1,11 @@
 <?php
-include "../inc/config.php";
+// Include CMS System
+/**--**/ include "../inc/config.php";
+//------------------------------------------------
+// Site Informations
+/**--**/  $meta['title'] = "Seite";
+/**--**/  $meta['page_id'] = 3;
+//------------------------------------------------
 
 if ($do == "")
 {

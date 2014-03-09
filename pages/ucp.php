@@ -1,5 +1,12 @@
 <?php
-  include "../inc/config.php";
+// Include CMS System
+/**--**/ include "../inc/config.php";
+//------------------------------------------------
+// Site Informations
+/**--**/  $meta['title'] = "UCP";
+/**--**/  $meta['page_id'] = 4;
+//------------------------------------------------
+
 if (!$_SESSION['loggedin'])
 {
 	header('Location: ../');

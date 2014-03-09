@@ -5,13 +5,9 @@ function init($content = "", $meta = null)
 	$init = show(loadingPanels(),array("content" => $content));
 	$settings = mysqli_fetch_object(db("Select * from settings where id = 1"));
 	$init = show($init,array("title" =>                     $meta['title'],
-                                 "language_content" =>          $language,
                                  "author" =>                    $meta['author'],
-                                 "publisher" =>	                $settings->publisher,
-                                 "copyright" =>                 $settings->copyright,
                                  "keywords" =>                  $meta['keywords'],
                                  "description" =>               $meta['description'],
-                                 "language" =>                  $settings->language,
                                  "css" =>                       $path['css'],
                                  "style" =>                     $path['style'],
                                  "js" =>                        $path['js']));

@@ -33,10 +33,6 @@
   text-decoration: none;
   display: block;
   margin: 0;
-  -webkit-transition: color .2s ease;
-  -moz-transition: color .2s ease;
-  -ms-transition: color .2s ease;
-  -o-transition: color .2s ease;
   transition: color .2s ease;
 }
 #cssmenu ul li ul {
@@ -47,10 +43,6 @@
 #cssmenu ul li ul li {
   max-height: 0;
   position: absolute;
-  -webkit-transition: max-height 0.4s ease-out;
-  -moz-transition: max-height 0.4s ease-out;
-  -ms-transition: max-height 0.4s ease-out;
-  -o-transition: max-height 0.4s ease-out;
   transition: max-height 0.4s ease-out;
   background: #ffffff;
 }
@@ -116,10 +108,6 @@
   top: 0;
   z-index: 0;
   background: #ffffff;
-  -webkit-transition: height .2s;
-  -moz-transition: height .2s;
-  -ms-transition: height .2s;
-  -o-transition: height .2s;
   transition: height .2s;
 }
 #cssmenu > ul > li.has-sub > a {
@@ -184,14 +172,10 @@
 #cssmenu #menu-button {
   display: none;
 }
-@media all and (max-width: 768px), only screen and (-webkit-min-device-pixel-ratio: 2) and (max-width: 1024px), only screen and (min--moz-device-pixel-ratio: 2) and (max-width: 1024px), only screen and (-o-min-device-pixel-ratio: 2/1) and (max-width: 1024px), only screen and (min-device-pixel-ratio: 2) and (max-width: 1024px), only screen and (min-resolution: 192dpi) and (max-width: 1024px), only screen and (min-resolution: 2dppx) and (max-width: 1024px) {
+@media all and (max-width: 768px), only screen and (max-width: 1024px), only screen and (max-width: 1024px), only screen and (max-width: 1024px), only screen and (min-resolution: 192dpi) and (max-width: 1024px), only screen and (min-resolution: 2dppx) and (max-width: 1024px) {
   #cssmenu > ul {
     max-height: 0;
     overflow: hidden;
-    -webkit-transition: max-height 0.35s ease-out;
-    -moz-transition: max-height 0.35s ease-out;
-    -ms-transition: max-height 0.35s ease-out;
-    -o-transition: max-height 0.35s ease-out;
     transition: max-height 0.35s ease-out;
   }
   #cssmenu > ul.open {
@@ -205,8 +189,6 @@
     float: none;
   }
   #cssmenu ul li a {
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
     box-sizing: border-box;
     width: 100%;
     padding: 12px 20px;
@@ -245,8 +227,6 @@
   }
   #cssmenu #menu-button {
     display: block;
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
     box-sizing: border-box;
     width: 100%;
     padding: 15px 20px;

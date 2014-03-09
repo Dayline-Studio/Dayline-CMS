@@ -21,7 +21,7 @@
                                      "style" =>                     $path['style'],
                                      "js" =>                        $path['js']));
             $pageswitcher = show("../pageswitcher");
-            display($pageswitcher.$init);
+            display($init);
     }
 
     function display($content)

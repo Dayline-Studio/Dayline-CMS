@@ -32,15 +32,15 @@ function generator($subfrom = 0, $part = 0)
 	$menu ="";
 	while  ($get = mysqli_fetch_assoc($qury)) 
 	{
+                if ($get['newtab']) {
+                    $tab = 'target="_blank"';
+                }
+                else {
+                    $tab = '';
+                }
 		$issub = db('SELECT subfrom FROM menu WHERE subfrom = '.$get['id'], 'rows');
 		if (!$issub)
 		{
-			if ($get['newtab']) {
-                            $tab = 'target="_blank"';
-                        }
-			else {
-                            $tab = '';
-                        }
 			$menu .= show("panels/menu_item", array('title' => $get['title'],
 								'newtab' => $tab,
 								'link' => $get['link']));
@@ -49,6 +49,7 @@ function generator($subfrom = 0, $part = 0)
 		{
 			$menu .= show("panels/menu_sub", array( 'title' => $get['title'],
                                                                 'link' => $get['link'],
+                                                                'newtab' => $tab,
 								'items' => generator($get['id'],$part)));
 		}
 	}
