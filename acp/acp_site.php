@@ -26,8 +26,8 @@ switch ($action)
 switch ($do)
 {
     case 'new_site':
-            if(up("INSERT INTO sites (`id`, `title`, `content`, `author`, `keywords`, `description`, `subfrom`, `position`) 
-                   VALUES (NULL, ".sqlString($_POST['title']).", '"._site_content_input."', ".sqlString($_SESSION['name']).", ".sqlString($_POST['keywords']).", ".sqlString($_POST['description']).", ".sqlInt($_POST['subfrom']).", 0)")){
+            if(up("INSERT INTO sites (`id`, `title`, `content`, `author`, `keywords`, `description`, `subfrom`, `position`, lastedit,editby,date) 
+                   VALUES (NULL, ".sqlString($_POST['title']).", '"._site_content_input."', ".sqlString($_SESSION['name']).", ".sqlString($_POST['keywords']).", ".sqlString($_POST['description']).", ".sqlInt($_POST['subfrom']).", 0, '', '', '".time()."')")){
             $show = msg("site_created_sucessful");
             }
             break;

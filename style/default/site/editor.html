@@ -18,9 +18,21 @@ tinymce.init({
     toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image"
 });
 </script>
-		<h1>
-			[title]
-		</h1>
+<table width="100%">
+    <tr>
+        <td rowspan="2" width="50%" align="left">
+            <h1>[title]</h1>
+        </td>
+        <td width="50%" align="right">
+            [author]
+        </td>
+    </tr>
+    <tr>
+        <td width="50%" align="right">
+            [edited]
+        </td>
+    </tr>
+</table>
 <form method="post" action="site.php?show=[site_id]&do=update">
 		<div class="edit">
 			[content]

@@ -29,7 +29,9 @@ function siteNaviBackwardList($id, $baum)
 
 function baumOut($id)
 {
-    foreach ( siteNaviBackwardList($id) as $items) 
+    $baum[1] = siteNaviForward($id);
+    $baum[0] = 1;
+    foreach ( siteNaviBackwardList($id, $baum) as $items) 
     {
         if (!is_numeric($items)) 
         {
@@ -38,4 +40,15 @@ function baumOut($id)
     }
     
     return $ret;
+}
+
+function siteNaviForward($id)
+{
+    $out = "";
+    $sites = db("select title, subfrom, id from sites where subfrom = ".$id);
+    while ($get = mysqli_fetch_assoc($sites))
+    {
+        $out .= show("site/site_li", array("title" => $get['title'], "link" => str_replace(" ","_",$get['title'])));
+    }
+    return $out;
 }

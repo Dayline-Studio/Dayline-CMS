@@ -184,3 +184,20 @@
     $txt = str_replace("(", "&#40;", $txt);
     return str_replace(")", "&#41;", $txt);
 }
+
+  function check_email_address($str_email_address) {
+    if('' != $str_email_address && !((eregi("^[_\.0-9a-z-]+@([0-9a-z-]+\.)+[a-z]{2,6}$",$str_email_address)))) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+  
+  function getCommentBox($site)
+  {
+      $comments = $db("select * from comments where site = ".$site);
+      while ($comment = $comments)
+      {
+          
+      }
+  }

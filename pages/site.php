@@ -17,11 +17,15 @@ if ($do == "")
     
     if ($get_site = db("select * from sites where title Like ".sqlString($show),'object'))
     {
+            $author = "Written by ".$get_site->author." - ".date("F j, Y, g:i a",$get_site->date);
+            if ($get_site->lastedit != "") {
+            $edited = "Last edit by ".$get_site->editby." - ".date("F j, Y, g:i a",$get_site->lastedit);
+            }
             $content = show($content, array(
                 "title" => 	$get_site->title,
                 "site_id" => 	$show,
-                "date" => 	date("F j, Y, g:i a",$get_site->date),
-                "author" => 	$get_site->author,
+                "edited" =>     $edited,
+                "author" =>     $author,
                 "content" => 	$get_site->content));
             //Loading Meta
             $meta['title'] 			=	$get_site->title;
@@ -32,20 +36,19 @@ if ($do == "")
     else {
         $content = msg('site_not_found');
     }
-    // $content = show("site/site_ul", array("li" => getSites(0))).$content;
 }
 else {
     switch ($do)
     {
         case  'update':
             if (permTo('site_edit')){
-                echo sqlString($show);
-            if (up("update sites Set content = '".mysql_real_escape_string($_POST['mce_0'])."' where title LIKE ".sqlString($show))){
-                    $content = msg('change_sucessful');
+                if (up("update sites Set content = '".mysql_real_escape_string($_POST['mce_0'])."', editby = ".sqlString($_SESSION['name']).", lastedit = ".time()." where title LIKE ".sqlString($show))){
+                        $content = msg('change_sucessful');
+                } else {
+                    $content = msg('change_failed');
+                }
             }
-            else $content = msg('change_failed');
-            }
-            else{
+            else {
                $content = msg('change_failed');
             }
             break;
