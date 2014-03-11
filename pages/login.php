@@ -36,30 +36,41 @@ if ($do == "")
 switch ($do)
 {
     case 'login': 
-        $username = $_POST['username'];
-        $passwort = $_POST['passwort'];
-
-        $user = mysqli_fetch_object(db('Select * From users Where user like '.sqlString(strtolower($username))));
-        if ($user->id != "" || customHasher($passwort,$user->salt,$user->rounds) != $user->pass)
+        if ($_POST['username'] != "" && $_POST['passwort'] != "")
         {
-            $_SESSION['loggedin'] = true;
-            $_SESSION['name'] = $user->name;
-            $_SESSION['user'] = $user->user;
-            $_SESSION['userid'] = $user->id;
-            $_SESSION['email'] = $user->email;
-            $_SESSION['login_time'] = time();
-            $_SESSION['group_main_id'] = $user->main_group;
-            header('Location: ../pages/ucp.php');
-            exit;
-        } else {
-            $content = msg('login_failed');
+            if (mysqli_num_rows(db("SELECT id FROM users WHERE user LIKE ".sqlString(strtolower($_POST['username'])))) == 1)
+            {
+                $username = $_POST['username'];
+                $passwort = $_POST['passwort'];
+
+                $user = mysqli_fetch_object(db('Select * From users Where user like '.sqlString(strtolower($username))));
+
+                if (customHasher($passwort,$user->salt,$user->rounds) == $user->pass)
+                {
+                    $_SESSION['loggedin'] = true;
+                    $_SESSION['name'] = $user->name;
+                    $_SESSION['user'] = $user->user;
+                    $_SESSION['userid'] = $user->id;
+                    $_SESSION['email'] = $user->email;
+                    $_SESSION['login_time'] = time();
+                    $_SESSION['group_main_id'] = $user->main_group;
+                    header('Location: ../pages/ucp.php');
+                    exit;
+                } else { 
+                    $content = msg(_wrong_pw);
+                }
+            } else { 
+                $content = msg(_user_not_found);
+            } 
+        } else { 
+            $content = msg(_fields_missing);  
         }
         break;
     case 'register':
 		if($_POST['username'] == "" || $_POST['firstname'] == "" ||
 		   $_POST['lastname'] == "" || $_POST['mail'] == "" ||
 		   $_POST['password'] == "" || $_POST['password2'] == "") {
-			$content = msg("fields_missing");	//felder nicht ausgefüllt
+			$content = msg(_fields_missing);	//felder nicht ausgefüllt
 		} else {
                     $nick 	= $_POST['username'];
                     $firstname	= $_POST['firstname'];
@@ -67,16 +78,16 @@ switch ($do)
                     $email      =  $_POST['mail'];
 		
                     if ($_POST['password'] != $_POST['password2']){
-                        $content = msg("pass_dont_match");
+                        $content = msg(_pass_dont_match);
                     } else 
                     if (!check_email_address($_POST['mail'])){
-                        $content = msg("mailcheck_failed");
+                        $content = msg(_mailcheck_failed);
                     } else
                     if (db("Select id "
                             . "FROM users "
                             . "where user LIKE ".strtolower(sqlString($nick))." "
                             . "OR email LIKE ".sqlString($email),'rows') > 0) {
-                        $content = msg("already_exists");
+                        $content = msg(_already_exists);
                     } else {
                         //Passwort generieren
                         $salt = randomstring(16);
@@ -87,10 +98,10 @@ switch ($do)
                         if (up("INSERT INTO users (id, name, pass, salt, email, rounds, user, street, firstname, lastname, country, main_group) "
                                 . "VALUES (NULL, ".sqlString($nick).", ".sqlString($pass).", ".sqlString($salt).", ".sqlString($email).", ".sqlInt($rounds).", ".strtolower(sqlString($nick)).", '', ".sqlString($firstname).", ".sqlString($lastname).", '', '0')"))
                         {
-                            $content = msg("regist_sucess");
+                            $content = msg(_regist_sucess);
                         }
                         else {
-                            $content = msg("regist_failed");
+                            $content = msg(_regist_failed);
                         }
                    }
                 }

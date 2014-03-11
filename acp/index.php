@@ -3,10 +3,12 @@
 /**--**/ include "../inc/config.php";
 //------------------------------------------------
 // Site Informations
-/**--**/  $meta['title'] = "News";
-/**--**/  $meta['page_id'] = 2;
+/**--**/  $meta['title'] = "ACP";
 //------------------------------------------------
 
 
-$content = getNews(0);
-init($content,$meta); 
+
+ 
+function getAcpMenu() {
+    $sites = db("SELECT * FROM menu WHERE part = 3");
+}     

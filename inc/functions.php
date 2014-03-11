@@ -37,7 +37,7 @@
             //Get the Main File for this Page (index.html)
             $output = getFile($path['style_index']);
 
-            //Loading the panels
+            //Loading the panels 
             while ($panel = readdir($panels)) 
             {
                     //Loading panel functions
@@ -125,7 +125,7 @@
             $r = 'g';
             $url = 'http://www.gravatar.com/avatar/';
             $url .= md5( strtolower( trim( $email ) ) );
-            $url .= "?s=$s&d=$d&r=$r";
+            $url .= "?s=$s&amp;d=$d&amp;r=$r";
             if ( $img ) 
             {
                     $url = '<img src="' . $url . '" />';
@@ -133,7 +133,7 @@
             return $url;
     }
 
-    function msg($id, $kind = 'stock')
+    function msg($msg, $kind = 'stock')
     {
             global $path;
             switch ($kind)
@@ -142,8 +142,7 @@
                     $file = show("msg/msg_stock");
                     
             }
-            
-            $msg = constant("_".$id);
+           
             $msg = show ($file, array(	"msg" => $msg,
                                         "link" => $_SESSION['last_site']));
             return $msg;
@@ -195,9 +194,67 @@
   
   function getCommentBox($site)
   {
+      $comment_parts = "";
       $comments = $db("select * from comments where site = ".$site);
       while ($comment = $comments)
       {
-          
+          $comment_parts = getComment($comment);
       }
+      return $comment_parts.dispCommentInput();
+  }
+  
+  function getComment($comment)
+  {
+    $com_disp = "";
+    $date = ((time()-$comment['date'])/60);
+    if ($date*60 < 60){
+        $out = (int)($date*60) . " sec ago";
+    }
+    else if ($date < 60) {
+        $out = (int)$date." min ago";
+    }
+    else if ($date > 59 && $date/60 < 24){
+        $out = "vor ".(int)($date/60)."h at ". date("h:i A",$comment['date']);
+    }
+    else if ($date/60 > 23 && $date/60/24 < 4) {
+        $out = (int)($date/60/24)." day(s) ago at ". date("h:i A",$comment['date']);
+    }
+    else {
+        $out = date("F j, g:i a", $comment['date']);
+    }
+
+    $user = db("select email from users where id = ".$comment['userid'],'object');
+    $gravatar = get_gravatar($user->email, 52, false);
+    $com_disp .= show("ucp/comment", array("user" => $comment['name'],
+                                            "gravatar" => $gravatar,
+                                            "content" => $comment['content'],
+                                            "date" => $out));
+
+    
+    return $com_disp;
+    }
+    
+  
+  function getComments($site = 0, $subsite = 0)
+  {
+    $comments = db("SELECT * FROM comments WHERE site = ".$site." AND subsite = ".$subsite);
+    
+    $output ='';
+    while ($comment = mysqli_fetch_assoc($comments))
+    {
+        $output .= getComment($comment);
+    }
+    return $output;
+  }
+  
+  function dispCommentInput($site = 0, $subsite = 0)
+  {
+     $gravatar = get_gravatar($_SESSION['email'], 52, false);
+     return show("ucp/comment_input", 
+          array(
+               "gravatar" => $gravatar,
+               "user" => $_SESSION['name'],
+               "site" => $site,
+               "subsite" => $subsite,
+                 )); 
   }

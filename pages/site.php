@@ -13,7 +13,7 @@ if ($do == "")
         $content = "site/editor";
     }
     else{
-        $content = "site/output";
+        $content = "site/output"; 
     }
     
    
@@ -40,7 +40,7 @@ if ($do == "")
             $meta['description']            =       $get_site->description;
     }
     else {
-        $content = msg('site_not_found');
+        $content = msg(_site_not_found);
     }
 }
 else {
@@ -49,13 +49,13 @@ else {
         case  'update':
             if (permTo('site_edit')){
                 if (up("update sites Set content = '".mysql_real_escape_string($_POST['mce_0'])."', editby = ".sqlString($_SESSION['name']).", lastedit = ".time()." where title LIKE ".sqlString($show))){
-                        $content = msg('change_sucessful');
+                        $content = msg(_change_sucessful);
                 } else {
-                    $content = msg('change_failed');
+                    $content = msg(_change_failed);
                 }
             }
             else {
-               $content = msg('change_failed');
+               $content = msg(_change_failed);
             }
             break;
     }
