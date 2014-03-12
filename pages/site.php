@@ -32,7 +32,7 @@ if ($do == "")
                 "site_id" => 	$show,
                 "edited" =>     $edited,
                 "author" =>     $author,
-                "content" => 	$get_site->content));
+                "content" => 	$get_site->content)).  dispComments($meta['page_id'],$get_site->id);
             //Loading Meta
             $meta['title'] 			=	$get_site->title;
             $meta['author']			=	$get_site->author;

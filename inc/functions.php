@@ -192,10 +192,10 @@
     }
   }
   
-  function getCommentBox($site)
+  function getCommentBox($site, $subsite = 0)
   {
       $comment_parts = "";
-      $comments = $db("select * from comments where site = ".$site);
+      $comments = $db("select * from comments where site = ".$site," and subsite = ".$subsite);
       while ($comment = $comments)
       {
           $comment_parts = getComment($comment);
@@ -257,4 +257,9 @@
                "site" => $site,
                "subsite" => $subsite,
                  )); 
+  }
+  
+  function dispComments($site, $subsite)
+  {
+     return show("ucp/comment_body", array("comments" => getComments($site,$subsite), "input" => dispCommentInput($site,$subsite)));
   }

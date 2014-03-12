@@ -39,11 +39,11 @@ pre {
 }
 
 .com_clear { clear:both; padding:0; margin:0; width:100%; font-size:0px; line-height:0px;}
-.comment {  width:500px; padding-bottom: 10px;}
-.comment .avatar_box { float:left; height: auto; width:80px;}
+.comment {  width:700px; padding-bottom: 10px;}
+.comment .avatar_box { float:left; width:80px;}
 .comment .avatar { background:#fff; padding:4px; border:1px solid #d8d8d8; position:relative;}
 .comment .username { color:#383838; font-weight:bold; clear:left; margin: 0;}
-.comment .comment_box { float:right; padding-bottom:8px; width:410px; height:auto; background:#fff; border:1px solid #d8d8d8; position:relative;}
+.comment .comment_box { float:right; padding-bottom:8px; width:610px; background:#fff; border:1px solid #d8d8d8; position:relative;}
 .comment .comment_box:before { content:''; width:13px; height:13px; background:#fff; border-left:1px solid #d8d8d8; border-bottom:1px solid #d8d8d8; position:absolute; top:24px; left:-8px; transform:rotate(45deg);}
 .comment .comment_paragraph { color:#454545; line-height:18px; margin:4px 10px 0 15px;}
 .comment .comment_paragraph:focus { outline:none;}
