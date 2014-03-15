@@ -17,7 +17,7 @@ jQuery.QapTcha = {
 			disabledSubmit : true,
 			autoRevert : true,
 			PHPfile : 'php/Qaptcha.jquery.php',
-			autoSubmit : false
+			autoSubmit : true
         };
 
 		if(this.length>0)
@@ -59,7 +59,7 @@ jQuery.QapTcha = {
 					{
 						// set the SESSION iQaptcha in PHP file
 						$.post(opts.PHPfile,{
-							action : 'qaptcha',
+							captcha : 'qaptcha',
 							qaptcha_key : inputQapTcha.attr('name')
 						},
 						function(data) {

@@ -8,13 +8,17 @@
 //------------------------------------------------
 
 if ($_GET['id']== '')
-{
+{ 
     $content = getNews(0);    
-} /* else {
+}  else {
     $newsid = $_GET['id'];
     
     $post = db("SELECT * FROM news WHERE id = ".sqlInt($newsid),'object');
-    $content = show("news/post",array(	"news_headline"	=> $post->title,"news_date" => date("m.d.y",$post->date), "news_content" => $post->post
+    $content = show("news/post",
+                    array(
+                        "news_headline"	=> $post->title,
+                        "news_date" => date("m.d.y",$post->date), 
+                        "news_content" => $post->post
                     ));
     $content .= getCommentBox($meta['page_id'], $post->id);
 }
