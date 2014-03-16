@@ -1,12 +1,10 @@
 <?php
-// Include CMS System
-/**--**/ include "../inc/config.php";
 //------------------------------------------------
 // Site Informations
-/**--**/  $meta['title'] = "Menü Konfigurieren";
+/**--**/  $meta['title'] = "Men&uuml; Konfigurieren";
 //------------------------------------------------
 // Site Permissions
-/**--**/ if (!permTo("site_create")) { msg('no_permissions'); }
+/**--**/ // if (!permTo("site_create")) { msg('no_permissions'); }
 //------------------------------------------------
 
 $menu = db("SELECT * FROM menu");
@@ -23,10 +21,6 @@ while ($eintrag = mysqli_fetch_assoc($menu))
 
 switch($action){
     default:
-        $output = show("acp/acp_menu_item", array("options" => $items));
+        $content = show("acp/acp_menu_item", array("options" => $items));
         break;
 }
-
-
-
-init($output,$meta);
