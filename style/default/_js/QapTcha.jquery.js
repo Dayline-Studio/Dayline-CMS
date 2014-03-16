@@ -16,8 +16,8 @@ jQuery.QapTcha = {
 			txtUnlock : 'Unlocked : form can be submited',
 			disabledSubmit : true,
 			autoRevert : true,
-			PHPfile : '../inc/captcha_handler.php',
-			autoSubmit : true
+			PHPfile : '../../../inc/captcha_handler.php',
+			autoSubmit : false
         };
 
 		if(this.length>0)

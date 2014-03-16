@@ -11,16 +11,20 @@ if ($_GET['id']== '')
 { 
     $content = getNews(0);    
 }  else {
+    
+    if (permTo('site_edit')){
+    $content = "site/content_editable";
+    }
+    else{
+        $content = "site/content"; 
+    }
+    
     $newsid = $_GET['id'];
     
     $post = db("SELECT * FROM news WHERE id = ".sqlInt($newsid),'object');
-    $content = show("news/post",
-                    array(
-                        "news_headline"	=> $post->title,
-                        "news_date" => date("m.d.y",$post->date), 
-                        "news_content" => $post->post
-                    ));
-    $content .= getCommentBox($meta['page_id'], $post->id);
+    
+    $content = show($content, array("content" => $post->post)).dispComments($meta['page_id'], $post->id);
 }
-//Initialisierung de Seite */
+
+//Initialisierung der Seite */
 init($content,$meta);   

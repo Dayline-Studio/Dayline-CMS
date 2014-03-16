@@ -150,13 +150,16 @@
 
     function getNews($groupid = 0)
     {
-            $news_posts = db("Select * From news where public_show = 1 AND grp = ".$groupid);
+            $news_posts = db("Select * From news where public_show = 1 AND grp = ".$groupid." ORDER BY date DESC");
             $list_news = "";
             while ($get_news = mysqli_fetch_assoc($news_posts))
             {
-                    $list_news .= show("news/post",array(	"news_headline"	=>	$get_news['title'],
-                                                                                            "news_date"		=> 	date("m.d.y",$get_news['date']),
-                                                                                            "news_content"	=>	$get_news['post']
+                    $list_news .= show("news/post",array(
+                                                            "news_headline" => $get_news['title'],
+                                                            "news_date" => date("m.d.y",$get_news['date']),
+                                                            "news_content" => $get_news['post'],
+                                                            "comments" => '<a href="../pages/news.php?id='.$get_news['id'].'">Kommentar schreiben</a>',
+                                                            "post_comment" => "Kommentare: ".db("SELECT count(id) as counted FROM comments where site = 2 AND subsite = ".$get_news['id'],'object')->counted
                                                                                     ));
             }
             if ($list_news == ""){

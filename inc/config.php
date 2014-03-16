@@ -6,12 +6,12 @@
         else { $style = "default"; }
         if (isset($_GET['l'])) { $language = $_GET['l']; } 
         else { $language = "de"; }
+        if (isset($_GET['show'])) { $show = $_GET['show']; }
+        else { $show = ""; }    
         if (isset($_GET['do'])) { $do = $_GET['do']; }
         else { $do = ""; }
         if (isset($_GET['action'])) { $action = $_GET['action']; }
-	else { $action = "";}
-	if (isset($_GET['show'])) { $show = $_GET['show']; }
-        else { $show = ""; }        
+	else { $action = "";}    
         
 //Allegmeine Pfade setzten durch Resultat der Parameter 
         $path['dir'] = './';
