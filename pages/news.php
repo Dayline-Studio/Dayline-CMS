@@ -9,7 +9,7 @@
 
 if ($_GET['id']== '')
 { 
-    $content = getNews(0);    
+    $content = getNews(2);    
 }  else {
     
     if (permTo('site_edit')){

@@ -19,7 +19,7 @@ if ($_SESSION['loggedin'])
                 if (permTo("comment"))
                 {
                     $sql = "INSERT INTO comments (id, name, userid, date, content, site, subsite) "
-                            . "VALUES (NULL, ".sqlString($_SESSION['name']).", ".sqlString($_SESSION['userid']).", '".time()."', ".  sqlString($_POST['comment']).", '".$qry->id."', ".  sqlInt($_GET['subsite']).")";
+                            . "VALUES (NULL, ".sqlString($_SESSION['name']).", ".sqlString($_SESSION['userid']).", '".time()."', ".  sqlString(con($_POST['comment'])).", '".$qry->id."', ".  sqlInt($_GET['subsite']).")";
                     if (up($sql))
                     {
                         $content = msg(_comment_successful);

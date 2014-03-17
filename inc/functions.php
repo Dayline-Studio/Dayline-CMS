@@ -21,6 +21,7 @@
                                      "style" =>                     $path['style'],
                                      "js" =>                        $path['js']));
             $pageswitcher = show("../pageswitcher");
+            $init = show($init, convertMatch(searchBetween("[s_", $init, "]")));
             display($init);
     }
 
@@ -112,11 +113,11 @@
     }
 
     function sqlString($param) {
-            return (NULL === $param ? "NULL" : '"'.mysql_real_escape_string($param).'"');
+            return (NULL === $param ? "NULL" : "'".con(mysql_real_escape_string($param))."'");
     }
 
     function sqlInt($param) {
-            return (NULL === $param ? "NULL" : intVal ($param));
+            return (NULL === $param ? "NULL" : "'".intVal($param)."'");
     }
 
     function get_gravatar( $email, $s = 80, $img = false) 
@@ -294,42 +295,64 @@
     return false;
   }
   
-  	function updateRSS() {
-		$xml = new DOMDocument('1.0', 'UTF-8');
-		$xml->formatOutput = true;
+    function updateRSS() {
+            $xml = new DOMDocument('1.0', 'UTF-8');
+            $xml->formatOutput = true;
 
-		$roo = $xml->createElement('rss');
-		$roo->setAttribute('version', '2.0');
-		$xml->appendChild($roo);
-		$cha = $xml->createElement('channel');
-		$roo->appendChild($cha); 
-	  
-		$qry = db("SELECT * FROM news WHERE grp = 0 AND public_show = 1");
-		while($rss_feed = mysqli_fetch_assoc($qry))
-		{
-			$rss['title'] = $rss_feed['title'];
-			$rss['description'] = $rss_feed['description'];
-			$rss['language'] = $lang;
-			$rss['link'] = "http://cms.d4ho.de/pages/news.php?id=".$rss_feed['id'];
-			$rss['lastBuildDate'] = date("D, j M Y H:i:s ", $rss_feed['date']);
-			$hea = $xml ->createElement('image');
-			$cha ->appendChild($hea);
-			$img = $xml ->createElement('url',$rss_feed['main_image']);
-			$hea ->appendChild($img);
-			$img = $xml ->createElement('width',88);
-			$hea ->appendChild($img);	
-			$img = $xml ->createElement('height',31);
-			$hea ->appendChild($img);
-		
-			foreach ($rss as $tag => $value)
-			{
-				$hea = $xml ->createElement($tag, utf8_encode($value));
-				$cha ->appendChild($hea);
-			}
-		}
-		
-		if($xml->save('../inc/upload/rss/rss.xml')) {
-			return true;
-		}		
-		return false;
-	}
+            $roo = $xml->createElement('rss');
+            $roo->setAttribute('version', '2.0');
+            $xml->appendChild($roo);
+            $cha = $xml->createElement('channel');
+            $roo->appendChild($cha); 
+
+
+            $qry = db("SELECT * FROM news WHERE grp = 0 AND public_show = 1");
+            while($rss_feed = mysqli_fetch_assoc($qry))
+            {
+                    $rss['title'] = $rss_feed['title'];
+                    $rss['description'] = $rss_feed['description'];
+                    $rss['language'] = $lang;
+                    $rss['link'] = "http://cms.d4ho.de/pages/news.php?id=".$rss_feed['id'];
+                    $rss['lastBuildDate'] = date("D, j M Y H:i:s ", $rss_feed['date']);
+                    $hea = $xml ->createElement('image');
+                    $cha ->appendChild($hea);
+                    $img = $xml ->createElement('url',$rss_feed['main_image']);
+                    $hea ->appendChild($img);
+                    $img = $xml ->createElement('width',88);
+                    $hea ->appendChild($img);	
+                    $img = $xml ->createElement('height',31);
+                    $hea ->appendChild($img);
+
+                    foreach ($rss as $tag => $value)
+                    {
+                            $hea = $xml ->createElement($tag, utf8_encode($value));
+                            $cha ->appendChild($hea);
+                    }
+            }
+
+            if($xml->save('../inc/upload/rss/rss.xml')) {
+                    return true;
+            }		
+            return false;
+    }
+        
+    function convertMatch($matches)
+    {
+        foreach ($matches as $value)
+        {
+            if (defined("_".$value)) {
+                $new["s_".$value] = constant("_".$value);
+            } else {
+                $new["s_".$value] = "STRING_NOT_FOUND_".strtoupper($value);
+            }
+        }
+        return $new;
+    }
+
+    function searchBetween($start_tag, $String ,$end_tag)
+    {
+        if (preg_match_all('/'.preg_quote($start_tag).'(.*?)'.preg_quote($end_tag).'/s', $String, $matches)) {
+                return $matches[1];
+        }
+        return false;
+    }

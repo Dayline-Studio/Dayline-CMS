@@ -116,7 +116,7 @@
     function db($input = "", $mysqli_action = null)
     {
             if(!$qry = mysqli_query( dbConnect(), $input )) {
-                error('<b>Query</b>   = '.str_replace($path['prefix'],'',$input).'</ul>');
+                die($input);
             }           
 
             if ($mysqli_action != null)
@@ -140,7 +140,7 @@
     function up($input = "")
     {
             if(!mysqli_query( dbConnect(), $input )) {
-                return false;
+                die($input);
             }
             return true;
     }

@@ -34,7 +34,7 @@ else
 }
 
 if ($error == "") {
-    init($acp_menu.$content,$meta);
+    init($acp_menu.'<hr>'.$content,$meta);
 } else {
     init($error,$meta);
 }
