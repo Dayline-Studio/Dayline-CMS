@@ -304,7 +304,6 @@
 		$cha = $xml->createElement('channel');
 		$roo->appendChild($cha); 
 	  
-
 		$qry = db("SELECT * FROM news WHERE grp = 0 AND public_show = 1");
 		while($rss_feed = mysqli_fetch_assoc($qry))
 		{
