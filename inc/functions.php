@@ -94,7 +94,7 @@
             }
             return $pass;
     }
-
+	
     function customHasher($pw, $salt, $rounds)
     {
             $hash = $pw;
@@ -293,3 +293,44 @@
     }
     return false;
   }
+  
+  	function updateRSS() {
+		$xml = new DOMDocument('1.0', 'UTF-8');
+		$xml->formatOutput = true;
+
+		$roo = $xml->createElement('rss');
+		$roo->setAttribute('version', '2.0');
+		$xml->appendChild($roo);
+		$cha = $xml->createElement('channel');
+		$roo->appendChild($cha); 
+	  
+
+		$qry = db("SELECT * FROM news WHERE grp = 0 AND public_show = 1");
+		while($rss_feed = mysqli_fetch_assoc($qry))
+		{
+			$rss['title'] = $rss_feed['title'];
+			$rss['description'] = $rss_feed['description'];
+			$rss['language'] = $lang;
+			$rss['link'] = "http://cms.d4ho.de/pages/news.php?id=".$rss_feed['id'];
+			$rss['lastBuildDate'] = date("D, j M Y H:i:s ", $rss_feed['date']);
+			$hea = $xml ->createElement('image');
+			$cha ->appendChild($hea);
+			$img = $xml ->createElement('url',$rss_feed['main_image']);
+			$hea ->appendChild($img);
+			$img = $xml ->createElement('width',88);
+			$hea ->appendChild($img);	
+			$img = $xml ->createElement('height',31);
+			$hea ->appendChild($img);
+		
+			foreach ($rss as $tag => $value)
+			{
+				$hea = $xml ->createElement($tag, utf8_encode($value));
+				$cha ->appendChild($hea);
+			}
+		}
+		
+		if($xml->save('../inc/upload/rss/rss.xml')) {
+			return true;
+		}		
+		return false;
+	}
