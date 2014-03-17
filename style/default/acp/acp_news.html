@@ -1,0 +1,35 @@
+<form action="index.php?acp=acp_news&AMP;do=create_news" method="post">
+	<table>
+		<tr><td>[s_title_site]:</td><td><input name="title" type="text" value=""></td></tr>
+		<tr><td>[s_keywords]:</td><td><input name="keywords" type="text" value=""></td></tr>
+                <tr><td>[s_group]:</td><td><select name="groupid">[options_group]</select></td></tr>
+                <tr><td>[s_show_public]:</td><td><input type="checkbox" name="visible" value="1" /></td></tr>
+                <tr><td>[s_main_image]:</td><td><input name="main_image" type="text" value=""></td></tr>
+                <tr><td>[s_description]:</td><td><textarea rows="4" cols="50" name="description"> </textarea></td></tr>
+	</table>
+        [s_news_content]
+        <script type="text/javascript" src="/plugins/tinymce/tinymce.min.js"></script>
+        <script type="text/javascript">
+        tinymce.init({
+            selector: "h1.edit",
+            inline: true,
+            toolbar: "undo redo",
+            menubar: false
+        });
+
+        tinymce.init({
+            selector: "div.edit",
+            inline: true,
+            plugins: [
+                "advlist autolink lists link image charmap print preview anchor",
+                "searchreplace visualblocks code fullscreen",
+                "insertdatetime media table contextmenu paste"
+            ],
+            toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image"
+        });
+        </script>
+        <div class="edit">
+                [s_enter_content_here]
+        </div>
+        <input type="submit" value="Annehmen" />
+</form>
