@@ -38,12 +38,18 @@ switch ($do)
     case 'login': 
         if ($_POST['username'] != "" && $_POST['passwort'] != "")
         {
-            if (mysqli_num_rows(db("SELECT id FROM users WHERE user LIKE ".sqlString(strtolower($_POST['username'])))) == 1)
+		
+			if (!check_email_address($_POST['username'])) {
+				$sql = "user";
+			} else {
+				$sql = "email";
+			}
+            if (db("SELECT id FROM users WHERE ".$sql." LIKE ".sqlString(strtolower($_POST['username'])),'rows') == 1)
             {
                 $username = $_POST['username'];
                 $passwort = $_POST['passwort'];
 
-                $user = mysqli_fetch_object(db('Select * From users Where user like '.sqlString(strtolower($username))));
+                $user = mysqli_fetch_object(db('Select * From users Where '.$sql.' like '.sqlString(strtolower($username))));
 
                 if (customHasher($passwort,$user->salt,$user->rounds) == $user->pass)
                 {
@@ -70,7 +76,7 @@ switch ($do)
 		if($_POST['username'] == "" || $_POST['firstname'] == "" ||
 		   $_POST['lastname'] == "" || $_POST['mail'] == "" ||
 		   $_POST['password'] == "" || $_POST['password2'] == "") {
-			$content = msg(_fields_missing);	//felder nicht ausgefüllt
+			$content = msg(_fields_missing);
 		} else {
                     $nick 	= $_POST['username'];
                     $firstname	= $_POST['firstname'];

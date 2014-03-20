@@ -23,7 +23,16 @@ if ($_GET['id']== '')
     
     $post = db("SELECT * FROM news WHERE id = ".sqlInt($newsid),'object');
     
-    $content = show($content, array("content" => $post->post)).dispComments($meta['page_id'], $post->id);
+    //Print
+    $_SESSION['print_content'] = $post->post;
+    $_SESSION['print_title'] = $post->title;
+    
+    $content = show("news/layout", array(
+                                    "news_headline" => $post->title,
+                                    "news_date" => date("m.d.y",$post->date),
+                                    "content" => show($content, array("content" => $post->post)),
+                                    "comments" => dispComments($meta['page_id'], $post->id)
+    ));
 }
 
 //Initialisierung der Seite */

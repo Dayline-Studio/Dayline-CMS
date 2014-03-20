@@ -11,7 +11,7 @@ if ($do == "")
 	switch ($action)
 	{
 		default:
-			$sites = db("select title,id from sites");
+				$sites = db("select title,id from sites");
 			 $options = "";
 			while ($site = _assoc($sites))
 			{

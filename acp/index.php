@@ -30,11 +30,11 @@ if ($file_exist)
 }
 else
 {
-    //Admin Welcome
+    $content = show("acp/welcome");
 }
 
 if ($error == "") {
-    init($acp_menu.'<hr>'.$content,$meta);
+    init(show("acp/menu", array("menu" => $acp_menu, "content" => $content)),$meta);
 } else {
     init($error,$meta);
 }

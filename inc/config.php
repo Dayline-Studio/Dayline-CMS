@@ -15,17 +15,18 @@
         
 //Allegmeine Pfade setzten durch Resultat der Parameter 
         $path['dir'] = './';
+        $path['content'] = "../content/";
         $path['include'] = "../inc/";
         $path['images'] = $path['include']."images/"; 
-        $path['plugins'] = "../plugins/"; 
+        $path['plugins'] = $path['content']."/plugins/"; 
         $path['pages'] = "../pages/"; 
-        $path['panels'] = "../panels/"; 
+        $path['panels'] = $path['content']."/panels/"; 
         $file['functions'] = $path['include']."functions.php";
         $file['auth'] = $path['include']."auth.php";
         $file['init'] = $path['include']."init.php";
-        $path['lang'] = $path['include']."language/";
+        $path['lang'] = $path['content']."language/";
         $file['mysql'] = $path['include']."mysql.php";
-	
+
 	require_once($file['mysql']);
         if ($_SESSION['pageswich'] == 'd4ho') {
             $db_con['db'] = 'usr_db31_2';
@@ -33,13 +34,12 @@
         $settings = db("select * from settings",'object');
         $style = $settings->style;
         
-        $path['style'] = "../style/".$style."/";
+        $path['style'] = $path['content']."/style/".$style."/";
         $path['css'] = $path['style']."_css/";
         $path['js'] = $path['style']."_js/";
         $path['style_index'] = $path['style']."index.html";
         
 	require_once($file['functions']);
-
 	//Loading Language
 	includeFile($path['lang']."global.php");	
 	
@@ -58,7 +58,7 @@
 			include($path['lang'].$language.'/'.$lang_file);
 		}
 	} 
-        
+      	  
 	closedir($lang_dir);
 	function includeFile($file)
 	{
@@ -104,7 +104,6 @@
             }
             return false;
     }
-    
     function _assoc($fetch)
 {
     if(array_key_exists('_stmt_rows_', $fetch))

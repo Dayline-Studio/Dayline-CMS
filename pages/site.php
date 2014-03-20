@@ -31,7 +31,11 @@ if ($do == "")
                 "site_id" => 	$show,
                 "edited" =>     $edited,
                 "author" =>     $author,
-                "content" => 	$get_site->content)).  dispComments($meta['page_id'],$get_site->id);
+                "content" => 	$get_site->content),$get_site->id);
+
+            //Print
+            $_SESSION['print_content'] = $get_site->content;
+            $_SESSION['print_title'] = $get_site->title;
             
             //Loading Meta            
             $meta['title'] = $get_site->title;

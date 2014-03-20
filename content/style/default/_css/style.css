@@ -1,7 +1,7 @@
 @import url(http://fonts.googleapis.com/css?family=Pontano+Sans);
 @import url(http://fonts.googleapis.com/css?family=Source+Code+Pro);
 body{
-	background: url(http://shop.d4ho.de/style/default/images/background.jpg);
+	background: url(http://shop.d4ho.de/content/style/default/images/background.jpg);
 	background-repeat: repeat;
 	background-position: top left;
 	font-family: 'Pontano Sans', sans-serif
@@ -53,8 +53,8 @@ pre {
 
 .QapTcha {float:left;margin-top:20px;width:252px;}
 .QapTcha .clr{clear:both}
-.QapTcha .bgSlider {width:252px; height: 10px;float:left; background-color:#FFF; background:transparent url('http://shop.d4ho.de/style/default/images/bg_qaptcha.png') no-repeat;}
-.QapTcha .Slider {width:10px;height:10px;background:transparent url('http://shop.d4ho.de/style/default/images/bg_draggable_qaptcha.png') no-repeat;cursor:e-resize;position:relative;top:0;left:0}
+.QapTcha .bgSlider {width:252px; height: 10px;float:left; background-color:#FFF; background:transparent url('http://shop.d4ho.de/content/style/default/images/bg_qaptcha.png') no-repeat;}
+.QapTcha .Slider {width:10px;height:10px;background:transparent url('http://shop.d4ho.de/content/style/default/images/bg_draggable_qaptcha.png') no-repeat;cursor:e-resize;position:relative;top:0;left:0}
 .QapTcha .TxtStatus {width:252px;margin-top:7px;text-align:left;color:#bb2828;font-family:Verdana;font-size:10px;clear:both}
 .QapTcha .dropSuccess {color:#4e8b37}
 .QapTcha .dropError {color:#bb2828}

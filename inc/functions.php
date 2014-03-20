@@ -113,7 +113,7 @@
     }
 
     function sqlString($param) {
-            return (NULL === $param ? "NULL" : "'".con(mysql_real_escape_string($param))."'");
+            return (NULL === $param ? "NULL" : "'".mysql_real_escape_string(con($param))."'");
     }
 
     function sqlInt($param) {
@@ -228,10 +228,14 @@
     }
 
     $user = db("select email from users where id = ".$comment['userid'],'object');
+	$comment_view = substr($comment['content'], 0, 200);
+	$comment_expand = substr($comment['content'], 0, -200);
     $gravatar = get_gravatar($user->email, 52, false);
     $com_disp .= show("ucp/comment", array("user" => $comment['name'],
                                             "gravatar" => $gravatar,
-                                            "content" => $comment['content'],
+                                            "content" => $comment_view,
+                                            "content_expand" => $comment_expand,
+                                            "id" => $comment['id'],
                                             "date" => $out));
 
     
@@ -268,33 +272,6 @@
      return show("ucp/comment_body", array("comments" => getComments($site,$subsite), "input" => dispCommentInput($site,$subsite)));
   }
   
-  function captcha()
-  {
-    $aResponse['error'] = false;
-
-    if(isset($_POST['captcha']) && isset($_POST['qaptcha_key']))
-    {
-            $_SESSION['qaptcha_key'] = false;	
-
-            if(htmlentities($_POST['captcha'], ENT_QUOTES, 'UTF-8') == 'qaptcha')
-            {
-                    $_SESSION['qaptcha_key'] = $_POST['qaptcha_key'];
-                    return json_encode($aResponse);
-            }
-            else
-            {
-                    $aResponse['error'] = true;
-                    return json_encode($aResponse);
-            }
-    }
-    else
-    {
-            $aResponse['error'] = true;
-            return json_encode($aResponse);
-    }
-    return false;
-  }
-  
     function updateRSS() {
             $xml = new DOMDocument('1.0', 'UTF-8');
             $xml->formatOutput = true;
@@ -306,16 +283,18 @@
             $roo->appendChild($cha); 
 
 
-            $qry = db("SELECT * FROM news WHERE grp = 0 AND public_show = 1");
+            $qry = db("SELECT * FROM news WHERE grp = 2 AND public_show = 1 ORDER BY date DESC");
             while($rss_feed = mysqli_fetch_assoc($qry))
             {
+                    $new = $xml->createElement('item');
+                    $cha->appendChild($new); 
                     $rss['title'] = $rss_feed['title'];
                     $rss['description'] = $rss_feed['description'];
                     $rss['language'] = $lang;
                     $rss['link'] = "http://cms.d4ho.de/pages/news.php?id=".$rss_feed['id'];
                     $rss['lastBuildDate'] = date("D, j M Y H:i:s ", $rss_feed['date']);
                     $hea = $xml ->createElement('image');
-                    $cha ->appendChild($hea);
+                    $new ->appendChild($hea);
                     $img = $xml ->createElement('url',$rss_feed['main_image']);
                     $hea ->appendChild($img);
                     $img = $xml ->createElement('width',88);
@@ -326,7 +305,7 @@
                     foreach ($rss as $tag => $value)
                     {
                             $hea = $xml ->createElement($tag, utf8_encode($value));
-                            $cha ->appendChild($hea);
+                            $new ->appendChild($hea);
                     }
             }
 
