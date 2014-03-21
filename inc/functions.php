@@ -66,17 +66,17 @@
 
             //Tags werden gesplittet einzeln durchgeführt
 
-    if(file_exists($path['style']."/".$file_content.".html"))
-            {
-                    $file_content = getFile($path['style']."/".$file_content.".html");		
-            }
-            foreach($tags as $name => $value)
-              {
-                     //Tags der Datei werden ersetzt durch funktionen und Sprachelemente
-                     $file_content = str_replace('['.$name.']', $value, $file_content);
-              }
-            //Datei wird fertig generiert zurück gegeben.
-            return $file_content;
+        if(file_exists($path['style']."/".$file_content.".html"))
+        {
+                $file_content = getFile($path['style']."/".$file_content.".html");		
+        }
+        foreach($tags as $name => $value)
+          {
+                 //Tags der Datei werden ersetzt durch funktionen und Sprachelemente
+                 $file_content = str_replace('['.$name.']', $value, $file_content);
+          }
+        //Datei wird fertig generiert zurück gegeben.
+        return $file_content;
     }
 
 
