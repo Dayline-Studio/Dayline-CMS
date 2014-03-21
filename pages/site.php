@@ -10,41 +10,49 @@
 if ($do == "")
 {
     if (permTo('site_edit')){
-        $content = "site/content_editable";
+        $file = "site/content_editable";
+        $set_cache = false;
     }
     else{
-        $content = "site/content"; 
+        $file = "site/content"; 
+        $keyword_webpage = md5($_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'].$_SERVER['QUERY_STRING']);
+        $content = __c("files")->get($keyword_webpage);
+        $set_cache = true;
     }
    
-    
-    //show to id
-    $show = str_replace("_"," ",$show);
-    
-    if ($get_site = db("select * from sites where title Like ".sqlString($show),'object'))
+    if ($content == null)
     {
-            $author = "Written by ".$get_site->author." - ".date("F j, Y, g:i a",$get_site->date);
-            if ($get_site->lastedit != "") {
-            $edited = "Last edit by ".$get_site->editby." - ".date("F j, Y, g:i a",$get_site->lastedit);
-            }
-            $content = show(show("site/head").show($content), array(
-                "title" => 	$get_site->title,
-                "site_id" => 	$show,
-                "edited" =>     $edited,
-                "author" =>     $author,
-                "content" => 	$get_site->content),$get_site->id);
+        //show to id
+        $show = str_replace("_"," ",$show);
 
-            //Print
-            $_SESSION['print_content'] = $get_site->content;
-            $_SESSION['print_title'] = $get_site->title;
-            
-            //Loading Meta            
-            $meta['title'] = $get_site->title;
-            $meta['author'] = $get_site->author;
-            $meta['keywords'] =	$get_site->keywords;
-            $meta['description'] = $get_site->description;
-    }
-    else {
-        $content = msg(_site_not_found);
+        if ($get_site = db("select * from sites where title Like ".sqlString($show),'object'))
+        {
+                $user = getUserInformations($get_site->userid, "name");
+                $author = "Written by ".$user->name." - ".date("F j, Y, g:i a",$get_site->date);
+                if ($get_site->lastedit != "") {
+                $edited = "Last edit by ".$get_site->editby." - ".date("F j, Y, g:i a",$get_site->lastedit);
+                }
+                $content = show(show("site/head").show($file), array(
+                    "title" => 	$get_site->title,
+                    "site_id" => 	$show,
+                    "edited" =>     $edited,
+                    "author" =>     $author,
+                    "content" => 	$get_site->content),$get_site->id);
+
+                //Print
+                $_SESSION['print_content'] = $get_site->content;
+                $_SESSION['print_title'] = $get_site->title;
+
+                //Loading Meta            
+                $meta['title'] = $get_site->title;
+                $meta['author'] = $user->name;
+                $meta['keywords'] =	$get_site->keywords;
+                $meta['description'] = $get_site->description;
+        }
+        else {
+            $content = msg(_site_not_found);
+        }
+        if ($set_cache) __c("files")->set($keyword_webpage,$content, 30);
     }
 }
 else {

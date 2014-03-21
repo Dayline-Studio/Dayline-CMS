@@ -78,9 +78,12 @@
         //Datei wird fertig generiert zurück gegeben.
         return $file_content;
     }
-
-
-
+    
+    function getUserInformations($userid, $informations)
+    {
+        return db("SELECT ".$informations." FROM users WHERE id = ".$userid, 'object');
+    }
+    
     function randomstring($length = 6) 
     {
             $chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
@@ -158,7 +161,7 @@
                     $list_news .= show("news/post",array(
                                                             "news_headline" => $get_news['title'],
                                                             "news_date" => date("m.d.y",$get_news['date']),
-                                                            "news_content" => $get_news['post'],
+                                                            "news_content" => $get_news['content'],
                                                             "comments" => '<a href="../pages/news.php?id='.$get_news['id'].'">Kommentar schreiben</a>',
                                                             "post_comment" => "Kommentare: ".db("SELECT count(id) as counted FROM comments where site = 2 AND subsite = ".$get_news['id'],'object')->counted
                                                                                     ));

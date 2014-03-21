@@ -14,8 +14,7 @@ if ($_GET['id']== '')
     
     if (permTo('site_edit')){
     $content = "site/content_editable";
-    }
-    else{
+    } else {
         $content = "site/content"; 
     }
     
@@ -24,13 +23,13 @@ if ($_GET['id']== '')
     $post = db("SELECT * FROM news WHERE id = ".sqlInt($newsid),'object');
     
     //Print
-    $_SESSION['print_content'] = $post->post;
+    $_SESSION['print_content'] = $post->content;
     $_SESSION['print_title'] = $post->title;
     
     $content = show("news/layout", array(
                                     "news_headline" => $post->title,
                                     "news_date" => date("m.d.y",$post->date),
-                                    "content" => show($content, array("content" => $post->post)),
+                                    "content" => show($content, array("content" => $post->content)),
                                     "comments" => dispComments($meta['page_id'], $post->id)
     ));
 }

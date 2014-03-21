@@ -13,7 +13,7 @@ $content = $cache->get("servers");
 
 if ($content == null)
 {
-    $qry_servers = db("select ip,port,type FROM server");
+    $qry_servers = db("select ip,port,type FROM gameserver");
     for ($i=0;$server = _assoc($qry_servers);$i++)
     {
         $servers[$i] = 
@@ -38,7 +38,7 @@ if ($content == null)
            $ip = '<a href="'.$server['gq_joinlink'].'">'.$ip.'</a>';
         }
             
-        $content .= show("server/server", 
+        $content .= show("gameserver/server", 
                         array(
                                 "hostname" => $server['gq_hostname'],
                                 "ip" => $ip,

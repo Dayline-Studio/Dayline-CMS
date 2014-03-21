@@ -15,3 +15,17 @@
        function getCurrentUrl() {
                return ((empty($_SERVER['HTTPS'])) ? 'http' : 'https') . "://". $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
     }
+    
+   /* $_SESSION['page_count'] = 0;
+    //$_SESSION['page_last_refresh'] = 0;
+    
+    if (time()-$_SESSION['page_last_refresh'] < 60 &&  $_SESSION['page_count'] < 100)
+    {
+        $_SESSION['page_count']++;
+    }
+    else die("Session Banned");
+    if (time()-$_SESSION['page_last_refresh'] > 60 &&  $_SESSION['page_count'] < 100)
+    {
+        $_SESSION['page_last_refresh'] = time();
+        $_SESSION['page_count'] = 0;
+    } */
