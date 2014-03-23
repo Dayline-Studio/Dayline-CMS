@@ -1,6 +1,6 @@
 <?php
 // Include CMS System
-/**--**/ include "../inc/config.php";
+/**--**/ include "../inc/base.php";
 //------------------------------------------------
 // Site Informations
 /**--**/  $meta['title'] = "UCP";

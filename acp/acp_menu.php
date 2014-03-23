@@ -4,7 +4,7 @@
 /**--**/  $meta['title'] = "Men&uuml; Konfigurieren";
 //------------------------------------------------
 // Site Permissions
-/**--**/ // if (!permTo("site_create")) { msg('no_permissions'); }
+/**--**/ // if (!permTo("site_create")) { msg('no_permissions'); } 
 //------------------------------------------------
 
 $menu = db("SELECT * FROM menu");

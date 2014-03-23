@@ -6,6 +6,7 @@
                        $_SESSION['user'] = 'gast';
                        $_SESSION['name'] = 'Gast';
                        $_SESSION['group'] = 'gast';
+                       $_SESSION['userid'] = 0;
      }
          //Last Site:
          $_SESSION['back_site'] = $_SESSION['last_site'];
