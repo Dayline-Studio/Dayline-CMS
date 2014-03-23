@@ -120,7 +120,7 @@
     }
 
     function sqlInt($param) {
-            return (NULL === $param ? "NULL" : "'".intVal($param)."'");
+            return (NULL === $param ? "NULL" : intVal($param));
     }
 
     function get_gravatar( $email, $s = 80, $img = false) 
@@ -284,7 +284,8 @@
             $xml->appendChild($roo);
             $cha = $xml->createElement('channel');
             $roo->appendChild($cha); 
-
+            $new = $xml->createElement('title', 'CMS - News');
+            $cha->appendChild($new); 
 
             $qry = db("SELECT * FROM news WHERE grp = 2 AND public_show = 1 ORDER BY date DESC");
             while($rss_feed = mysqli_fetch_assoc($qry))
