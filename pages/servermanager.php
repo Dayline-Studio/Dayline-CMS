@@ -72,12 +72,17 @@ if ($_SESSION['userid'] != 0)
                     $gq->setFilter('normalise');
                     $results = $gq->requestData();
 
-                    show(
+                    $content = show(
                             "servermanager/server_show",
                             array(
-                                "server_ip" => $results[$server->server_type]['gq_hostname'],
+                                "server_ip" => $results[$server->server_type]['gq_address'],
+                                "buttons" => $buttons,
+                                "server_joinlink" => $results[$server->server_type]['gq_joinlink'],
+                                "server_map" => $results[$server->server_type]['gq_map'],
                                 "server_port" => $results[$server->server_type]['gq_port'],
-                                "server_joinlink" => $results[$server->server_type]['gq_joinlink']
+                                "server_joinlink" => $results[$server->server_type]['gq_joinlink'],
+                                "server_max_players" => $results[$server->server_type]['gq_maxplayers'],
+                                "server_players" => $results[$server->server_type]['gq_numplayers']
                                 )
                         );
                             

@@ -59,6 +59,9 @@ pre {
 .QapTcha .dropSuccess {color:#4e8b37}
 .QapTcha .dropError {color:#bb2828}
 
+.linkboxgt { opacity: 0.5; transition: opacity .3s linear; } 
+.linkboxgt:hover { opacity: 1; } 
+
 .right{
     text-align: right;
 }
@@ -143,7 +146,7 @@ pre {
         letter-spacing: 1px;
         text-transform: uppercase;
         font-size: 14px;
-      font-family: 'PT Sans', sans-serif;
+        font-family: 'PT Sans', sans-serif;
 	padding: 5px;
         color: #fff;
 	background: #4cb6ea;
@@ -173,4 +176,22 @@ height:300px;
 .center
 {
     text-align: center;
+} 
+.inblock{
+display: inline-block; vertical-align: top; padding: 5px;width: auto
+}
+
+@media all and (max-width: 640px), only screen and (max-width: 640px), only screen and (max-width: 640px), only screen and (max-width: 640px), only screen and (min-resolution: 192dpi) and (max-width: 640px), only screen and (min-resolution: 2dppx) and (max-width: 640px) {
+
+	.inblock{
+	width:100%;
+	}
+        #right {
+        float: none;
+	width: 100%;
+        }
+        #content {
+            
+            margin-right: 0px;
+        }
 }

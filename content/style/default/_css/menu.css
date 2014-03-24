@@ -228,7 +228,7 @@
   #cssmenu #menu-button {
     display: block;
     box-sizing: border-box;
-    width: 100%;
+    width: auto;
     padding: 15px 20px;
     text-transform: uppercase;
     font-weight: 700;
