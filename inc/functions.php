@@ -286,6 +286,12 @@
             $roo->appendChild($cha); 
             $new = $xml->createElement('title', 'CMS - News');
             $cha->appendChild($new); 
+            $new = $xml->createElement('description','D4ho.de - CMS');
+            $cha->appendChild($new);
+            $bld = $xml->createElement('image');
+            $cha->appendChild($bld);
+            $bld ->appendChild($xml ->createElement('url',"http://dummyimage.com/120x61"));
+            
 
             $qry = db("SELECT * FROM news WHERE grp = 2 AND public_show = 1 ORDER BY date DESC");
             while($rss_feed = mysqli_fetch_assoc($qry))
@@ -296,7 +302,7 @@
                     $rss['description'] = $rss_feed['description'];
                     $rss['language'] = $lang;
                     $rss['link'] = "http://cms.d4ho.de/pages/news.php?id=".$rss_feed['id'];
-                    $rss['lastBuildDate'] = date("D, j M Y H:i:s ", $rss_feed['date']);
+                    $rss['pubDate'] = date("D, j M Y H:i:s ", $rss_feed['date']);
                     $hea = $xml ->createElement('image');
                     $new ->appendChild($hea);
                     $img = $xml ->createElement('url',$rss_feed['main_image']);
