@@ -1,12 +1,11 @@
 @import url(http://fonts.googleapis.com/css?family=Pontano+Sans);
 @import url(http://fonts.googleapis.com/css?family=Source+Code+Pro);
 body{
-	background: url(http://shop.d4ho.de/content/style/default/images/background.jpg);
-	background-repeat: repeat;
-	background-position: top left;
+        background-image: linear-gradient(white 0%, #4CB6EA 30%, white 100%);
 	font-family: 'Pontano Sans', sans-serif
 }
 #wrapper{
+        box-shadow: 5px 10px 20px grey;
 	height: auto;
 	min-width: 300px; 
 	max-width: 1200px;
@@ -14,14 +13,9 @@ body{
 	margin-left: auto ;
 	margin-right: auto;
 }
-fieldset {
-    border: 0;
-}
+fieldset { border: 0; }
 
-#copyright {
-    
-    color: #fff
-}
+#copyright { color: #fff }
 
 pre {
     	font-family: 'Source Code Pro', sans-serif;
@@ -39,11 +33,11 @@ pre {
 }
 
 .com_clear { clear:both; padding:0; margin:0; width:100%; font-size:0px; line-height:0px;}
-.comment {  width:700px; padding-bottom: 10px;}
-.comment .avatar_box { float:left; width:80px;}
+.comment {  width:100%; padding-bottom: 10px;}
+.comment .avatar_box { float:left; width:10%;}
 .comment .avatar { background:#fff; padding:4px; border:1px solid #d8d8d8; position:relative;}
 .comment .username { color:#383838; font-weight:bold; clear:left; margin: 0;}
-.comment .comment_box { float:right; padding-bottom:8px; width:610px; background:#fff; border:1px solid #d8d8d8; position:relative;}
+.comment .comment_box { float:right; padding-bottom:8px; min-height: 52px; width:89%; background:#fff; border:1px solid #d8d8d8; position:relative;}
 .comment .comment_box:before { content:''; width:13px; height:13px; background:#fff; border-left:1px solid #d8d8d8; border-bottom:1px solid #d8d8d8; position:absolute; top:24px; left:-8px; transform:rotate(45deg);}
 .comment .comment_paragraph { color:#454545; line-height:18px; margin:4px 10px 0 15px;}
 .comment .comment_paragraph:focus { outline:none;}
@@ -61,6 +55,48 @@ pre {
 
 .linkboxgt { opacity: 0.5; transition: opacity .3s linear; } 
 .linkboxgt:hover { opacity: 1; } 
+
+.buttonSocial {
+	width:30px;
+	opacity: 0.8;
+    transform: rotate(0deg);
+	transition: all 1s ease-in-out;
+}
+
+.buttonSocial:hover {
+	width: 50px;
+	opacity: 1;
+	transform: rotate(360deg);
+	rotate: 180;
+}
+
+.horizontalList li{
+	display: inline;
+	list-style-type: none;
+	padding-right: 20px;
+}
+
+.buttonStyle {
+        height: 24px;
+	background-color: #4CB6EA;
+	border-radius:2px;
+	border:1px solid #057fd0;
+	display:inline-block;
+	cursor:pointer;
+	color:#ffffff;
+	padding: 0px 20px;
+	text-decoration:none;
+    transition: all .3s ease-in-out;
+}
+
+.buttonStyle:hover {
+	background-color:#ffffff;
+        color:#4CB6EA;
+}
+.buttonStyle:active {
+	position:relative;
+	top:1px;
+}
 
 .right{
     text-align: right;
@@ -80,13 +116,28 @@ pre {
 	background: #FAFAFA;
 	margin-bottom: 20px;
 }
-#navi a,
-#navi a:link,
-#navi a:visited,
-#navi a:hover,
-#navi a:active {
-  color: #fff; font-weight: bold;
-  text-decoration: none;
+
+#navi a, #navi a:link, #navi a:visited, #navi a:hover, #navi a:active { color: #fff; font-weight: bold; text-decoration: none; }
+
+#news a, #news a:link, #news a:visited, #news a:active { 
+    text-shadow: none;
+    text-decoration: none; color: #4CB6EA;  transition: color .3s ease-in-out; 
+}
+#news a:hover { 
+    color: #E6E6E6; 
+    text-shadow: 0 -1px 1px #666666, 0 1px 1px #FFFFFF;
+}
+
+//#content a, #content a:link, #content a:visited, #content a:active { text-decoration: none; color: #4CB6EA;  transition: color .3s linear; }
+//#content a:hover { color: #E6E6E6; }
+
+
+input[type=text], textarea {
+ transition: all 0.3s ease-in-out;   
+}
+
+input[type=text]:focus, textarea:focus {
+    box-shadow: 0 0 5px rgba(81, 203, 238, 1);
 }
 
 #menu{
@@ -118,11 +169,6 @@ pre {
     width: 100%;
 }
 
-
-
-#login {
-
-}
 #login input {
     width: 100%;
     margin-bottom: 2px
@@ -154,7 +200,7 @@ pre {
 }
 .inlineblock.part {
 width:300px;
-height:300px;
+height:auto;
 }
 .inlineblock.v-hr {
     width:2px; 
@@ -183,15 +229,21 @@ display: inline-block; vertical-align: top; padding: 5px;width: auto
 
 @media all and (max-width: 640px), only screen and (max-width: 640px), only screen and (max-width: 640px), only screen and (max-width: 640px), only screen and (min-resolution: 192dpi) and (max-width: 640px), only screen and (min-resolution: 2dppx) and (max-width: 640px) {
 
-	.inblock{
-	width:100%;
-	}
-        #right {
-        float: none;
-	width: 100%;
-        }
-        #content {
-            
-            margin-right: 0px;
-        }
+    body{
+        background-image: none;
+        margin:0; padding:0; border:0
+    }
+    #wrapper{
+        box-shadow: none;
+    }
+    .inblock{
+    width:100%;
+    }
+    #right {
+    float: none;
+    width: 100%;
+    }
+    #content {
+        margin-right: 0px;
+    }
 }

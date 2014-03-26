@@ -24,10 +24,10 @@ function search($tags)
 
 function searchEngine($tag)
 {
-    $search = db("SELECT post,title FROM news WHERE post LIKE ".sqlString("%$tag%"));
+    $search = db("SELECT content,title FROM news WHERE content LIKE ".sqlString("%$tag%"));
     while ($result = _assoc($search))
     {
-        $res = $result['post'];
+        $res = $result['content'];
     }
     return $res;
 }

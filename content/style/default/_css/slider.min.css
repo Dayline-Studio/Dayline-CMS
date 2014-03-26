@@ -1,0 +1,32 @@
+#slides{display:none}
+a.slidesjs-next{display:block;width:12px;height:0;overflow:hidden;text-indent:-9999px;float:left;margin-right:10px;background:url(../images/slider/btns-next-prev.png) no-repeat -12px 0}
+a.slidesjs-previous{display:block;width:12px;height:0;overflow:hidden;text-indent:-9999px;float:left;margin-right:5px;background:url(../images/slider/btns-next-prev.png) no-repeat}
+a.slidesjs-play{display:block;height:0;overflow:hidden;text-indent:-9999px;float:left;margin-right:5px;width:15px;background:url(../images/slider/btns-next-prev.png) no-repeat -25px 0}
+a.slidesjs-stop{display:block;height:0;overflow:hidden;text-indent:-9999px;float:left;margin-right:5px;width:18px;background:url(../images/slider/btns-next-prev.png) no-repeat -41px 0}
+a:hover.slidesjs-next{background:-12px -18px}
+a:hover.slidesjs-previous{background:0 -18px}
+a:hover.slidesjs-play{background:-25px -18px}
+a:hover.slidesjs-stop{background:-41px -18px}
+.slidesjs-pagination{float:right;list-style:none;margin:7px 0 0}
+.slidesjs-pagination li{float:left;margin:0 1px}
+.slidesjs-pagination li a{display:block;width:13px;height:0;padding-top:13px;float:left;overflow:hidden;background:url(../images/slider/img/pagination.png)}
+.slidesjs-pagination li a.active{background:0 -13px}
+.slidesjs-pagination li a:hover.active{background:0 -13px}
+.slidesjs-pagination li a:hover{background:0 -26px}
+#slides a:link{color:#333}
+#slides a:visited{color:#333}
+#slides a:hover{color:#9e2020}
+#slides a:active{color:#9e2020}
+.navbar{overflow:hidden}
+ @media (max-width: 767px) {
+.container{width:auto}
+}
+ @media (max-width: 480px) {
+.container{width:auto}
+}
+ @media (min-width: 768px) and (max-width: 979px) {
+.container{width:724px}
+}
+ @media (min-width: 1200px) {
+.container{width:1170px}
+}

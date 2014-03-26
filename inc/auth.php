@@ -8,6 +8,11 @@
                        $_SESSION['group'] = 'gast';
                        $_SESSION['userid'] = 0;
      }
+         //ip
+         if (!isset($_SESSION['current_ip'])) {
+            $_SESSION['current_ip'] = $_SERVER['REMOTE_ADDR'];
+         }
+                 
          //Last Site:
          $_SESSION['back_site'] = $_SESSION['last_site'];
          $_SESSION['last_site'] = $_SESSION['current_site'];

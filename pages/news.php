@@ -29,7 +29,7 @@ if ($_GET['id']== '')
     $content = show("news/layout", array(
                                     "news_headline" => $post->title,
                                     "author"=> getUserInformations($post->userid, 'gplus')->gplus,
-									"news_date" => date("m.d.y",$post->date),
+				    "news_date" => date("F j, Y, G:i",$post->date),
                                     "content" => show($content, array("content" => $post->content)),
                                     "comments" => dispComments($meta['page_id'], $post->id)
     ));

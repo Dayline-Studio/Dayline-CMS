@@ -2,13 +2,12 @@
 
 function menu()
 {
-       // $items = __c("files")->get('menu');
-      //  if ($items == null)
-       // {
-            //Mainmenu content items
+        $items = __c("files")->get('menu');
+        if ($items == null)
+        {
             $items = generator();
-            //__c("files")->set('menu',$items, 600);
-      //  }
+            __c("files")->set('menu',$items, 600);
+        }
             //User Menu
             if ($_SESSION['loggedin'])
             {

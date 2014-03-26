@@ -116,7 +116,11 @@
     }
 
     function sqlString($param) {
-            return (NULL === $param ? "NULL" : "'".mysql_real_escape_string(con($param))."'");
+            return (NULL === $param ? "NULL" : "'".mysql_real_escape_string($param)."'");
+    }
+    
+    function sqlStringCon($param) {
+         return (NULL === $param ? "NULL" : "'".mysql_real_escape_string(con($param))."'");
     }
 
     function sqlInt($param) {
@@ -158,18 +162,18 @@
             $list_news = "";
             while ($get_news = mysqli_fetch_assoc($news_posts))
             {
-                    $list_news .= show("news/post",array(
-                                                            "news_headline" => $get_news['title'],
-                                                            "news_date" => date("m.d.y",$get_news['date']),
-                                                            "news_content" => $get_news['content'],
-                                                            "comments" => '<a href="../pages/news.php?id='.$get_news['id'].'">Kommentar schreiben</a>',
-                                                            "post_comment" => "Kommentare: ".db("SELECT count(id) as counted FROM comments where site = 2 AND subsite = ".$get_news['id'],'object')->counted
-                                                                                    ));
+                $list_news .= show("news/post",array(
+                    "news_headline" => $get_news['title'],
+                    "news_date" => date("F j, Y, G:i",$get_news['date']),
+                    "news_content" => $get_news['content'],
+                    "id" => $get_news['id'],
+                    "post_comment" => '<a href="../pages/news.php?id='.$get_news['id'].'#comments">Kommentare: '.db("SELECT count(id) as counted FROM comments where site = 2 AND subsite = ".$get_news['id'],'object')->counted.'</a>'
+                                                ));
             }
             if ($list_news == ""){
                 $list_news = _news_not_found;
             }
-            return $list_news;
+            return show("news/layout_posts", array("posts" => $list_news));
     }
 
     function permTo($permission)
@@ -231,8 +235,8 @@
     }
 
     $user = db("select email from users where id = ".$comment['userid'],'object');
-	$comment_view = substr($comment['content'], 0, 200);
-	$comment_expand = substr($comment['content'], 0, -200);
+    $comment_view = substr($comment['content'], 0, 200);
+    $comment_expand = substr($comment['content'], 0, -200);
     $gravatar = get_gravatar($user->email, 52, false);
     $com_disp .= show("ucp/comment", array("user" => $comment['name'],
                                             "gravatar" => $gravatar,
@@ -276,6 +280,8 @@
   }
   
     function updateRSS() {
+            global $path;
+        
             $xml = new DOMDocument('1.0', 'UTF-8');
             $xml->formatOutput = true;
 
@@ -310,10 +316,6 @@
                     $new ->appendChild($hea);					
                     $img = $xml ->createElement('url',$rss_feed['main_image']);
                     $hea ->appendChild($img);
-                  //  $img = $xml ->createElement('width',88);
-                  //  $hea ->appendChild($img);	
-                  //  $img = $xml ->createElement('height',31);
-                  //  $hea ->appendChild($img);
 
                     foreach ($rss as $tag => $value)
                     {
@@ -322,7 +324,7 @@
                     }
             }
 
-            if($xml->save('../inc/upload/rss/rss.xml')) {
+            if($xml->save($path['upload'].'rss/rss.xml')) {
                     return true;
             }		
             return false;

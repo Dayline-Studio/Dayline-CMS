@@ -6,7 +6,7 @@
 /**--**/  $meta['title'] = "Server";
 //------------------------------------------------
 
-require '../plugins/gameq/GameQ.php';
+require '../content/plugins/gameq/GameQ.php';
 
 $cache = phpFastCache("files");
 $content = $cache->get("servers");

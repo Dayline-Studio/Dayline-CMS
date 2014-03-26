@@ -1,0 +1,60 @@
+@import url(http://fonts.googleapis.com/css?family=Pontano+Sans);@import url(http://fonts.googleapis.com/css?family=Source+Code+Pro);
+body{background-image:linear-gradient(white 0%,#4CB6EA3 0%,white 100%);font-family:'Pontano Sans', sans-serif}
+#wrapper{box-shadow:5px 10px 20px grey;height:auto;min-width:300px;max-width:1200px;background:#Fff;margin-left:auto;margin-right:auto}
+fieldset{border:0}
+#copyright{color:#fff}
+pre{font-family:'Source Code Pro', sans-serif;border:1px solid #F0F0F0;background-color:#F8F8F8;color:#777;margin:30px;padding:10px}
+#footbar{text-align:center;background:#74CEFA;padding:20px 0}
+.com_clear{clear:both;width:100%;font-size:0;line-height:0;margin:0;padding:0}
+.comment{width:100%;padding-bottom:10px}
+.comment .avatar_box{float:left;width:10%}
+.comment .avatar{background:#fff;border:1px solid #d8d8d8;position:relative;padding:4px}
+.comment .username{color:#383838;font-weight:700;clear:left;margin:0}
+.comment .comment_box{float:right;padding-bottom:8px;min-height:52px;width:89%;background:#fff;border:1px solid #d8d8d8;position:relative}
+.comment .comment_box:before{content:'';width:13px;height:13px;background:#fff;border-left:1px solid #d8d8d8;border-bottom:1px solid #d8d8d8;position:absolute;top:24px;left:-8px;transform:rotate(45deg)}
+.comment .comment_paragraph{color:#454545;line-height:18px;margin:4px 10px 0 15px}
+.comment .comment_paragraph:focus{outline:none}
+.comment .comment_submit{float:right;margin-top:5px}
+.comment .comment_area{resize:none;border:none;width:100%;height:auto}
+.comment .date{float:right;font-size:.85em;color:#454545;margin-top:0;margin-right:15px}
+.QapTcha{float:left;margin-top:20px;width:252px}
+.QapTcha .clr{clear:both}
+.QapTcha .bgSlider{width:252px;height:10px;float:left;background-color:#FFF;background:transparent url(http://shop.d4ho.de/content/style/default/images/bg_qaptcha.png) no-repeat}
+.QapTcha .Slider{width:10px;height:10px;background:transparent url(http://shop.d4ho.de/content/style/default/images/bg_draggable_qaptcha.png) no-repeat;cursor:e-resize;position:relative;top:0;left:0}
+.QapTcha .TxtStatus{width:252px;margin-top:7px;text-align:left;color:#bb2828;font-family:Verdana;font-size:10px;clear:both}
+.QapTcha .dropSuccess{color:#4e8b37}
+.QapTcha .dropError{color:#bb2828}
+.linkboxgt{opacity:0.5;transition:opacity .3s linear}
+.linkboxgt:hover{opacity:1}
+.buttonStyle{height:22px;background-color:#4CB6EA;border-radius:2px;border:1px solid #057fd0;display:inline-block;cursor:pointer;color:#fff;text-decoration:none;transition:all .3s ease-in-out;padding:0 10px}
+.buttonStyle:hover{background-color:#fff;color:#4CB6EA}
+.buttonStyle:active{position:relative;top:1px}
+.right{text-align:right}
+.half{width:50%}
+#right{float:right;width:300px;background:#FAFAFA;margin-bottom:20px}
+#navi a,#navi a:link,#navi a:visited,#navi a:hover,#navi a:active{color:#fff;font-weight:700;text-decoration:none}
+#content a,#content a:link,#content a:visited,#content a:active{text-decoration:none;color:#4CB6EA;transition:color .3s linear}
+#content a:hover{color:#E6E6E6}
+input[type=text],textarea{transition:all .3s ease-in-out}
+input[type=text]:focus,textarea:focus{box-shadow:0 0 5px rgba(81,203,238,1)}
+#content{margin-right:300px;height:auto;width:auto;background:#fff;min-width:260px;max-width:880px;padding:20px}
+#foot{width:100%;background:#4cb6ea;height:150px;text-align:center}
+#head{background:#E6E6E6;width:100%}
+#login input{width:100%;margin-bottom:2px}
+#counter{width:70%;margin:0 auto}
+#hbox{font-weight:700;letter-spacing:1px;text-transform:uppercase;font-size:14px;color:#fff}
+.box_h{font-weight:700;letter-spacing:1px;text-transform:uppercase;font-size:14px;font-family:'PT Sans', sans-serif;color:#fff;background:#4cb6ea;padding:5px}
+.inlineblock.part{width:300px;height:auto}
+.inlineblock.v-hr{width:2px;color:#fff;text-align:center;height:250px;margin:5px}
+.inlineblock{display:inline-block;vertical-align:top}
+.box_r{background:#74CEFA;padding:5px}
+.center{text-align:center}
+.inblock{display:inline-block;vertical-align:top;width:auto;padding:5px}
+.full,#menu,.width_full{width:100%}
+@media all and (max-width: 640px), only screen and (max-width: 640px), only screen and (max-width: 640px), only screen and (max-width: 640px), only screen and (min-resolution: 192dpi) and (max-width: 640px), only screen and (min-resolution: 2dppx) and (max-width: 640px) {
+body{background-image:none;border:0;margin:0;padding:0}
+#wrapper{box-shadow:none}
+.inblock{width:100%}
+#right{float:none;width:100%}
+#content{margin-right:0}
+}

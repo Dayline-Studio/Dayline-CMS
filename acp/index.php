@@ -7,26 +7,34 @@
 //------------------------------------------------
 if (!permTo("menu_acp")) { $error = msg(_no_permissions); }
 
+$subsite = array();
+ 
 if (isset($_GET['acp'])) {
     $acp = $_GET['acp'];
 } else {
     $acp = "";
 }
 
-$getd = db("SELECT * FROM menu WHERE part = 3");
-while ($get = mysqli_fetch_assoc($getd))
-{
-    $acp_menu .= '<li><a href ="../acp/index.php?acp='.$get['link'].'">'.$get['title']."</a></li>";
-    if ($acp != "" && $acp == $get['link'])
+    global $path;
+    
+    $items = opendir('../acp/module');
+    $item_stack = "";
+    while ($item = readdir($items)) 
     {
-        $file_exist = true;
-    }
-            
-}
+        if ($item != ".." && $item != ".") 
+        {
+            $filename = substr($item,0,-4);
+            $item_stack .= '<li><a class="buttonStyle" href="index.php?acp='.$filename.'">[s_'.$filename.']</a></li>';
+            if ($filename == $_GET['acp']) {
+                $file_exist = true;
+            }    
+        }
+    } 
+    closedir($items);
 
 if ($file_exist)
 {
-    include $acp.".php";
+    include 'module/'.$acp.".php";
 }
 else
 {
@@ -34,7 +42,15 @@ else
 }
 
 if ($error == "") {
-    init(show("acp/menu", array("menu" => $acp_menu, "content" => $content)),$meta);
+	 if (isset($subsite[0]))
+	 {
+		 foreach ($subsite as $sub)
+		 {
+			$li .= '<li><a class="buttonStyle" href="?acp='.$_GET['acp'].'&AMP;action='.$sub.'" >[s_'.$sub.']</a></li>';
+		 }
+		 $submenu = show('acp/acp_horiz_list', array('li' => $li));
+	 }
+    init(show("acp/menu", array("menu" => $item_stack, "content" => $content, "submenu" => $submenu)),$meta);
 } else {
     init($error,$meta);
 }

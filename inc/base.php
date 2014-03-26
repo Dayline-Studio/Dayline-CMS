@@ -1,7 +1,7 @@
 <?php	
         require_once("../inc/auth.php");
         require_once("../inc/config.php");
-                
+        
 //Parameter auslesen für allegemeine Settings
         if (isset($_GET['s'])) { $style = $_GET['s']; }
         else { $style = "default"; }
@@ -18,10 +18,11 @@
         $path['dir'] = $config['dir'];
         $path['content'] = "../content/";
         $path['include'] = "../inc/";
+        $path['upload'] = $path['include']."upload/";
         $path['images'] = $path['include']."images/"; 
-        $path['plugins'] = $path['content']."/plugins/"; 
+        $path['plugins'] = $path['content']."plugins/"; 
         $path['pages'] = "../pages/"; 
-        $path['panels'] = $path['content']."/panels/"; 
+        $path['panels'] = $path['content']."panels/"; 
         $file['functions'] = $path['include']."functions.php";
         $file['auth'] = $path['include']."auth.php";
         $file['init'] = $path['include']."init.php";
@@ -41,6 +42,7 @@
         
 	require_once($file['functions']);
 	//Loading Language
+        updateRSS();
 	includeFile($path['lang']."global.php");	
 	
 	$lang_dir = opendir($path['lang'].$language);
