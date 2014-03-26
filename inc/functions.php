@@ -42,7 +42,7 @@
             while ($panel = readdir($panels)) 
             {
                     //Loading panel functions
-                    if ($panel != ".." && $panel != ".") 
+                    if ($panel != ".." && $panel != "." && $panel != "disable") 
                     {
                             //Import panel function
                             includeFile($path['panels'].$panel);
@@ -298,19 +298,22 @@
             {
                     $new = $xml->createElement('item');
                     $cha->appendChild($new); 
+					
+
                     $rss['title'] = $rss_feed['title'];
-                    $rss['description'] = $rss_feed['description'];
+					$image = '&lt;img style="border: 0px none; margin: 0px; padding: 0px;" align="right" alt="" width="60" height="60" src="'.$rss_feed['main_image'].'" &gt;';
+                    $rss['description'] = $image.$rss_feed['description'];
                     $rss['language'] = $lang;
                     $rss['link'] = "http://cms.d4ho.de/pages/news.php?id=".$rss_feed['id'];
                     $rss['pubDate'] = date("D, j M Y H:i:s ", $rss_feed['date']);
                     $hea = $xml ->createElement('image');
-                    $new ->appendChild($hea);
+                    $new ->appendChild($hea);					
                     $img = $xml ->createElement('url',$rss_feed['main_image']);
                     $hea ->appendChild($img);
-                    $img = $xml ->createElement('width',88);
-                    $hea ->appendChild($img);	
-                    $img = $xml ->createElement('height',31);
-                    $hea ->appendChild($img);
+                  //  $img = $xml ->createElement('width',88);
+                  //  $hea ->appendChild($img);	
+                  //  $img = $xml ->createElement('height',31);
+                  //  $hea ->appendChild($img);
 
                     foreach ($rss as $tag => $value)
                     {
