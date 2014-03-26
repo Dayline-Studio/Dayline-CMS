@@ -1,39 +1,24 @@
 <?php
 function counter() {
 
-	//GET User IP
-	$user_ip = $_SERVER['REMOTE_ADDR'];
 	$today = mktime(0,0,0,date("m",time()),date("d",time()),date("Y",time()));
-	$user_exist = db("SELECT ip FROM counter_user Where ip LIKE ".sqlString($user_ip),'rows');
-	$day_exist = db("SELECT datum FROM counter Where datum LIKE ".$today,'rows');
-        $today_online = db("SELECT ip FROM counter_user Where ip LIKE ".sqlString($user_ip)." and datum>=".$today,'rows');
+	//update
+		//updatet die besucherzahl+1 wenn kein heutiger eintrag des users existiert
+		up("UPDATE counter SET besucher=besucher+1 WHERE date = ".$today." AND NOT EXISTS (SELECT ip FROM counter_user WHERE ip LIKE '".md5($_SESSION['current_ip'])."' and datum>=".$today.")");
+		//aktualisiert den heutigen eintrag des users
+		up("REPLACE INTO counter_user (ip, datum) VALUES ('".md5($_SESSION['current_ip'])."', ".time().")");
+		//updatet die aufrufe oder erstellt die counter zeile für heute mit 1 besucher und 1 aufruf
+		up("INSERT INTO counter (date, besucher, aufrufe) VALUES (".$today.",1,1) ON DUPLICATE KEY UPDATE aufrufe=aufrufe+1");
 
-	//Update
-	if($user_exist == 0)
-		up("INSERT INTO counter_user (id,ip, datum) VALUES (NULL,".sqlString($user_ip).", ".time().")");
-	else
-                up("UPDATE counter_user SET datum=".time()." Where ip LIKE ".sqlString($user_ip));
-	if($day_exist == 0)
-		up("INSERT INTO counter (id,besucher, aufrufe, datum) VALUES (NULL,0,1,".$today.")");
-	else
-	up("UPDATE counter SET aufrufe=aufrufe+1 Where datum LIKE ".$today);
-        
-        if($today_online == 0)
-        up("UPDATE counter SET besucher=besucher+1 Where datum LIKE ".$today);
-
-	//Read
-	$count_today = db("SELECT aufrufe as count_today FROM counter WHERE datum=".$today,'object')->count_today;
-	$count_total = db("SELECT SUM(aufrufe) as count_total FROM counter ",'object')->count_total;
-	$users_total = db("SELECT SUM(besucher) as users_total FROM counter",'object')->users_total;
-	$users_today = db("SELECT besucher as users_today FROM counter Where datum =".$today, 'object')->users_today;
-        $daily_avg = db("SELECT AVG(aufrufe) as daily_avg FROM counter ",'object')->daily_avg;
+	//Read 
+	$count_today = db("SELECT aufrufe, besucher FROM counter WHERE date=".$today,'object');
+	$count_total = db("SELECT AVG(aufrufe) AS daily_avg,SUM(aufrufe) AS count_total, SUM(besucher) AS users_total FROM counter ",'object');
 
 	//Output
-	$output = show("panels/counter", array(
-                                    "count_today" => $count_today,
-                                    "users_today" => $users_today,
-                                    "users_total" => $users_total,
-                                    "count_total" => $count_total,
-                                    "daily_avg" => (int)$daily_avg));
-	return $output;
+	 return show("panels/counter", array(
+                                    "count_today" => $count_today->aufrufe,
+                                    "users_today" => $count_today->besucher,
+                                    "users_total" => $count_total->users_total,
+                                    "count_total" => $count_total->count_total,
+                                    "daily_avg" => (int)$count_total->daily_avg));
 }
