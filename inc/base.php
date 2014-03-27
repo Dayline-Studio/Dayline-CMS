@@ -27,10 +27,6 @@
         $file['auth'] = $path['include']."auth.php";
         $file['init'] = $path['include']."init.php";
         $path['lang'] = $path['content']."language/";
-
-        /*if ($_SESSION['pageswich'] == 'd4ho') {
-            $db_con['db'] = 'usr_db31_2';
-        }*/
         
         $settings = db("select * from settings",'object');
         $style = $settings->style;
@@ -41,8 +37,8 @@
         $path['style_index'] = $path['style']."index.html";
         
 	require_once($file['functions']);
+        
 	//Loading Language
-        updateRSS();
 	includeFile($path['lang']."global.php");	
 	
 	$lang_dir = opendir($path['lang'].$language);
@@ -50,7 +46,7 @@
 	//Loading the panels
 	if ( $language != 'de' || $language != 'en') 
         {
-            $language = 'de'; //ToDo Language aus Settings (database)
+            $language = $settings->language;
         }
 	while ($lang_file = readdir($lang_dir)) 
 	{
@@ -108,10 +104,12 @@
     }
     function _assoc($fetch)
 {
-    if(array_key_exists('_stmt_rows_', $fetch))
+    if(array_key_exists('_stmt_rows_', $fetch)) {
         return $fetch[0];
-    else
+    }
+    else {
         return $fetch->fetch_assoc();
+    }
 }
     
     function db($input = "", $mysqli_action = null)

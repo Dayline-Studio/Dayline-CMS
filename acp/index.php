@@ -7,6 +7,7 @@
 //------------------------------------------------
 if (!permTo("menu_acp")) { $error = msg(_no_permissions); }
 
+$content = "";
 $subsite = array();
  
 if (isset($_GET['acp'])) {
