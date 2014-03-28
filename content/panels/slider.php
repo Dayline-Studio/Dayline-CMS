@@ -6,13 +6,13 @@ function slider() {
     $slider_images = __c("files")->get('slider_images');
     if ($slider_images == null)
     {
-        $images = opendir($path['style']."images/slider/");
+        $images = opendir($path['upload']."images/slider/");
         $slider_images = "";
         while ($image = readdir($images)) 
         {
             if ($image != ".." && $image != ".") 
             {
-                  $slider_images .= '<img src="'.$path['style']."images/slider/".$image.'" alt="" />';
+                  $slider_images .= '<img src="'.$path['upload'].'images/slider/'.$image.'" alt="" />';
             }
         } 
         closedir($images);

@@ -43,8 +43,8 @@
 #cssmenu ul li ul li {
   max-height: 0;
   position: absolute;
-  transition: max-height 0.4s ease-out;
-  background: #ffffff;
+  background: #4cb6ea;
+  transition: all 0.4s ease-out;
 }
 #cssmenu ul li ul li.has-sub:after {
   display: block;
@@ -74,7 +74,7 @@
   font-size: 14px;
   font-weight: 400;
   text-transform: none;
-  color: #000000;
+  color: #fff;
   letter-spacing: 0;
   display: block;
   width: 140px;
@@ -84,6 +84,11 @@
 #cssmenu ul li ul li.active > a {
   color: #4cb6ea;
 }
+#cssmenu ul li ul li:hover{
+    background: #fff;
+    box-shadow: 3px 5px 8px grey;
+}
+
 #cssmenu ul li ul li:hover:after,
 #cssmenu ul li ul li.active:after {
   background: #4cb6ea;

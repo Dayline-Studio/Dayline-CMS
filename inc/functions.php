@@ -9,6 +9,8 @@
             global $path, $language; 
             $init = show(loadingPanels(),array("content" => $content));
             $settings = mysqli_fetch_object(db("Select * from settings where id = 1"));
+            $init = show($init, convertMatch(searchBetween("[s_", $init, "]")));
+            $init = show($init, convertMatchDyn(searchBetween("[dyn_", $init, "]")));
             $init = show($init,array("title" =>                     $meta['title'],
                                      "language_content" =>          $language,
                                      "author" =>                    $meta['author'],
@@ -20,8 +22,13 @@
                                      "css" =>                       $path['css'],
                                      "style" =>                     $path['style'],
                                      "js" =>                        $path['js']));
-            $pageswitcher = show("../pageswitcher");
-            $init = show($init, convertMatch(searchBetween("[s_", $init, "]")));
+            display($init);
+    }
+    
+    function initMinimal($content = "")
+    {
+            global $path, $language; 
+            $init = show($content, convertMatch(searchBetween("[s_", $content, "]")));
             display($init);
     }
 
@@ -153,6 +160,7 @@
            
             $msg = show ($file, array(	"msg" => $msg,
                                         "link" => $_SESSION['last_site']));
+            backSideFix();
             return $msg;
     }
 
@@ -343,10 +351,23 @@
         return $new;
     }
 
+    function convertMatchDyn($matches)
+    {
+        foreach ($matches as $value)
+        {
+            $new["dyn_".$value] = show("allround/ajax_loading", array('panel_name' => $value));
+        }
+        return $new;
+    }
+    
     function searchBetween($start_tag, $String ,$end_tag)
     {
         if (preg_match_all('/'.preg_quote($start_tag).'(.*?)'.preg_quote($end_tag).'/s', $String, $matches)) {
                 return $matches[1];
         }
         return false;
+    }
+    
+    function backSideFix() {
+        $_SESSION['current_site'] = $_SESSION['last_site'];
     }
