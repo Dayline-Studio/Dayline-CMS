@@ -25,7 +25,7 @@ if ($_GET['id']== '')
     //Print
     $_SESSION['print_content'] = $post->content;
     $_SESSION['print_title'] = $post->title;
-    
+    $meta['title'] = $post->title;
     $content = show("news/layout", array(
                                     "news_headline" => $post->title,
                                     "author"=> getUserInformations($post->userid, 'gplus')->gplus,
