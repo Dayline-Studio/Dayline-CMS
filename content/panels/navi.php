@@ -11,6 +11,10 @@ function navi()
             break;
         default:
             $content = '<a href="../pages/'.basename($_SERVER["PHP_SELF"]).'">'.ucfirst(substr(basename($_SERVER["PHP_SELF"]),0,-4))."</a>";
+            break;
+        case 'categories':
+            $content = '<a href="../pages/'.basename($_SERVER["PHP_SELF"]).'">'.ucfirst(substr(basename($_SERVER["PHP_SELF"]),0,-4))."</a>";
+            break;
    }
    
    if ($meta['page_id'] == 3){

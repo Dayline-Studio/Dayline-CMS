@@ -168,7 +168,7 @@
     {
             $news_posts = db("Select * From news where public_show = 1 AND grp = ".$groupid." ORDER BY date DESC");
             $list_news = "";
-            while ($get_news = mysqli_fetch_assoc($news_posts))
+            while ($get_news = _assoc($news_posts))
             {
                 $list_news .= show("news/post",array(
                     "news_headline" => $get_news['title'],
@@ -186,7 +186,7 @@
 
     function permTo($permission)
     {
-            return	mysqli_fetch_object(db("SELECT ".$permission." From groups WHERE id = ".sqlInt($_SESSION['group_main_id'])))->$permission;
+            return db("SELECT ".$permission." From groups WHERE id = ".sqlInt($_SESSION['group_main_id']),'object')->$permission;
     }
 
     function con($txt) {
@@ -213,13 +213,7 @@
   
   function getCommentBox($site, $subsite = 0)
   {
-      $comment_parts = "";
-      $comments = $db("select * from comments where site = ".$site," and subsite = ".$subsite);
-      while ($comment = $comments)
-      {
-          $comment_parts = getComment($comment);
-      }
-      return $comment_parts.dispCommentInput();
+      return getComments($site,$subsite).dispCommentInput();
   }
   
   function getComment($comment)
@@ -242,10 +236,9 @@
         $out = date("F j, g:i a", $comment['date']);
     }
 
-    $user = db("select email from users where id = ".$comment['userid'],'object');
     $comment_view = substr($comment['content'], 0, 200);
     $comment_expand = substr($comment['content'], 0, -200);
-    $gravatar = get_gravatar($user->email, 52, false);
+    $gravatar = get_gravatar($comment['email'], 52, false);
     $com_disp .= show("ucp/comment", array("user" => $comment['name'],
                                             "gravatar" => $gravatar,
                                             "content" => $comment_view,
@@ -260,10 +253,22 @@
   
   function getComments($site = 0, $subsite = 0)
   {
-    $comments = db("SELECT * FROM comments WHERE site = ".$site." AND subsite = ".$subsite);
+    $comments = db("SELECT "
+                    . "c.content,"
+                    . "u.name,"
+                    . "u.email,"
+                    . "c.date"
+                . " FROM "
+                    . "comments as c,"
+                    . " users as u "
+                . "WHERE c.site = ".$site." "
+                . "AND u.id = c.userid "
+                . "AND c.subsite = ".$subsite." "
+                . "ORDER BY c.date DESC"
+            );
     
     $output ='';
-    while ($comment = mysqli_fetch_assoc($comments))
+    while ($comment = _assoc($comments))
     {
         $output .= getComment($comment);
     }
@@ -288,54 +293,54 @@
   }
   
     function updateRSS() {
-            global $path;
-        
-            $xml = new DOMDocument('1.0', 'UTF-8');
-            $xml->formatOutput = true;
+        global $path;
 
-            $roo = $xml->createElement('rss');
-            $roo->setAttribute('version', '2.0');
-            $xml->appendChild($roo);
-            $cha = $xml->createElement('channel');
-            $roo->appendChild($cha); 
-            $new = $xml->createElement('title', 'CMS - News');
+        $xml = new DOMDocument('1.0', 'UTF-8');
+        $xml->formatOutput = true;
+
+        $roo = $xml->createElement('rss');
+        $roo->setAttribute('version', '2.0');
+        $xml->appendChild($roo);
+        $cha = $xml->createElement('channel');
+        $roo->appendChild($cha); 
+        $new = $xml->createElement('title', 'CMS - News');
+        $cha->appendChild($new); 
+        $new = $xml->createElement('description','D4ho.de - CMS');
+        $cha->appendChild($new);
+        $bld = $xml->createElement('image');
+        $cha->appendChild($bld);
+        $bld ->appendChild($xml ->createElement('url',"http://dummyimage.com/120x61"));
+
+
+        $qry = db("SELECT * FROM news WHERE grp = 2 AND public_show = 1 ORDER BY date DESC");
+        while($rss_feed = mysqli_fetch_assoc($qry))
+        {
+            $new = $xml->createElement('item');
             $cha->appendChild($new); 
-            $new = $xml->createElement('description','D4ho.de - CMS');
-            $cha->appendChild($new);
-            $bld = $xml->createElement('image');
-            $cha->appendChild($bld);
-            $bld ->appendChild($xml ->createElement('url',"http://dummyimage.com/120x61"));
-            
 
-            $qry = db("SELECT * FROM news WHERE grp = 2 AND public_show = 1 ORDER BY date DESC");
-            while($rss_feed = mysqli_fetch_assoc($qry))
+
+            $rss['title'] = $rss_feed['title'];
+            $image = '&lt;img style="border: 0px none; margin: 0px; padding: 0px;" align="right" alt="" width="60" height="60" src="'.$rss_feed['main_image'].'" &gt;';
+            $rss['description'] = $image.$rss_feed['description'];
+            $rss['language'] = $lang;
+            $rss['link'] = "http://cms.d4ho.de/pages/news.php?id=".$rss_feed['id'];
+            $rss['pubDate'] = date("D, j M Y H:i:s ", $rss_feed['date']);
+            $hea = $xml ->createElement('image');
+            $new ->appendChild($hea);					
+            $img = $xml ->createElement('url',$rss_feed['main_image']);
+            $hea ->appendChild($img);
+
+            foreach ($rss as $tag => $value)
             {
-                    $new = $xml->createElement('item');
-                    $cha->appendChild($new); 
-					
-
-                    $rss['title'] = $rss_feed['title'];
-					$image = '&lt;img style="border: 0px none; margin: 0px; padding: 0px;" align="right" alt="" width="60" height="60" src="'.$rss_feed['main_image'].'" &gt;';
-                    $rss['description'] = $image.$rss_feed['description'];
-                    $rss['language'] = $lang;
-                    $rss['link'] = "http://cms.d4ho.de/pages/news.php?id=".$rss_feed['id'];
-                    $rss['pubDate'] = date("D, j M Y H:i:s ", $rss_feed['date']);
-                    $hea = $xml ->createElement('image');
-                    $new ->appendChild($hea);					
-                    $img = $xml ->createElement('url',$rss_feed['main_image']);
-                    $hea ->appendChild($img);
-
-                    foreach ($rss as $tag => $value)
-                    {
-                            $hea = $xml ->createElement($tag, utf8_encode($value));
-                            $new ->appendChild($hea);
-                    }
+                    $hea = $xml ->createElement($tag, utf8_encode($value));
+                    $new ->appendChild($hea);
             }
+        }
 
-            if($xml->save($path['upload'].'rss/rss.xml')) {
-                    return true;
-            }		
-            return false;
+        if($xml->save($path['upload'].'rss/rss.xml')) {
+                return true;
+        }		
+        return false;
     }
         
     function convertMatch($matches)
@@ -370,4 +375,12 @@
     
     function backSideFix() {
         $_SESSION['current_site'] = $_SESSION['last_site'];
+    }
+    
+    function tagConverter($tags) {
+        $tags = str_replace("/",",",$tags);
+        $tags = str_replace(" , ",",",$tags);
+        $tags = str_replace(" ,",",",$tags);
+        $tags = str_replace(", ",",",$tags);
+        return explode(",", $tags);
     }

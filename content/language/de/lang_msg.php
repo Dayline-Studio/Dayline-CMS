@@ -28,3 +28,4 @@ define ('_not_logged_in', "Du musst eingeloggt sein um diese Funktion nutzen zu 
 define ('_mail_send_true', "E-mail gesendet");
 define ('_mail_send_false', "Problem beim Senden der E-mail. Eingabe &uuml;berpr&uuml;fen");  
 define ('_no_server_found', "Du besitzt keine Server oder bist nicht Eingeloggt");
+define ('_categorie_not_found', "Kategorie nicht gefunden!");

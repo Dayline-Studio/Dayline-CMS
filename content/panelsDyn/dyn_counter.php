@@ -19,4 +19,3 @@
                                 "users_total" => $count_total->users_total,
                                 "count_total" => $count_total->count_total,
                                 "daily_avg" => (int)$count_total->daily_avg)));
-    backSideFix();
