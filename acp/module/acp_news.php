@@ -48,6 +48,7 @@ if ($do == "")
                         .sqlString($_POST['mce_0']).", "
                         .sqlString($_POST['title']).", "
                         .sqlInt(time()).", "
+                        .sqlInt($_POST['keywords']).", "
                         .sqlInt($_POST['groupid']).", "
                         .sqlString($_POST['visible']).", "
                         .sqlString($_POST['description']).", "

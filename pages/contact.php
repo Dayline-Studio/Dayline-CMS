@@ -10,7 +10,7 @@ if ($do == "")
     switch ($show)
     {
         default:
-        $out = show('contact/form');
+        $disp = show('contact/form');
         break;
     }
 }
@@ -22,11 +22,11 @@ switch ($do)
            $_POST['subject'] == "" ||
            $_POST['message'] == "")
         {
-            $out = msg(_fields_missing); 
+            $disp = msg(_fields_missing); 
         }
         else if (!check_email_address($_POST['mail']))
         {
-            $out = msg(_mailcheck_failed);
+            $disp = msg(_mailcheck_failed);
         }
         else {
 
@@ -34,13 +34,13 @@ switch ($do)
                 . "VALUES (NULL, ".sqlString($_POST['mail']).", ".sqlString($_POST['subject']).", ".sqlString($_POST['message']).", 1, 0");
 
             if(mail(con($_POST['mail']),con($_POST['subject']) , con($_POST['message']))) {
-                $out = msg(_mail_send_true);
+                $disp = msg(_mail_send_true);
             } else {
-                $out = msg(_mail_send_false);
+                $disp = msg(_mail_send_false);
             }
          }
          break;
 }
 
 //Initialisierung
-init($out, $meta);
+init($disp, $meta);

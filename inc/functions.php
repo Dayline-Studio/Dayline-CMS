@@ -254,17 +254,18 @@
   function getComments($site = 0, $subsite = 0)
   {
     $comments = db("SELECT "
-                    . "c.content,"
-                    . "u.name,"
-                    . "u.email,"
-                    . "c.date"
+                    . "c.content as content,"
+                    . "u.name as name,"
+                    . "u.email as email,"
+                    . "c.date as date"
                 . " FROM "
                     . "comments as c,"
                     . " users as u "
                 . "WHERE c.site = ".$site." "
                 . "AND u.id = c.userid "
+                . "AND c.active = 1 "
                 . "AND c.subsite = ".$subsite." "
-                . "ORDER BY c.date DESC"
+                . "ORDER BY c.date ASC"
             );
     
     $output ='';
