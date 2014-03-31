@@ -11,7 +11,7 @@ if ($do == "")
 	switch ($action)
 	{
 		default:
-                    $content = show('acp/acp_slider');    
+                    $disp = show('acp/acp_slider');    
                     break;
 	}
 }

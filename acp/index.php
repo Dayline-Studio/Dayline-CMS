@@ -7,7 +7,7 @@
 //------------------------------------------------
 if (!permTo("menu_acp")) { $error = msg(_no_permissions); }
 
-$content = "";
+$disp = "";
 $subsite = array();
  
 if (isset($_GET['acp'])) {
@@ -39,19 +39,24 @@ if ($file_exist)
 }
 else
 {
-    $content = show("acp/welcome");
+    $disp = show("acp/welcome");
 }
 
 if ($error == "") {
-	 if (isset($subsite[0]))
-	 {
-		 foreach ($subsite as $sub)
-		 {
-			$li .= '<li><a class="buttonStyle" href="?acp='.$_GET['acp'].'&AMP;action='.$sub.'" >[s_'.$sub.']</a></li>';
-		 }
-		 $submenu = show('acp/acp_horiz_list', array('li' => $li));
-	 }
-    init(show("acp/menu", array("menu" => $item_stack, "content" => $content, "submenu" => $submenu)),$meta);
+    $path['acp_settings'] = 'settings/'.$acp.'.xml';
+    if (file_exists($path['acp_settings']))
+    {
+         $acp_settings =  new SimpleXMLElement(file_get_contents($path['acp_settings']));
+         if (isset($acp_settings->subsites[0]))
+         {
+                 foreach ($acp_settings->subsites[0] as $sub)
+                 {
+                        $li .= '<li><a class="buttonStyle" href="?acp='.$_GET['acp'].'&AMP;action='.$sub.'" >[s_'.$sub.']</a></li>';
+                 }
+                 $submenu = show('acp/acp_horiz_list', array('li' => $li));
+         }
+     }
+    init(show("acp/menu", array("menu" => $item_stack, "content" => $disp, "submenu" => $submenu)),$meta);
 } else {
     init($error,$meta);
 }

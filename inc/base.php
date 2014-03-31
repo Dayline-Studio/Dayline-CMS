@@ -41,23 +41,19 @@
 	//Loading Language
 	includeFile($path['lang']."global.php");	
 	
-	$lang_dir = opendir($path['lang'].$language);
 	
-	//Loading the panels
-	if ( $language != 'de' || $language != 'en') 
-        {
+	if ( $language != 'de' || $language != 'en') {
             $language = $settings->language;
-        }
-	while ($lang_file = readdir($lang_dir)) 
-	{
-		if ($lang_file != ".." && $lang_file != ".") 
-		{
-			//Import panel function
+    }
+		
+	$lang_dir = opendir($path['lang'].$language);
+	while ($lang_file = readdir($lang_dir)) {
+		if ($lang_file != ".." && $lang_file != ".") {
 			include($path['lang'].$language.'/'.$lang_file);
 		}
-	} 
-      	  
+	} 	  
 	closedir($lang_dir);
+	
 	function includeFile($file)
 	{
 		$r = true;

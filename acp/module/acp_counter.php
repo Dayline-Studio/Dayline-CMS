@@ -4,7 +4,7 @@ if ($do == "")
 	switch ($action)
 	{
 		default:
-                    $content = show("acp/acp_counter");
+                    $disp = show("acp/acp_counter");
                 break;
 	}
 }
@@ -13,10 +13,10 @@ switch ($do)
     case 'reset':
             if (permTo('reset_counter')) {
                 if (up('TRUNCATE `counter`') && up('TRUNCATE `counter_user`')) {
-                    $content = msg(_counter_reset_successful);
+                    $disp = msg(_counter_reset_successful);
                 } else { 
-                    $content = msg(_counter_reset_failed);
+                    $disp = msg(_counter_reset_failed);
                 }
-            } else $content = msg(_no_permissions);
+            } else $disp = msg(_no_permissions);
             break;
 }

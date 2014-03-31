@@ -1,8 +1,8 @@
 <?php
 // Site Informations
-/**--**/  $meta['title'] = "Gruppen";
+/**--**/  $meta['title'] = _acp_groups;
 //------------------------------------------------
-  
+
 if ($do == "")
 {
     switch ($action)
@@ -23,7 +23,7 @@ if ($do == "")
                             'group_name' => $group['groupid']
                         ));
             }
-            $content = show('acp/acp_groups',
+            $disp = show('acp/acp_groups',
                     array(
                         'rows' => $rows
                     ));

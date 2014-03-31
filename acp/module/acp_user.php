@@ -17,7 +17,7 @@ if ($do == "")
                             'title' => $user['name']
                         ));
             }
-            $content = show('acp/acp_user',
+            $disp = show('acp/acp_user',
                     array(
                         'user_list' => $userlist
                 ));

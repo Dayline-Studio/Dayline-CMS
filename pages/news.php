@@ -9,13 +9,13 @@
 
 if ($_GET['id']== '')
 { 
-    $content = getNews(2);    
+    $disp = getNews(2);    
 }  else {
     
     if (permTo('site_edit')){
-    $content = "site/content_editable";
+    $disp = "site/content_editable";
     } else {
-        $content = "site/content"; 
+        $disp = "site/content"; 
     }
     
     $newsid = $_GET['id'];
@@ -28,14 +28,14 @@ if ($_GET['id']== '')
     $meta['title'] = $post->title;
     $meta['keywords'] = $post->keywords;
     $meta['description'] = $post->description;
-    $content = show("news/layout", array(
+    $disp = show("news/layout", array(
                                     "news_headline" => $post->title,
                                     "author"=> getUserInformations($post->userid, 'gplus')->gplus,
 				    "news_date" => date("F j, Y, G:i",$post->date),
-                                    "content" => show($content, array("content" => $post->content)),
+                                    "content" => show($disp, array("content" => $post->content)),
                                     "comments" => dispComments($meta['page_id'], $post->id)
     ));
 }
 
 //Initialisierung der Seite */
-init($content,$meta);   
+init($disp,$meta);   

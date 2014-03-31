@@ -6,7 +6,7 @@
 /**--**/  $meta['title'] = "Overview";
 //------------------------------------------------
 
-$content = "";
+$disp = "";
 switch ($show)
 {
     default:
@@ -20,9 +20,9 @@ switch ($show)
                     ));
         }
         $case['news'] = getNewsBox(getQrybyTagsFromNews());
-        $case['topnews'] = getNewsBox(getQrybyTagsFromTopNews());
-        $content .= show('overview/main' , $case);
-    
+        $case['top_news'] = getNewsBox(getQrybyTagsFromTopNews());
+        $case['top_post'] = getTopPostBox(getQryTopPost());
+        $disp .= show('overview/main' , $case);
         
         break;
     case 'categorie':
@@ -31,11 +31,11 @@ switch ($show)
             $qry = getQrybyTagsFromNews($_GET['id']);
             while ($data = _assoc($qry))
             {
-                $content .= $data['rate'].' '.$data['title'].'<br>';
+                $disp .= $data['rate'].' '.$data['title'].'<br>';
             }
 
         } else {
-            $content = msg(_categorie_not_found);
+            $disp = msg(_categorie_not_found);
         }
         break;    
 }
@@ -60,18 +60,32 @@ function getNewsBox($qry)
     return $save;
 }
 
+function getTopPostBox($qry) {
+    $post = mysqli_fetch_object($qry);
+
+    $case['title'] = $post->title;
+    $case['image'] = $post->image;
+    $case['description'] = $post->description;
+
+    return show('overview/show_top_post', $case);
+}
+
 //Return Query von News Order by Date
-function getQrybyTagsFromNews($id) {
+function getQrybyTagsFromNews() {
     return getContentFrom("news",'*','date DESC');
 }
 
 //Return Query von News Order by Rate
-function getQrybyTagsFromTopNews($id) {
+function getQrybyTagsFromTopNews() {
     return getContentFrom("news",'*','rate DESC');
 }
 
+function getQryTopPost() {
+    return getContentFrom("news", "*", 'rate DESC LIMIT 1');
+}
+
 //Return Query von Sites Order by Title
-function getQrybyTagsFromSites($id) {
+function getQrybyTagsFromSites() {
     return getContentFrom("sites",getKeywordsFromCategories($id),'title DESC');
 }
 
@@ -90,6 +104,7 @@ function getContentFrom($site ,$keywords, $orderby)
     return db("SELECT "
                 . "n.title as title,"
                 . "n.content as content,"
+				. "n.main_image as image,"
                 . "c.active as active,"
                 . "n.description as description,"
                 . "n.id as id,"
@@ -143,4 +158,4 @@ function arrayTomysqlOR($arr)
     return substr($tags,4);
 }
 
-init($content, $meta);
+init($disp, $meta);

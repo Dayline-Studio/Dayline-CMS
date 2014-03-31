@@ -21,6 +21,6 @@ while ($eintrag = mysqli_fetch_assoc($menu))
 
 switch($action){
     default:
-        $content = show("acp/acp_menu_item", array("options" => $items));
+        $disp = show("acp/acp_menu_item", array("options" => $items));
         break;
 }

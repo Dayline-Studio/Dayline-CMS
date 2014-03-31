@@ -20,7 +20,7 @@ if ($do == "")
             {
                     $options .= '<option value="'.$group['id'].'">'.$group['groupid'].'</option>';
             }
-            $content = show("acp/acp_news_create",array("options_group" => $options));
+            $disp = show("acp/acp_news_create",array("options_group" => $options));
             break;
         case 'news_manage':
             $news = db('SELECT title,id FROM news');
@@ -32,7 +32,7 @@ if ($do == "")
                             'title' => $post['title']
                         ));
             }
-            $content = show("acp/acp_news_manage", array('options' => $options));
+            $disp = show("acp/acp_news_manage", array('options' => $options));
             break;
     }
 } else {
@@ -57,20 +57,20 @@ if ($do == "")
                         . ")"
                    )){
                         updateRSS();
-                        $content = msg(_entry_successful);
+                        $disp = msg(_entry_successful);
                      }
-                else { $content = msg(_change_failed); }
-            } else { $content = msg(_no_permissions); }
+                else { $disp = msg(_change_failed); }
+            } else { $disp = msg(_no_permissions); }
             break;
         case 'delete_news':
             if (permTo('delete_news')) {
                 if(up("DELETE FROM news WHERE id = ".sqlInt($_POST['id']))) {
-                    $content = msg(_change_sucessful);
+                    $disp = msg(_change_sucessful);
                     updateRSS();
                  } else {
-                     $content = msg(_change_failed);
+                     $disp = msg(_change_failed);
                  }
-            } else { $content = msg(_no_permissions); }
+            } else { $disp = msg(_no_permissions); }
             break;
     }
 }

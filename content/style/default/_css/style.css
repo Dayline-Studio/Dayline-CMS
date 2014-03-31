@@ -58,6 +58,15 @@ pre {
     transition: all .3s ease-in-out;
 }
 
+.overview_top_post {
+    width: 100%;
+}
+.overview_top_post img {
+    width: 100%;
+    height: auto;
+    overflow: hidden;
+}
+
 .overview_news_panel {
     font-size:14px;
 }

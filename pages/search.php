@@ -6,9 +6,9 @@
 /**--**/  $meta['title'] = "Search";
 //------------------------------------------------
 
-$content = show("search/head");
+$disp = show("search/head");
 if (isset($_GET['tags'])) {
-    $content .= search($_GET['tags']);
+    $disp .= search($_GET['tags']);
 }
 
 function search($tags)
@@ -46,4 +46,4 @@ function replaceTextBackground($replace_string, $tags)
     return $replace_string;
 }
 
-init($content,$meta);
+init($disp,$meta);
