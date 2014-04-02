@@ -1,11 +1,11 @@
 <?
-define ('_profile_edit', 		"Edit Profile");
-define ('_logout', 				"Log out");
-define ('_email', 				"E-Mail");
-define ('_password', 			"Password");
-define ('_password_confirm',	"repeat Password");
-define ('_street', 				"Street");
-define ('_firstname', 			"first name");
-define ('_lastname',			"family name");
-define ('_password_current', 	"current Password");
+define ('_profile_edit', 		'edit profile');
+define ('_logout', 				'Logout');
+define ('_email', 				'e-mail');
+define ('_password', 			'password');
+define ('_password_confirm',	'repeat password');
+define ('_street', 				'street');
+define ('_firstname', 			'first name');
+define ('_lastname',			'last name');
+define ('_password_current', 	'current password');
 ?>
