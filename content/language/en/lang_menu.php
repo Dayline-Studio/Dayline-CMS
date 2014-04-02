@@ -6,5 +6,5 @@ define ('_article',			"Article");
 define ('_ucp', 			"UCP");
 define ('_acp', 			"ACP");
 define ('_guestbook', 		"Guestbook");
-define ('_arrive', 			"approach");
+define ('_arrive', 			"Driveway");
 ?>
