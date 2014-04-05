@@ -11,7 +11,7 @@ if ($do == '') {
     {
         case 'update':
             if (permTo('update_socialnetwork')) {
-                if (up('Update settings SET ('
+                if (up('Update settings SET '
                         . 'link_twitter = '.sqlStringCon($_POST['twitter']).','
                         . 'link_facebook = '.sqlStringCon($_POST['facebook']).','
                         . 'link_google = '.sqlStringCon($_POST['google']).','

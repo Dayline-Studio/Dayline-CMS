@@ -5,6 +5,7 @@
                        $_SESSION['loggedin'] = false;
                        $_SESSION['user'] = 'gast';
                        $_SESSION['name'] = 'Gast';
+                       $_SESSION['groupid'] = '0';
                        $_SESSION['group'] = 'gast';
                        $_SESSION['userid'] = 0;
      }

@@ -19,10 +19,13 @@
                                      "keywords" =>                  $meta['keywords'],
                                      "description" =>               $meta['description'],
                                      "language" =>                  $settings->language,
+                                     "google_analytics" =>          $settings->google_analytics,
+                                     "domain" =>                    $_SERVER['HTTP_HOST'],
                                      "css" =>                       $path['css'],
                                      "style" =>                     $path['style'],
+                                     "include" =>                   $path['include'],
                                      "js" =>                        $path['js']));
-            display($init);
+            display(preg_replace("/\s+/", " ", $init));
     }
     
     function initMinimal($content = "")
@@ -158,7 +161,7 @@
                     
             }
            
-            $msg = show ($file, array(	"msg" => $msg,
+            $msg = show ($file, array(	"msg" => 'Housslave: '.$msg,
                                         "link" => $_SESSION['last_site']));
             backSideFix();
             return $msg;
