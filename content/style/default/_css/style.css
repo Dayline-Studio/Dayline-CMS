@@ -43,6 +43,51 @@ pre {
     padding:20px 0;
 }
 
+.ucp_msg_gravatar {
+    width: 18px;
+    transition: width .3s ease-in-out;
+}
+
+.tableStyle tr:hover .ucp_msg_gravatar {
+    width: 64px;
+}
+
+.tableStyle{
+    text-align:left;
+    width: 100%;
+}
+
+.tableStyle th{
+    color: #000;
+    background-color: #fff;
+    border-bottom: 1px solid #000;
+}
+
+.tableStyle td,th {
+    padding:5px;
+    vertical-align: middle;
+}
+
+.tableStyle tr:nth-child(1n+2) {
+    background-color:#F2F2F2;
+    color:#000;
+    transition:all .3s linear;
+}
+
+.tableStyle tr:nth-child(2n+3) {
+    background-color:#fff;
+    color:#000;
+    transition:all .3s linear;
+}
+
+.tableStyle tr:hover{
+    background-color:#D8D8D8;
+}
+
+.ucp_msg_inbox {
+    width: 100%;
+}
+
 .overview_head hr {
     border:0;
     height:0;
@@ -394,26 +439,6 @@ pre {
     width:300px;
     background:#FAFAFA;
     margin-bottom:20px;
-}
-
-.acp table td,table th {
-    padding:2px 10px;
-}
-
-.acp table tr:nth-child(1n+2) {
-    background-color:#F2F2F2;
-    color:#000;
-    transition:all .3s linear;
-}
-
-.acp table tr:nth-child(2n+3) {
-    background-color:#fff;
-    color:#000;
-    transition:all .3s linear;
-}
-
-.acp table tr:hover {
-    background-color:#D8D8D8;
 }
 
 .navi a,.navi a:link,.navi a:visited,.navi a:hover,.navi a:active {

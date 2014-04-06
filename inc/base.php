@@ -40,7 +40,8 @@
         
 	//Loading Language
 	includeFile($path['lang']."global.php");	
-	
+	$disp = "";
+        $case = array();
 	
 	if ( $language != 'de' || $language != 'en') {
             $language = $settings->language;
