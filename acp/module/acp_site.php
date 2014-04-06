@@ -36,7 +36,7 @@ if ($do == "")
             if (permTo('create_site')) {
                 if(up("INSERT INTO sites (`id`, `title`, `content`, `author`, `keywords`, `description`, `subfrom`, `position`, lastedit,editby,date) 
                        VALUES (NULL, ".sqlString($_POST['title']).", '"._site_content_input."', ".sqlString($_SESSION['name']).", ".sqlString($_POST['keywords']).", ".sqlString($_POST['description']).", ".sqlInt($_POST['subfrom']).", 0, '', '', '".time()."')")){
-                $disp .= msg(_site_created_sucessful);
+                $disp .= msg(_site_created_successful);
                 }
             } else { $disp = msg(_no_permissions); }
             break;

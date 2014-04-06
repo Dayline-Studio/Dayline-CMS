@@ -48,10 +48,6 @@ pre {
     transition: width .3s ease-in-out;
 }
 
-.tableStyle tr:hover .ucp_msg_gravatar {
-    width: 64px;
-}
-
 .tableStyle{
     text-align:left;
     width: 100%;
@@ -71,7 +67,6 @@ pre {
 .tableStyle tr:nth-child(1n+2) {
     background-color:#F2F2F2;
     color:#000;
-    transition:all .3s linear;
 }
 
 .tableStyle tr:nth-child(2n+3) {

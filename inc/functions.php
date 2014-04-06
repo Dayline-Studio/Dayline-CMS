@@ -2,89 +2,92 @@
 
     require_once 'cachesystem/fastcache.php';
     phpFastCache::$storage = "auto";
-    phpFastCache::setup("path", "/home/webspace/ws31/inc/_cache");
+    phpFastCache::setup("path", "../inc/_cache");
         
     function init($content = "", $meta = null)
     {
-            global $path, $language; 
-            $init = show(loadingPanels(),array("content" => $content));
-            $settings = mysqli_fetch_object(db("Select * from settings where id = 1"));
-            $init = show($init, convertMatch(searchBetween("[s_", $init, "]")));
-            $init = show($init, convertMatchDyn(searchBetween("[dyn_", $init, "]")));
-            $init = show($init,array("title" =>                     $meta['title'],
-                                     "language_content" =>          $language,
-                                     "author" =>                    $meta['author'],
-                                     "publisher" =>	            $settings->publisher,
-                                     "copyright" =>                 $settings->copyright,
-                                     "keywords" =>                  $meta['keywords'],
-                                     "description" =>               $meta['description'],
-                                     "language" =>                  $settings->language,
-                                     "google_analytics" =>          $settings->google_analytics,
-                                     "domain" =>                    $_SERVER['HTTP_HOST'],
-                                     "css" =>                       $path['css'],
-                                     "style" =>                     $path['style'],
-                                     "include" =>                   $path['include'],
-                                     "js" =>                        $path['js']));
-            display(preg_replace("/\s+/", " ", $init));
+        global $path, $language; 
+        $init = show(loadingPanels(),array("content" => $content));
+        $settings = mysqli_fetch_object(db("Select * from settings where id = 1"));
+        
+        $init = show($init, convertMatchDyn(searchBetween("[dyn_", $init, "]")));
+        $init = preg_replace("/\s+/", " ", $init);
+        $init_case['title'] = $meta['title'];
+        $init_case['author'] = $meta['author'];
+        $init_case['copyright'] = $settings->copyright;
+        $init_case['keywords'] = $meta['keywords'];
+        $init_case['description'] = $meta['description'];
+        $init_case['google_analytics'] = $settings->google_analytics;
+        $init_case['domain'] = $_SERVER['HTTP_HOST'];
+
+        $init_case['css'] = $path['css'];
+        $init_case['style'] = $path['style'];
+        $init_case['include'] = $path['include'];
+        $init_case['js'] = $path['js'];
+        if (isset($meta['google_plus'])) {
+            $init_case['google_plus'] = $meta['google_plus'];
+        } else {
+            $init_case['google_plus'] = "";
+        }
+
+        $init = show($init,$init_case);
+        $init = show($init, convertMatch(searchBetween("[s_", $init, "]")));
+        display($init);
     }
     
-    function initMinimal($content = "")
-    {
-            global $path, $language; 
-            $init = show($content, convertMatch(searchBetween("[s_", $content, "]")));
-            display($init);
+    function initMinimal($content = "") {
+        $init = show($content, convertMatch(searchBetween("[s_", $content, "]")));
+        display($init);
     }
 
-    function display($content)
-    {
-            echo $content;
+    function display($content) {
+        echo $content;
     }
     function loadingPanels()
     {
-            //Global Path Variable
-            global $path;
-            //Loading panel Folder
-            $panels = opendir($path['panels']);
-            //Get the Main File for this Page (index.html)
-            $output = getFile($path['style_index']);
+        //Global Path Variable
+        global $path;
+        //Loading panel Folder
+        $panels = opendir($path['panels']);
+        //Get the Main File for this Page (index.html)
+        $output = getFile($path['style_index']);
 
-            //Loading the panels 
-            while ($panel = readdir($panels)) 
-            {
-                    //Loading panel functions
-                    if ($panel != ".." && $panel != "." && $panel != "disable") 
-                    {
-                            //Import panel function
-                            includeFile($path['panels'].$panel);
-                            //Remove .php (-4 chars)
-                            $panel = substr($panel,0,-4);
-                            //Replace the Tag with the returning content from the panel
-                            if (function_exists($panel)){
-                                $output = show($output, array( $panel => $panel() ));
-                            }
-                    }
-            } 
-            closedir($panels);
+        //Loading the panels
+        while ($panel = readdir($panels))
+        {
+                //Loading panel functions
+                if ($panel != ".." && $panel != "." && $panel != "disable") 
+                {
+                        //Import panel function
+                        includeFile($path['panels'].$panel);
+                        //Remove .php (-4 chars)
+                        $panel = substr($panel,0,-4);
+                        //Replace the Tag with the returning content from the panel
+                        if (function_exists($panel)){
+                            $output = show($output, array( $panel => $panel() ));
+                        }
+                }
+        }
+        closedir($panels);
 
-            return $output;
+        return $output;
     }
 
     //Dateipfad und Tags[array] werden übergeben
     function show($file_content = "", $tags = array(null => null))
     {
-            global $path;
+        global $path;
 
-            //Tags werden gesplittet einzeln durchgeführt
-
+        //Tags werden gesplittet einzeln durchgeführt
         if(file_exists($path['style']."/".$file_content.".html"))
         {
-                $file_content = getFile($path['style']."/".$file_content.".html");		
+            $file_content = getFile($path['style']."/".$file_content.".html");		
         }
         foreach($tags as $name => $value)
-          {
-                 //Tags der Datei werden ersetzt durch funktionen und Sprachelemente
-                 $file_content = str_replace('['.$name.']', $value, $file_content);
-          }
+        {
+            //Tags der Datei werden ersetzt durch funktionen und Sprachelemente
+            $file_content = str_replace('['.$name.']', $value, $file_content);
+        }
         //Datei wird fertig generiert zurück gegeben.
         return $file_content;
     }
@@ -96,75 +99,74 @@
     
     function randomstring($length = 6) 
     {
-            $chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
-            srand((double)microtime()*1000000);
-            $i = 0;
-            while ($i < $length) 
-            {
-                    $num = rand() % strlen($chars);
-                    $tmp = substr($chars, $num, 1);
-                    $pass = $pass . $tmp;
-                    $i++;
-            }
-            return $pass;
+        $chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+        srand((double)microtime()*1000000);
+        $i = 0;
+        while ($i < $length) 
+        {
+            $num = rand() % strlen($chars);
+            $tmp = substr($chars, $num, 1);
+            $pass = $pass . $tmp;
+            $i++;
+        }
+        return $pass;
     }
 	
-    function customHasher($pw, $salt, $rounds)
+    function customHasher($pw, $rounds)
     {
-            $hash = $pw;
-            for ($i = 0; $i < $rounds; $i++)
-            {
-                    if (!($i%3.5)){
-                        $hash = sha1($hash.$salt);
-                    }
-                    else {
-                        $hash = md5($salt.$hash);
-                    }
+        $hash = $pw;
+        for ($i = 0; $i < $rounds; $i++)
+        {
+            if (!($i%3.5)){
+                $hash = sha1($hash.$config['salt']);
+            } else {
+                $hash = md5($config['salt'].$hash);
             }
-            sha1($hash); 
-            return $hash;
+        }
+        sha1($hash); 
+        return $hash;
     }
 
     function sqlString($param) {
-            return (NULL === $param ? "NULL" : "'".mysql_real_escape_string($param)."'");
+        return (NULL === $param ? "NULL" : "'".mysql_real_escape_string($param)."'");
     }
     
     function sqlStringCon($param) {
-         return (NULL === $param ? "NULL" : "'".mysql_real_escape_string(con($param))."'");
+        return (NULL === $param ? "NULL" : "'".mysql_real_escape_string(con($param))."'");
     }
 
     function sqlInt($param) {
-            return (NULL === $param ? "NULL" : intVal($param));
+        return (NULL === $param ? "NULL" : intVal($param));
     }
 
     function get_gravatar( $email, $s = 80, $img = false) 
     {
-            $d = 'wavatar';
-            $r = 'g';
-            $url = 'http://www.gravatar.com/avatar/';
-            $url .= md5( strtolower( trim( $email ) ) );
-            $url .= "?s=$s&amp;d=$d&amp;r=$r";
-            if ( $img ) 
-            {
-                    $url = '<img src="' . $url . '" />';
-            }	
-            return $url;
+        $d = 'wavatar';
+        $r = 'g';
+        $url = 'http://www.gravatar.com/avatar/';
+        $url .= md5( strtolower( trim( $email ) ) );
+        $url .= "?s=$s&amp;d=$d&amp;r=$r";
+        if ( $img ) 
+        {
+                $url = '<img src="' . $url . '" />';
+        }	
+        return $url;
     }
 
     function msg($msg, $kind = 'stock')
     {
-            global $path;
-            switch ($kind)
-            {
-                default:
-                    $file = show("msg/msg_stock");
-                    
-            }
-           
-            $msg = show ($file, array(	"msg" => 'Housslave: '.$msg,
-                                        "link" => $_SESSION['last_site']));
-            backSideFix();
-            return $msg;
+        global $path, $meta;
+        switch ($kind)
+        {
+            default:
+                $file = show("msg/msg_stock");     
+        }
+
+        $meta['title'] = $msg;
+        $msg = show ($file, array(	"msg" => 'Housslave: '.$msg,
+                                    "link" => $_SESSION['last_site']));
+        backSideFix();
+        return $msg;
     }
 
     function getNews($groupid = 0)
@@ -388,3 +390,24 @@
         $tags = str_replace(", ",",",$tags);
         return explode(",", $tags);
     }
+    
+    function sendMessage($sender, $receiver, $content, $title, $email = "",$server = false) {
+    return up('INSERT INTO messages ('
+            . 'sender_id,'
+            . 'receiver_id,'
+            . 'opened,'
+            . 'inbox,'
+            . 'outbox,'
+            . 'email,'
+            . 'date,'
+            . 'content,'
+            . 'title'
+            . ') VALUES ( '
+            . sqlInt($sender).','
+            . sqlInt($receiver).','
+            . '0,1,1,'
+            . sqlString($email).','
+            . time().','
+            . sqlString($title).','
+            . sqlString($content).')');
+}

@@ -102,27 +102,26 @@ function getContentFrom($site ,$keywords, $orderby)
         $keyString = " ";
     }
     return db("SELECT "
-                . "n.title as title,"
-                . "n.content as content,"
-				. "n.main_image as image,"
-                . "c.active as active,"
-                . "n.description as description,"
-                . "n.id as id,"
-                . "n.date as date,"
-                . "count(c.subsite) as rate "
+                . "n.title title,"
+                . "n.content content,"
+		. "n.main_image image,"
+                . "c.active active,"
+                . "n.description description,"
+                . "n.id id,"
+                . "n.date date,"
+                . "count(c.subsite) rate "
             . "FROM "
-                . $site." as n,"
-                . "comments as c "
-            . "WHERE c.site = 2 "
+                . $site." n "
+            . "LEFT JOIN comments c ON n.id = c.subsite "
+            . "WHERE c.site = 2 OR c.site IS NULL "
             . $keyString
-            . "AND c.subsite = n.id "
             . "GROUP by n.id "
             . "ORDER BY ".$orderby);
 }
 
 function ratePost($count)
 {
-    return ($count-1)*13;
+    return ($count)*13;
 }
 
 //Return Array der Tags der jeweiligen Kategorie ID
