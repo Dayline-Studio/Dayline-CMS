@@ -149,7 +149,7 @@ function getMessage($userid, $msgid) {
     return db("SELECT m.email memail,m.receiver_id,m.date,m.title,m.content,u.name,u.email as email "
             . "FROM messages as m "
             . "LEFT JOIN users as u ON m.sender_id = u.id "
-            . "WHERE m.receiver_id || m.sender_id = " . sqlInt($userid).' '
+            . "WHERE (m.receiver_id || m.sender_id = " . sqlInt($userid).') '
             . 'AND m.inbox = 1 '
             . 'AND m.id = ' . sqlInt($msgid)
             ,'object');

@@ -6,8 +6,15 @@
 if ($do == "")
 {
     switch ($action)
-    {
-        default:
+    {	
+		case 'edit_group':
+			$groups = db('SELECT * FROM groups WHERE id ='.sqlInt($_GET['id']),'array');
+			foreach($groups as $permission => $value){
+			}
+			
+		break;
+		
+		default:
             $groups = db('SELECT id,groupid FROM groups');
             $rows = ""; 
             while ($group = _assoc($groups))
@@ -32,8 +39,19 @@ if ($do == "")
 } else {
     switch ($do)
     {
-        case 'update_settings':
-
+		case 'delete_group':
+			if (permTo('delete_group')){
+				if (up('DELETE FROM groups WHERE id ='.sqlInt($_GET['id']))) {
+				$disp = msg(_change_successful);
+			} else {
+				$disp = msg(_change_failed);
+			}
+			} else {
+				$disp = msg(_no_permissions);
+			}
+			break;
+        case 'update_group':
+			//hier kommt noch was
             break;
     }
 }
