@@ -7,7 +7,10 @@
     function init($content = "", $meta = null)
     {
         global $path, $language; 
-        $init = show(loadingPanels(),array("content" => $content));
+        
+        $disp = getFile($path['style_index']);
+        
+        $init = show(loadingPanels($disp),array("content" => $content));
         $settings = mysqli_fetch_object(db("Select * from settings where id = 1"));
         
         $init = show($init, convertMatchDyn(searchBetween("[dyn_", $init, "]")));
@@ -39,19 +42,23 @@
         $init = show($content, convertMatch(searchBetween("[s_", $content, "]")));
         display($init);
     }
+    
+    function initMinStyle($init) {
+        $init = show($init, convertMatch(searchBetween("[s_", $content, "]")));
+        $init = show(getFile($path['style_index']), array('content' => $init));
+        display($init);
+    }
 
     function display($content) {
         echo $content;
     }
-    function loadingPanels()
+    function loadingPanels($disp)
     {
         //Global Path Variable
         global $path;
         //Loading panel Folder
         $panels = opendir($path['panels']);
-        //Get the Main File for this Page (index.html)
-        $output = getFile($path['style_index']);
-
+        
         //Loading the panels
         while ($panel = readdir($panels))
         {
@@ -64,13 +71,13 @@
                         $panel = substr($panel,0,-4);
                         //Replace the Tag with the returning content from the panel
                         if (function_exists($panel)){
-                            $output = show($output, array( $panel => $panel() ));
+                            $disp = show($disp, array( $panel => $panel() ));
                         }
                 }
         }
         closedir($panels);
 
-        return $output;
+        return $disp;
     }
 
     //Dateipfad und Tags[array] werden übergeben
