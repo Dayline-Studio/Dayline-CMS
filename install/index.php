@@ -5,15 +5,28 @@
 //------------------------------------------------
  require_once ('mysql.php');
  
-	$config['sql_host'] ='localhost';
-	$config['sql_db'] = 'usr_db31_2';
-	$config['sql_user']= 'db31';
-	$config['sql_pass'] = 'XaG8Vv2bUnKVdMzm'; 
-	$config['salt']	= randomstring(32);	
+	$files = array();
+	$files['config'] = '../inc/config.php';
+	$files['upload'] = '../inc/upload';
+	$files['cach'] = '../inc/_cache';
 				
 	switch($_GET['action'])
 	{
 		default:
+			foreach($files as $path)
+			{
+				if( 777 == substr(sprintf('%o', fileperms($path)), -3))
+				{
+					echo 'Permissions wurden richtig gesetzt<br>';
+				}
+				else
+				{
+					echo 'Permissions der Datei '.$file.' im Pfad '.$path.' bitte auf 777 setzen<br>';
+				}
+			}
+		break;
+		
+		case mysql_connection:
 			$disp = file_get_contents("html/install.html");
 			echo ($disp );	
 		break;
