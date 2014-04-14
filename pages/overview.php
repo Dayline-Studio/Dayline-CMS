@@ -11,6 +11,7 @@ switch ($show)
 {
     default:
         $categories = getFromCategories();
+        $case['categories'] = "";
         while ($data = _assoc($categories)) {
             $case['categories'] .= show('overview/show_all',
                     array(
@@ -43,6 +44,7 @@ switch ($show)
 
 function getNewsBox($qry)
 {
+    $save = "";
     while ($post = _assoc($qry))
     {
         $length = 25;

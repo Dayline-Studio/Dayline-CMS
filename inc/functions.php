@@ -15,25 +15,19 @@
         
         $init = show($init, convertMatchDyn(searchBetween("[dyn_", $init, "]")));
         $init = preg_replace("/\s+/", " ", $init);
-        $init_case['title'] = $meta['title'];
-        $init_case['author'] = $meta['author'];
-        $init_case['copyright'] = $settings->copyright;
-        $init_case['keywords'] = $meta['keywords'];
-        $init_case['description'] = $meta['description'];
-        $init_case['google_analytics'] = $settings->google_analytics;
-        $init_case['domain'] = $_SERVER['HTTP_HOST'];
+        $meta['copyright'] = $settings->copyright;
+        $meta['google_analytics'] = $settings->google_analytics;
+        $meta['domain'] = $_SERVER['HTTP_HOST'];
 
-        $init_case['css'] = $path['css'];
-        $init_case['style'] = $path['style'];
-        $init_case['include'] = $path['include'];
-        $init_case['js'] = $path['js'];
-        if (isset($meta['google_plus'])) {
-            $init_case['google_plus'] = $meta['google_plus'];
-        } else {
-            $init_case['google_plus'] = "";
+        $meta['css'] = $path['css'];
+        $meta['style'] = $path['style'];
+        $meta['include'] = $path['include'];
+        $meta['js'] = $path['js'];
+        if (!isset($meta['google_plus'])) {
+            $meta['google_plus'] = "";
         }
 
-        $init = show($init,$init_case);
+        $init = show($init,$meta);
         $init = show($init, convertMatch(searchBetween("[s_", $init, "]")));
         display($init);
     }
@@ -198,7 +192,9 @@
 
     function permTo($permission)
     {
-            return db("SELECT ".$permission." From groups WHERE id = ".sqlInt($_SESSION['group_main_id']),'object')->$permission;
+        if ($perm = db("SELECT ".$permission." From groups WHERE id = ".sqlInt($_SESSION['group_main_id']),'object')->$permission)
+            return $perm;
+        return 0;
     }
 
     function con($txt) {
@@ -358,6 +354,7 @@
         
     function convertMatch($matches)
     {
+        $new = array();
         foreach ($matches as $value)
         {
             if (defined("_".$value)) {
@@ -383,7 +380,7 @@
         if (preg_match_all('/'.preg_quote($start_tag).'(.*?)'.preg_quote($end_tag).'/s', $String, $matches)) {
                 return $matches[1];
         }
-        return false;
+        return array();
     }
     
     function backSideFix() {

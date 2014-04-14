@@ -11,17 +11,17 @@ if ($do == "")
 {
     if (permTo('site_edit')){
         $file = "site/content_editable";
-        $set_cache = false;
+       // $set_cache = false;
     }
     else{
         $file = "site/content"; 
-        $keyword_webpage = md5($_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'].$_SERVER['QUERY_STRING']);
-        $content = __c("files")->get($keyword_webpage);
-        $set_cache = true;
+       // $keyword_webpage = md5($_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'].$_SERVER['QUERY_STRING']);
+       // $content = __c("files")->get($keyword_webpage);
+       // $set_cache = true;
     }
    
-    if ($content == null)
-    {
+   // if ($content == null)
+   // {
         //show to id
         $show = str_replace("_"," ",$show);
 
@@ -52,8 +52,8 @@ if ($do == "")
         else {
             $content = msg(_site_not_found);
         }
-        if ($set_cache) __c("files")->set($keyword_webpage,$content, 30);
-    }
+        //if ($set_cache) __c("files")->set($keyword_webpage,$content, 30);
+    //}
 }
 else {
     switch ($do)

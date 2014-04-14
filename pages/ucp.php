@@ -101,24 +101,40 @@ switch ($do)
     case 'update_profile':
         $user = getUserInformations($_SESSION['userid'],"email,street,firstname,lastname,country,pass,rounds");
         $passwd = customHasher($_POST['pass'],$user->rounds);
-        
-        if ($_POST['passwd'] != $_POST['cpasswd'] && !empty($_POST['cpasswd'])) {
-            $disp = msg(_pass_dont_match);
-        } else if ($passwd != $user->pass) {
-            $disp = msg(_pass_wrong);
+        $update = true;
+        if ($passwd == $user->pass) {
+            if (!empty($_POST['cpasswd'])) {
+                if ($_POST['cpasswd'] == $_POST['cpasswd']) {
+                    if (strlen($_POST['cpasswd']) > 6) {
+                        $passwd = customHasher($_POST['cpasswd'],$user->rounds);
+                    } else {
+                        $disp = msg(_password_syntax_failed);
+                        $update = false;
+                    }
+                } else {
+                    $disp = msg(_pass_dont_match);
+                    $update = false;
+                }
+            } 
         } else {
-            if (strlen($_POST['cpasswd']) > 6) {
-                db ('Update users Set
-                    pass = '.sqlString(customHasher($_POST['cpasswd'],$user->rounds)).',
-                    email = '.sqlString($_POST['email']).',
-                    firstname = '.sqlString($_POST['firstname']).',
-                    lastname = '.sqlString($_POST['lastname']).',
-                    country = '.sqlString($_POST['country']).',
-                    street = '.sqlString($_POST['street']).'
-                    Where id ='.$_SESSION['userid']);
+            $disp = msg(_pass_wrong);
+            $update = false;
+        }   
+        if ($update) {
+         if (db ('Update users Set
+                pass = '.sqlString($passwd).',
+                email = '.sqlString($_POST['email']).',
+                firstname = '.sqlString($_POST['firstname']).',
+                lastname = '.sqlString($_POST['lastname']).',
+                country = '.sqlString($_POST['country']).',
+                street = '.sqlString($_POST['street']).'
+                Where id ='.$_SESSION['userid'])) {
                 $disp = msg(_change_sucessful);
-            } $disp = msg(_password_syntax_failed);
+            } else {
+                $disp = msg(_change_failed);
+            }
         }
+
         break;
     case 'msg_send':
         if (permTo('msg_send')) {

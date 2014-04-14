@@ -6,8 +6,7 @@
 /**--**/  $meta['title'] = "News";
 /**--**/  $meta['page_id'] = 2;
 //------------------------------------------------
-
-if ($_GET['id']== '')
+if (!isset($_GET['id']))
 { 
     $disp = getNews(2);    
 }  else {

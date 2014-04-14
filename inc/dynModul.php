@@ -5,7 +5,7 @@ backSideFix();
 
 if (isset($_GET['modulname'])) {
     $panelPath = "../content/panelsDyn/dyn_".$_GET['modulname'].".php";
-    $panelName = $_GET['modulName'];
+    $panelName = $_GET['modulname'];
     
     if(file_exists($panelPath)) {
         include($panelPath);

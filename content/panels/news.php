@@ -1,6 +1,7 @@
 <?php
 function news(){
     $news = db("SELECT title,date,description,id FROM news ORDER BY date DESC LIMIT 4");
+    $posts = "";
     while ($post = _assoc($news))
     {
         $length = 25;

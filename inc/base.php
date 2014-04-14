@@ -1,6 +1,10 @@
 <?php	
-        require_once("../inc/auth.php");
-        require_once("../inc/config.php");
+$installation = false;
+require_once("../inc/auth.php");
+if (file_exists("../inc/config.php")) {
+    include("../inc/config.php");
+}
+        
         
 //Parameter auslesen für allegemeine Settings
         if (isset($_GET['s'])) { $style = $_GET['s']; }
@@ -15,89 +19,98 @@
 	else { $action = "";}
         
 //Allegmeine Pfade setzten durch Resultat der Parameter 
-        $path['dir'] = $config['dir'];
-        $path['content'] = "../content/";
-        $path['include'] = "../inc/";
-        $path['upload'] = $path['include']."upload/";
-        $path['images'] = $path['include']."images/"; 
-        $path['plugins'] = $path['content']."plugins/"; 
-        $path['pages'] = "../pages/"; 
-        $path['panels'] = $path['content']."panels/"; 
-        $file['functions'] = $path['include']."functions.php";
-        $file['auth'] = $path['include']."auth.php";
-        $file['init'] = $path['include']."init.php";
-        $path['lang'] = $path['content']."language/";
-        
+    $disp = "";
+    $case = array();
+    $path['dir'] = $config['dir'];
+    $path['content'] = "../content/";
+    $path['include'] = "../inc/";
+    $path['upload'] = $path['include']."upload/";
+    $path['images'] = $path['include']."images/"; 
+    $path['plugins'] = $path['content']."plugins/"; 
+    $path['pages'] = "../pages/"; 
+    $path['panels'] = $path['content']."panels/"; 
+    $file['functions'] = $path['include']."functions.php";
+    $file['auth'] = $path['include']."auth.php";
+    $file['init'] = $path['include']."init.php";
+    $path['lang'] = $path['content']."language/";
+
+    if (!$installation) {
         $settings = db("select * from settings",'object');
         $style = $settings->style;
-        
-        $path['style'] = $path['content']."/style/".$style."/";
-        $path['css'] = $path['style']."_css/";
-        $path['js'] = $path['style']."_js/";
-        $path['style_index'] = $path['style']."index.html";
-        
-	require_once($file['functions']);
-        
-	//Loading Language
-	includeFile($path['lang']."global.php");	
-	$disp = "";
-        $case = array();
-	
-	if ( $language != 'de' || $language != 'en') {
-            $language = $settings->language;
+    } else {
+        $style = "default";
+    }
+
+    $path['style'] = $path['content']."style/".$style."/";
+    $path['css'] = $path['style']."_css/";
+    $path['js'] = $path['style']."_js/";
+    $path['style_index'] = $path['style']."index.html";
+
+    require_once($file['functions']);
+
+    //Loading Language
+    includeFile($path['lang']."global.php");
+
+    if ( $language != 'de' || $language != 'en') {
+       if (!$installation) {
+           $language = $settings->language;
+       } else {
+           $language = 'de';
+       }
     }
 		
-	$lang_dir = opendir($path['lang'].$language);
-	while ($lang_file = readdir($lang_dir)) {
-		if ($lang_file != ".." && $lang_file != ".") {
-			include($path['lang'].$language.'/'.$lang_file);
-		}
-	} 	  
-	closedir($lang_dir);
+    $lang_dir = opendir($path['lang'].$language);
+    while ($lang_file = readdir($lang_dir)) {
+            if ($lang_file != ".." && $lang_file != ".") {
+                    include($path['lang'].$language.'/'.$lang_file);
+            }
+    } 	  
+    closedir($lang_dir);
 	
-	function includeFile($file)
-	{
-		$r = true;
-		if (file_exists ( $file )) {
-			return include($file);
-		}
-		else {
-                        addError("File not found -".$file);
-			$r = false;
-		}
-		return $r;
-	}
-	function getFile($file)
-	{
-		$r = true;
-		if (file_exists ( $file )) {
-			return file_get_contents($file);
-		}
-		else {
-			addError("File not found -".$file);
-			$r = false;
-		}
-		return $r;
-	}
-        
-        
-            function dbConnect()
+    function includeFile($file)
     {
-    
-            global $config;
-            if($config['sql_host'] != '' && $config['sql_user'] != '' && $config['sql_pass'] != '' && $config['sql_db'] != '')
-            {
-                    if(!$db_link = mysqli_connect($config['sql_host'],$config['sql_user'],$config['sql_pass'], $config['sql_db'])) {
-                        die("Fehler beim Zugriff auf die Datenbank!");
-                    }
-                    else {
-                        return $db_link;
-                    }
-            }
-            else {
-                error("Es wurden nicht alle Datenbank Daten zur Verbindung angegeben");
-            }
-            return false;
+        $r = true;
+        if (file_exists ( $file )) {
+            return include($file);
+        }
+        else {
+            addError("File not found -".$file);
+            $r = false;
+        }
+        return $r;
+    }
+        
+    function getFile($file)
+    {
+        $r = true;
+        if (file_exists ( $file )) {
+            return file_get_contents($file);
+        }
+        else {
+            addError("File not found -".$file);
+            $r = false;
+        }
+        return $r;
+    }
+        
+        
+    function dbConnect()
+    {
+        global $config;
+        if($config['sql_host'] != '' && $config['sql_user'] != '' && $config['sql_pass'] != '' && $config['sql_db'] != '')
+        {
+                if(!$db_link = mysqli_connect($config['sql_host'],$config['sql_user'],$config['sql_pass'], $config['sql_db'])) {
+                    die("Fehler beim Zugriff auf die Datenbank!");
+                }
+                else {
+                    mysqli_query("SET NAMES 'utf8'");
+                    return $db_link;
+                }
+        }
+        else {
+            error("Es wurden nicht alle Datenbank Daten zur Verbindung angegeben");
+        }
+        return false;
     }
     function _assoc($fetch)
 {
@@ -112,7 +125,7 @@
     function db($input = "", $mysqli_action = null)
     {
             if(!$qry = mysqli_query( dbConnect(), $input )) {
-                die($input);
+                return;
             }           
 
             if ($mysqli_action != null)

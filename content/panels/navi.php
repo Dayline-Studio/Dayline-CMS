@@ -17,7 +17,7 @@ function navi()
             break;
    }
    
-   if ($meta['page_id'] == 3){
+   if (isset($meta['page_id']) && $meta['page_id'] == 3){
        $site_navi = baumOut($site->id);
    } else {
        $site_navi = "";
@@ -60,6 +60,7 @@ function siteNaviBackwardList($id, $baum)
 
 function baumOut($id)
 {
+    $ret = "";
     $baum[1] = siteNaviForward($id);
     $baum[0] = 1;
     
