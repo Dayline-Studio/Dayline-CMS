@@ -78,9 +78,8 @@ if ($do == "")
                 $msg_case['date'] = date("m.d.y H:i:s",$data->date);
                 $msg_case['subject'] = $data->title;
                 $msg_case['content'] = $data->content;
-
                 $meta['title'] = "Msg: ".$data->title;
-                if ($data->receiver_id != $_SESSION['userid']) {
+                if ($data->receiver_id == $_SESSION['userid']) {
                     $disp = show('ucp/msg_viewer', $msg_case);
                     up('UPDATE messages SET opened = 1 WHERE id = '.sqlInt($_GET['id']));
                 } else {

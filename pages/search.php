@@ -27,7 +27,7 @@ function searchEngine($tag)
     $search = db("SELECT content,title FROM news WHERE content LIKE ".sqlString("%$tag%"));
     while ($result = _assoc($search))
     {
-        $res = $result['content'];
+        $res = strip_tags($result['content']);
     }
     return $res;
 }

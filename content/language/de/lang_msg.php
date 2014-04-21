@@ -1,7 +1,7 @@
 <?php
 define ('_pass_dont_match', 		"Passw&ouml;rter stimmen nicht &uuml;berein");
 define ('_pass_wrong', 				"Aktuelles Passwort ist falsch");
-define ('_fields_missing', 			"Es sind nicht alle erforderlichen Felder ausgefüllt");
+define ('_fields_missing', 			"Es sind nicht alle erforderlichen Felder ausgef&uuml;llt");
 define ('_change_sucessful', 		"&Auml;nderungen erfolgreich!");
 define ('_change_failed', 			"&Auml;nderungen fehlgeschlagen!");
 define ('_login_failed', 			"Passwort oder Benutzername falsch!");
@@ -32,3 +32,5 @@ define ('_categorie_not_found', "Kategorie nicht gefunden!");
 define ('_msg_delete_sucessful', 'Nachricht erfolgreich entfernt');
 define ('_msg_sent_successful', 'Nachricht erfolgreich gesendet');
 define ('_msg_sent_failed', 'Nachricht senden fehlgeschlagen');
+define ('_command_already_in_progress', 'Es wird bereits ein anderer Befehl ausgeführt');
+define ('_commend_send_successful', 'Dein Befehl wurde zum Server weitergeleitet. Dies kann maximal 60 Sekunden in Anspruch nehmen.');

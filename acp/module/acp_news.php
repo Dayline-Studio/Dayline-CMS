@@ -23,7 +23,7 @@ if ($do == "")
             $disp = show("acp/acp_news_create",array("options_group" => $options));
             break;
         case 'news_manage':
-            $news = db('SELECT title,id FROM news');
+            $news = db('SELECT title,id FROM news ORDER BY date DESC');
             $options = "";
             while ($post = _assoc($news)) {
                 $options .= show('acp/acp_select_option',
@@ -43,17 +43,17 @@ if ($do == "")
                 if(up("INSERT INTO news ("
                         . "id, content, title, date, "
                         . "grp, public_show, description, "
-                        . "main_image, userid) VALUES ("
+                        . "main_image, userid, keywords) VALUES ("
                         . "NULL, "
                         .sqlString($_POST['mce_0']).", "
                         .sqlString($_POST['title']).", "
                         .sqlInt(time()).", "
-                        .sqlInt($_POST['keywords']).", "
                         .sqlInt($_POST['groupid']).", "
-                        .sqlString($_POST['visible']).", "
+                        .sqlInt($_POST['visible']).", "
                         .sqlString($_POST['description']).", "
                         .sqlString($_POST['main_image']).", "
-                        .sqlInt($_SESSION['userid'])
+                        .sqlInt($_SESSION['userid']).", "
+                        .sqlInt($_POST['keywords'])
                         . ")"
                    )){
                         updateRSS();

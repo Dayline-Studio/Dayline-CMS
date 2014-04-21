@@ -28,3 +28,8 @@ define ('_acp_user', 'User verwalten');
 define ('_acp_groups', 'Gruppen/Permissions');
 define ('_delete', 'L&ouml;schen');
 define ('_edit', 'Bearbeiten');
+define ('_name', 'Name');
+define ('_submenu', 'Submen&uuml;');
+define ('_type', 'Position');
+define ('_newtab', 'NeuerTab');
+define ('_link', 'Link');

@@ -23,21 +23,34 @@ if ($do == "")
    // if ($content == null)
    // {
         //show to id
-        $show = str_replace("_"," ",$show);
+        $case['show'] = str_replace("_"," ",$show);
 
-        if ($get_site = db("select * from sites where title Like ".sqlString($show),'object'))
+        if ($get_site = db("select * from sites where title Like ".sqlString($case['show']),'object'))
         {
                 $user = getUserInformations($get_site->userid, "name");
-                $author = "Written by ".$user->name." - ".date("F j, Y, g:i a",$get_site->date);
-                if ($get_site->lastedit != "") {
-                $edited = "Last edit by ".$get_site->editby." - ".date("F j, Y, g:i a",$get_site->lastedit);
+                if ($get_site->show_author) {
+                    $case['author'] = "Written by ".$user->name." - ".date("F j, Y, g:i a",$get_site->date);
+                } else {
+                    $case['author'] = "";
                 }
-                $content = show(show("site/head").show($file), array(
-                    "title" => 	$get_site->title,
-                    "site_id" => 	$show,
-                    "edited" =>     $edited,
-                    "author" =>     $author,
-                    "content" => 	$get_site->content),$get_site->id);
+                if ($get_site->show_headline) {
+                    $case['title'] = $get_site->title;
+                } else {
+                    $case['title'] = "";
+                }
+                if ($get_site->lastedit != "" && $get_site->show_lastedit) {
+                    $case['edited'] = "Last edit by ".$get_site->editby." - ".date("F j, Y, g:i a",$get_site->lastedit);
+                } else {
+                    $case['edited'] = "";
+                }
+                if ($get_site->show_print) {
+                    $case['print'] = show('site/print');
+                } else {
+                    $case['print'] = "";
+                }
+                $case['content'] = $get_site->content;
+                $case['site_id'] = $show;
+                $content = show(show("site/head").show($file),$case);
 
                 //Print
                 $_SESSION['print_content'] = $get_site->content;
