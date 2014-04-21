@@ -1,9 +1,10 @@
 <?php
 
     require_once 'cachesystem/fastcache.php';
+    require_once 'phpmailer/class.phpmailer.php';
     phpFastCache::$storage = "auto";
     phpFastCache::setup("path", "../inc/_cache");
-        
+    
     function init($content = "", $meta = null)
     {
         global $path, $language; 
@@ -414,4 +415,20 @@
             . time().','
             . sqlString($title).','
             . sqlString($content).')');
-}
+    }
+    
+    function sendmail($content, $subject, $reciver) {
+        $mail = new PHPMailer();
+        $mail->isSendmail();
+        
+        $mail->SetFrom('admin@d4ho.de', 'Administrator');
+        
+        $mail->CharSet  =  "utf-8";
+        $mail->Subject = $subject;
+        $mail->msgHTML($content);
+        $mail->addAddress($reciver);
+        if ($mail->send()) {
+            return true;
+        }
+        return false;
+    }
