@@ -15,8 +15,12 @@
          }
                  
          //Last Site:
-         $_SESSION['back_site'] = $_SESSION['last_site'];
-         $_SESSION['last_site'] = $_SESSION['current_site'];
+         if (isset($_SESSION['last_site'])) {
+            $_SESSION['back_site'] = $_SESSION['last_site'];
+         }
+         if (isset($_SESSION['current_site'])) {
+            $_SESSION['last_site'] = $_SESSION['current_site']; 
+         }
          $_SESSION['current_site'] = getCurrentUrl();
 
        function getCurrentUrl() {

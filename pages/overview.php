@@ -159,4 +159,7 @@ function arrayTomysqlOR($arr)
     return substr($tags,4);
 }
 
-init($disp, $meta);
+//Seite Rendern
+Disp::$content = $disp;
+Disp::addMeta($meta);
+Disp::render();

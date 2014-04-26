@@ -2,95 +2,22 @@
 
     require_once 'cachesystem/fastcache.php';
     require_once 'phpmailer/class.phpmailer.php';
+    
     phpFastCache::$storage = "auto";
     phpFastCache::setup("path", "../inc/_cache");
-    
-    function init($content = "", $meta = null)
-    {
-        global $path, $language; 
-        
-        $disp = getFile($path['style_index']);
-        
-        $init = show(loadingPanels($disp),array("content" => $content));
-        $settings = mysqli_fetch_object(db("Select * from settings where id = 1"));
-        
-        $init = show($init, convertMatchDyn(searchBetween("[dyn_", $init, "]")));
-        $init = preg_replace("/\s+/", " ", $init);
-        $meta['copyright'] = $settings->copyright;
-        $meta['google_analytics'] = $settings->google_analytics;
-        $meta['domain'] = $_SERVER['HTTP_HOST'];
 
-        $meta['css'] = $path['css'];
-        $meta['style'] = $path['style'];
-        $meta['include'] = $path['include'];
-        $meta['js'] = $path['js'];
-        if (!isset($meta['google_plus'])) {
-            $meta['google_plus'] = "";
-        }
-
-        $init = show($init,$meta);
-        $init = show($init, convertMatch(searchBetween("[s_", $init, "]")));
-        display($init);
-    }
-    
-    function initMinimal($content = "") {
-        $init = show($content, convertMatch(searchBetween("[s_", $content, "]")));
-        display($init);
-    }
-    
-    function initMinStyle($init) {
-        $init = show($init, convertMatch(searchBetween("[s_", $content, "]")));
-        $init = show(getFile($path['style_index']), array('content' => $init));
-        display($init);
-    }
-
-    function display($content) {
-        echo $content;
-    }
-    function loadingPanels($disp)
-    {
-        //Global Path Variable
-        global $path;
-        //Loading panel Folder
-        $panels = opendir($path['panels']);
-        
-        //Loading the panels
-        while ($panel = readdir($panels))
-        {
-                //Loading panel functions
-                if ($panel != ".." && $panel != "." && $panel != "disable") 
-                {
-                        //Import panel function
-                        includeFile($path['panels'].$panel);
-                        //Remove .php (-4 chars)
-                        $panel = substr($panel,0,-4);
-                        //Replace the Tag with the returning content from the panel
-                        if (function_exists($panel)){
-                            $disp = show($disp, array( $panel => $panel() ));
-                        }
-                }
-        }
-        closedir($panels);
-
-        return $disp;
-    }
-
-    //Dateipfad und Tags[array] werden übergeben
     function show($file_content = "", $tags = array(null => null))
     {
         global $path;
 
-        //Tags werden gesplittet einzeln durchgeführt
         if(file_exists($path['style']."/".$file_content.".html"))
         {
-            $file_content = getFile($path['style']."/".$file_content.".html");		
+            $file_content = file_get_contents($path['style']."/".$file_content.".html");		
         }
         foreach($tags as $name => $value)
         {
-            //Tags der Datei werden ersetzt durch funktionen und Sprachelemente
             $file_content = str_replace('['.$name.']', $value, $file_content);
         }
-        //Datei wird fertig generiert zurück gegeben.
         return $file_content;
     }
     
@@ -116,6 +43,7 @@
 	
     function customHasher($pw, $rounds)
     {
+        global $config;
         $hash = $pw;
         for ($i = 0; $i < $rounds; $i++)
         {
@@ -193,8 +121,10 @@
 
     function permTo($permission)
     {
-        if ($perm = db("SELECT ".$permission." From groups WHERE id = ".sqlInt($_SESSION['group_main_id']),'object')->$permission)
+        if (isset($_SESSION['group_main_id'])) {
+            $perm = db("SELECT ".$permission." From groups WHERE id = ".sqlInt($_SESSION['group_main_id']),'object')->$permission;
             return $perm;
+        }
         return 0;
     }
 
@@ -263,6 +193,7 @@
   function getComments($site = 0, $subsite = 0)
   {
     $comments = db("SELECT "
+                    . "c.id as id,"
                     . "c.content as content,"
                     . "u.name as name,"
                     . "u.email as email,"
@@ -397,7 +328,8 @@
     }
     
     function sendMessage($sender, $receiver, $content, $title, $email = "",$server = false) {
-    return up('INSERT INTO messages ('
+        sendmail($content, $title, getUserInformations($receiver, 'email')->email);
+        return up('INSERT INTO messages ('
             . 'sender_id,'
             . 'receiver_id,'
             . 'opened,'
@@ -413,20 +345,20 @@
             . '0,1,1,'
             . sqlString($email).','
             . time().','
-            . sqlString($title).','
-            . sqlString($content).')');
+            . sqlString($content).','
+            . sqlString($title).')');
     }
     
-    function sendmail($content, $subject, $reciver) {
+    function sendmail($content, $subject, $receiver) {
         $mail = new PHPMailer();
         $mail->isSendmail();
         
-        $mail->SetFrom('admin@d4ho.de', 'Administrator');
+        $mail->SetFrom('admin@'.$_SERVER['HTTP_HOST'] , 'mailFrom->'.$_SERVER['HTTP_HOST']);
         
         $mail->CharSet  =  "utf-8";
         $mail->Subject = $subject;
         $mail->msgHTML($content);
-        $mail->addAddress($reciver);
+        $mail->addAddress($receiver);
         if ($mail->send()) {
             return true;
         }

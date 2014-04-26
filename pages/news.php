@@ -16,10 +16,9 @@ if (!isset($_GET['id']))
     } else {
         $disp = "site/content"; 
     }
-    
-    $newsid = $_GET['id'];
-    
-    $post = db("SELECT title,name,keywords,date,description,gplus,news.id as id,content FROM news LEFT JOIN users ON news.userid = users.id WHERE news.id = ".sqlInt($newsid),'object');
+
+    News::init();
+    $post = News::$post[$_GET['id']];
     if($post != null)
     {
         //Print
@@ -41,8 +40,9 @@ if (!isset($_GET['id']))
     } else {
         $disp = msg(_news_post_not_found);
     }
-        
 }
 
-//Initialisierung der Seite */
-init($disp,$meta);   
+//Seite Rendern
+Disp::$content = $disp;
+Disp::addMeta($meta);
+Disp::render();

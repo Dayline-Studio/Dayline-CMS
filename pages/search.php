@@ -46,4 +46,7 @@ function replaceTextBackground($replace_string, $tags)
     return $replace_string;
 }
 
-init($disp,$meta);
+//Seite Rendern
+Disp::$content = $disp;
+Disp::addMeta($meta);
+Disp::render();

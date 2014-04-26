@@ -50,5 +50,8 @@ if ($content == null)
     $cache->set("servers", $content, 1);
 }
 
-init($content,$meta);
+//Seite Rendern
+Disp::$content = $disp;
+Disp::addMeta($meta);
+Disp::render();
 

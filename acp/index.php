@@ -60,7 +60,9 @@ if ($error == "") {
             $submenu = show('acp/acp_horiz_list', array('li' => $li));
         }
     }
-    init(show("acp/menu", array("menu" => $item_stack, "content" => $disp, "submenu" => $submenu)),$meta);
+    Disp::$content = show("acp/menu", array("menu" => $item_stack, "content" => $disp, "submenu" => $submenu));
+    Disp::addMeta($meta);
+    Disp::render();
 } else {
     init($error,$meta);
 }

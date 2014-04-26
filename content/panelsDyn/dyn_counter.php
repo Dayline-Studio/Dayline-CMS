@@ -13,9 +13,11 @@
     $count_total = db("SELECT AVG(aufrufe) AS daily_avg,SUM(aufrufe) AS count_total, SUM(besucher) AS users_total FROM counter ",'object');
 
     //Output
-     initMinimal(show("panels/counter", array(
+    Disp::$content = show("panels/counter", array(
                                 "count_today" => $count_today->aufrufe,
                                 "users_today" => $count_today->besucher,
                                 "users_total" => $count_total->users_total,
                                 "count_total" => $count_total->count_total,
-                                "daily_avg" => (int)$count_total->daily_avg)));
+                                "daily_avg" => (int)$count_total->daily_avg));
+    
+    Disp::renderMin();

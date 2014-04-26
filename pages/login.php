@@ -112,4 +112,8 @@ switch ($do)
         header('Location: ../');
         break;
 }
-init($content,$meta);
+
+//Seite Rendern
+Disp::$content = $disp;
+Disp::addMeta($meta);
+Disp::render();

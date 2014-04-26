@@ -201,4 +201,8 @@ if ($do == "")
             $disp = "failed";
     }
 }
-init($disp,$meta);
+
+//Seite Rendern
+Disp::$content = $disp;
+Disp::addMeta($meta);
+Disp::render();

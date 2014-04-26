@@ -158,7 +158,11 @@ switch ($do)
         }
         break;
 }
-init($disp,$meta);
+
+//Seite Rendern
+Disp::$content = $disp;
+Disp::addMeta($meta);
+Disp::render();
 
 function getMessage($userid, $msgid) {
     return db("SELECT m.email memail,m.receiver_id,m.date,m.title,m.content,u.name,u.email as email "

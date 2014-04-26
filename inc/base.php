@@ -4,13 +4,29 @@ require_once("../inc/auth.php");
 if (file_exists("../inc/config.php")) {
     include("../inc/config.php");
 }
-        
-        
+
+    spl_autoload_register(null, false);
+    spl_autoload_extensions('.class.php');
+    spl_autoload_register('classLoader');
+    function classLoader($class)
+    {
+        $filename = $class . '.class.php';
+        $file ='../inc/' . $filename;
+        if (!file_exists($file))
+        {
+            return false;
+        }
+        include $file;
+    }
+    
+    Config::init();
+    Db::init(Config::$sql);
+    Config::loadSettings();
+    Config::loadLanguage();
+
 //Parameter auslesen für allegemeine Settings
         if (isset($_GET['s'])) { $style = $_GET['s']; }
         else { $style = "default"; }
-        if (isset($_GET['l'])) { $language = $_GET['l']; } 
-        else { $language = "de"; }
         if (isset($_GET['show'])) { $show = $_GET['show']; }
         else { $show = ""; }
         if (isset($_GET['do'])) { $do = $_GET['do']; }
@@ -41,59 +57,13 @@ if (file_exists("../inc/config.php")) {
         $style = "default";
     }
 
-    $path['style'] = $path['content']."style/".$style."/";
+    $path['style'] = "../templates/".$style."/";
     $path['css'] = $path['style']."_css/";
     $path['js'] = $path['style']."_js/";
     $path['style_index'] = $path['style']."index.html";
 
     require_once($file['functions']);
 
-    //Loading Language
-    includeFile($path['lang']."global.php");
-
-    if ( $language != 'de' || $language != 'en') {
-       if (!$installation) {
-           $language = $settings->language;
-       } else {
-           $language = 'de';
-       }
-    }
-		
-    $lang_dir = opendir($path['lang'].$language);
-    while ($lang_file = readdir($lang_dir)) {
-            if ($lang_file != ".." && $lang_file != ".") {
-                    include($path['lang'].$language.'/'.$lang_file);
-            }
-    } 	  
-    closedir($lang_dir);
-	
-    function includeFile($file)
-    {
-        $r = true;
-        if (file_exists ( $file )) {
-            return include($file);
-        }
-        else {
-            addError("File not found -".$file);
-            $r = false;
-        }
-        return $r;
-    }
-        
-    function getFile($file)
-    {
-        $r = true;
-        if (file_exists ( $file )) {
-            return file_get_contents($file);
-        }
-        else {
-            addError("File not found -".$file);
-            $r = false;
-        }
-        return $r;
-    }
-        
-        
     function dbConnect()
     {
         global $config;
@@ -103,7 +73,7 @@ if (file_exists("../inc/config.php")) {
                     die("Fehler beim Zugriff auf die Datenbank!");
                 }
                 else {
-                    mysqli_query("SET NAMES 'utf8'");
+                    mysqli_query($db_link, "SET NAMES 'utf8'");
                     return $db_link;
                 }
         }
@@ -112,15 +82,16 @@ if (file_exists("../inc/config.php")) {
         }
         return false;
     }
+    
     function _assoc($fetch)
-{
-    if(array_key_exists('_stmt_rows_', $fetch)) {
-        return $fetch[0];
+    {
+        if(array_key_exists('_stmt_rows_', $fetch)) {
+            return $fetch[0];
+        }
+        else {
+            return $fetch->fetch_assoc();
+        }
     }
-    else {
-        return $fetch->fetch_assoc();
-    }
-}
     
     function db($input = "", $mysqli_action = null)
     {
@@ -158,10 +129,4 @@ if (file_exists("../inc/config.php")) {
     {
         global $errors;
         $errors .= $error."<br>";
-    }
-    
-    function getErrors()
-    {
-        global $errors;
-        return $errors;
     }

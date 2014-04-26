@@ -50,7 +50,7 @@ if ($do == "")
                 }
                 $case['content'] = $get_site->content;
                 $case['site_id'] = $show;
-                $content = show(show("site/head").show($file),$case);
+                $disp = show(show("site/head").show($file),$case);
 
                 //Print
                 $_SESSION['print_content'] = $get_site->content;
@@ -63,7 +63,7 @@ if ($do == "")
                 $meta['description'] = $get_site->description;
         }
         else {
-            $content = msg(_site_not_found);
+            $disp = msg(_site_not_found);
         }
         //if ($set_cache) __c("files")->set($keyword_webpage,$content, 30);
     //}
@@ -74,18 +74,22 @@ else {
         case  'update':
             if (permTo('site_edit')){
                 if (up("update sites Set content = '".mysql_real_escape_string($_POST['mce_0'])."', editby = ".sqlString($_SESSION['name']).", lastedit = ".time()." where title LIKE ".sqlString($show))){
-                        $content = msg(_change_sucessful);
+                        $disp = msg(_change_sucessful);
                 } else {
-                    $content = msg(_change_failed);
+                    $disp = msg(_change_failed);
                 }
             }
             else {
-               $content = msg(_change_failed);
+               $disp = msg(_change_failed);
             }
             break;
     }
 }
-init($content,$meta);
+
+//Seite Rendern
+Disp::$content = $disp;
+Disp::addMeta($meta);
+Disp::render();
 
 function getLink($title)
 {
