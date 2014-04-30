@@ -12,26 +12,38 @@
 				
 	switch($_GET['action'])
 	{
-		default:
+		default: 
+                    $permissions_no_error = true;
+                   
 			foreach($files as $path)
 			{
-				if( 777 == substr(sprintf('%o', fileperms($path)), -3))
+                               
+				if( 777 != substr(sprintf('%o', fileperms($path)), -3))
 				{
-					echo 'Permissions wurden richtig gesetzt<br>';
+                                    echo $path.' muss auf 777 gesetzt werden. <br/>';
+                                       
+                                         $permissions_no_error =false;	
 				}
-				else
-				{
-					echo 'Permissions der Datei '.$file.' im Pfad '.$path.' bitte auf 777 setzen<br>';
-				}
+                                else
+                                {
+                                    echo $path.' wurde auf 777 gesetzt. <br/>';
+                                }
+                              
 			}
+                          if ($permissions_no_error)
+                                {
+                                    echo ' Permissions wurden richtig gesetzt<br>';   
+                                     $disp = file_get_contents("html/permissions.html");
+                                     echo($disp);
+                                }
 		break;
 		
-		case mysql_connection:
+		case 'mysql_connection':
 			$disp = file_get_contents("html/install.html");
 			echo ($disp );	
 		break;
 		
-		case check_input:
+		case 'check_input':
 		    
 			if(mysqli_connect($config['sql_host'],$config['sql_user'],	$config['sql_pass'],$config['sql_db']))
 			{
@@ -39,11 +51,11 @@
 				{
 					if(up('DROP TABLE IF EXISTS '.$table))
 					{
-						echo "Datenbank " .$table. " wurde gelöscht, weil sie bereits vorhanden war<br>";
+						echo "Datenbank " .$table. " wurde gel�scht, weil sie bereits vorhanden war<br>";
 					}
 					if(up('CREATE TABLE '.$table.' ('.$sql.') '))
 					{
-						echo "Datenbank " .$table. " wurde erfolgreich erstellt<br>";
+						echo "Datenbank " .$table. " wurde erfolgreich erstellt <br>";
 					}	
 					else
 					{
@@ -52,16 +64,19 @@
 				}
 			}
 			else echo 'Nein';
+                        
+                        $disp = file_get_contents("html/check_input.html");
+                                     echo($disp);
 		break;
 		
-		case create_config:
+		case 'create_config':
 			$content = show(file_get_contents('config.clear'),$config);
 			
 			$config_file = fopen ('config.php','r+');
 			rewind($config_file);
 			fwrite ($config_file, $content);
 			fclose ($config_file);
-			echo asd;
+			
 		break;
 	
 	}
