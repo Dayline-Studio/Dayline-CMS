@@ -1,17 +1,16 @@
-News
-[array|posts|<div>
-	<div class="center"><h3>{title}</h3></div>
-	<div style="text-align:right">{date_out}</div>
-	<div>{content}</div>
+<div>
+	<div class="center"><h3>[news_headline]</h3></div>
+	<div style="text-align:right">[news_date]</div>
+	<div>[news_content]</div>	
         <table class="width_full">
             <tr>
                 <td>
-                    <a href="../pages/news.php?id={id}">{s_goto_news}</a>
+                    <a href="../pages/news.php?id=[id]">[s_goto_news]</a>
                 </td>
                 <td class="right">
-                    {post_comment}
+                    [post_comment]
                 </td>
             </tr>
         </table>
 	<hr />
-</div>}
+</div>

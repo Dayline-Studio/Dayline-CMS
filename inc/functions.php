@@ -8,15 +8,17 @@
 
     function show($file_content = "", $tags = array(null => null))
     {
-        if(file_exists(Config::$path['template']."/".$file_content.".html"))
+        global $path;
+
+        if(file_exists($path['style']."/".$file_content.".html"))
         {
-            $file_content = file_get_contents(Config::$path['template']."/".$file_content.".html");		
+            $file_content = file_get_contents($path['style']."/".$file_content.".html");		
         }
         foreach($tags as $name => $value)
         {
-            $file_content = str_replace('{'.$name.'}', $value, $file_content);
+            $file_content = str_replace('['.$name.']', $value, $file_content);
         }
-        return preg_replace("/\s+/", " ", $file_content);
+        return $file_content;
     }
     
     function getUserInformations($userid, $informations)
@@ -33,11 +35,12 @@
         {
             $num = rand() % strlen($chars);
             $tmp = substr($chars, $num, 1);
+            $pass = $pass . $tmp;
             $i++;
         }
-        return $tmp;
+        return $pass;
     }
-    
+	
     function customHasher($pw, $rounds)
     {
         global $config;
@@ -91,7 +94,7 @@
 
         $meta['title'] = $msg;
         $msg = show ($file, array(	"msg" => 'Housslave: '.$msg,
-                                        "link" => $_SESSION['last_site']));
+                                    "link" => $_SESSION['last_site']));
         backSideFix();
         return $msg;
     }
@@ -360,23 +363,4 @@
             return true;
         }
         return false;
-    }
-    
-    function convertDateOutput($datein) {
-        $date = ((time()-$datein)/60);
-        if ($date*60 < 60){
-            return (int)($date*60) . " sec ago";
-        }
-        else if ($date < 60) {
-            return (int)$date." min ago";
-        }
-        else if ($date > 59 && $date/60 < 24){
-            return "vor ".(int)($date/60)."h at ". date("h:i A",$datein);
-        }
-        else if ($date/60 > 23 && $date/60/24 < 4) {
-            return (int)($date/60/24)." day(s) ago at ". date("h:i A",$datein);
-        }
-        else {
-            return date("F j, g:i a", $datein);
-        }
     }

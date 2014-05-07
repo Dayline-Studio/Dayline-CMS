@@ -12,17 +12,17 @@
             selector: "div.edit",
             inline: true,
 
-            plugins: {
+            plugins: [
                 "advlist textcolor autolink youtube lists link image charmap print preview anchor",
                 "searchreplace visualblocks code fullscreen",
                 "insertdatetime media table contextmenu paste"
-            },
+            ],
             toolbar: "insertfile undo redo | styleselect | youtube | bold italic forecolor backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image"
         });
     </script>
-    <form method="post" action="site.php?show={site_id}&do=update">
+    <form method="post" action="site.php?show=[site_id]&do=update">
                     <div class="edit">
-                            {content}
+                            [content]
                     </div>
             <input type="submit" value="Anwenden" />
     </form>

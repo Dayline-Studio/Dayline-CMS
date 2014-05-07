@@ -26,7 +26,6 @@ if ($do == "")
             break;
         case 'inbox':
             $qry_in = getInbox($_SESSION['userid']);
-            $case['inbox'] = "";
             if (mysqli_num_rows($qry_in) == 0){
                 $case['inbox'] = show('ucp/msg_inbox_empty');
             } else {
@@ -49,7 +48,6 @@ if ($do == "")
                 }
             }
             $qry_out = getOutbox($_SESSION['userid']);
-            $case['outbox'] = "";
             if (mysqli_num_rows($qry_out) == 0){
                 $case['outbox'] = show('ucp/msg_outbox_empty');
             } else {

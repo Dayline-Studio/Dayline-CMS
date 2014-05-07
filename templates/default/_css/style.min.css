@@ -35,8 +35,8 @@ pre{font-family:'Source Code Pro', sans-serif;border:1px solid #F0F0F0;backgroun
 #navi a,#navi a:link,#navi a:visited,#navi a:hover,#navi a:active{color:#fff;font-weight:700;text-decoration:none}
 #content a,#content a:link,#content a:visited,#content a:active{text-decoration:none;color:#4CB6EA;transition:color .3s linear}
 #content a:hover{color:#E6E6E6}
-input[type=text},textarea{transition:all .3s ease-in-out}
-input[type=text}:focus,textarea:focus{box-shadow:0 0 5px rgba(81,203,238,1)}
+input[type=text],textarea{transition:all .3s ease-in-out}
+input[type=text]:focus,textarea:focus{box-shadow:0 0 5px rgba(81,203,238,1)}
 #content{margin-right:300px;height:auto;width:auto;background:#fff;min-width:260px;max-width:880px;padding:20px}
 #foot{width:100%;background:#4cb6ea;height:150px;text-align:center}
 #head{background:#E6E6E6;width:100%}

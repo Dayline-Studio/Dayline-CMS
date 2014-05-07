@@ -22,27 +22,24 @@ if ($_SESSION['loggedin'])
                             . "VALUES (NULL, ".sqlString($_SESSION['userid']).", '".time()."', ". sqlStringCon($_POST['comment']).", '".$qry->id."', ".  sqlInt($_GET['subsite']).", 1)";
                     if (up($sql))
                     {
-                        header('Location: '.$_SESSION['last_site']);
+                        $content = msg(_comment_successful);
                     } else {
-                        $disp = msg(_comment_failed); 
+                        $content = msg(_comment_failed); 
                     }
                 } else {
-                    $disp = msg(_comment_no_permissions);
+                    $content = msg(_comment_no_permissions);
                 }
             } else {
-                $disp = msg(_comment_site_not_found);
+                $content = msg(_comment_site_not_found);
             }
         } else {
-            $disp = msg(_comment_content_not_found);
+            $content = msg(_comment_content_not_found);
         }
     } else {
-        $disp = msg(_comment_failed);
+        $content = msg(_comment_failed);
     }
 } else {
-    $disp = msg(_comment_no_permissions);
+    $content = msg(_comment_no_permissions);
 }
 
-//Seite Rendern
-Disp::$content = $disp;
-Disp::addMeta($meta);
-Disp::render();
+init($content,$meta);
