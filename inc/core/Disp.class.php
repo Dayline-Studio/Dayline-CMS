@@ -17,7 +17,7 @@ class Disp {
         $disp = file_get_contents(Config::$template['index']);
         
         $init = show(self::loadingPanels($disp),array("content" => self::$content));        
-        $init = show($init, convertMatchDyn(searchBetween("[dyn_", $init, "]")));
+        $init = show($init, convertMatchDyn(searchBetween("{dyn_", $init, "}")));
         $init = preg_replace("/\s+/", " ", $init);
         self::$meta['copyright'] = Config::$settings->copyright;
         self::$meta['google_analytics'] = Config::$settings->google_analytics;
@@ -33,19 +33,24 @@ class Disp {
         }
 
         $init = show($init,self::$meta);
-        $init = show($init, convertMatch(searchBetween("[s_", $init, "]")));
+        $init = show($init, convertMatch(searchBetween("{s_", $init, "}")));
         self::display($init);
     }
     
     function renderMin() {
-        $init = show(self::$content, convertMatch(searchBetween("[s_", self::$content, "]")));
+        $init = show(self::$content, convertMatch(searchBetween("{s_", self::$content, "}")));
         self::display($init);
     }
     
-    function initMinStyle($init) {
-        $init = show($init, convertMatch(searchBetween("[s_", $content, "]")));
-        $init = show(getFile($path['style_index']), array('content' => $init));
-        display($init);
+    public static function renderMinStyle() {
+        self::$meta['css'] = '../templates/default/_css/';
+        self::$meta['style'] = '../templates/default/';
+        self::$meta['js'] = '../templates/default/_css/';
+        self::$meta['conten'] = self::$content;
+     //   $init = show(self::$content, convertMatch(searchBetween("{s_", self::$content, "}")));
+        $meta = array_merge(self::$meta, array('content' => self::$content));
+		$init = show(file_get_contents('../templates/default/index.html'), $meta);
+        self::display($init);
     }
 
     private function display($content) {
@@ -58,14 +63,14 @@ class Disp {
         
         while ($panel = readdir($panels))
         {
-                if ($panel != ".." && $panel != "." && $panel != "disable") 
-                {
-                        include($path['panels'].$panel);
-                        $panel = substr($panel,0,-4);
-                        if (function_exists($panel)){
-                            $disp = show($disp, array( $panel => $panel() ));
-                        }
+            if ($panel != ".." && $panel != "." && $panel != "disable")
+            {
+                include($path['panels'].$panel);
+                $panel = substr($panel,0,-4);
+                if (function_exists($panel)){
+                    $disp = show($disp, array( $panel => $panel() ));
                 }
+            }
         }
         closedir($panels);
 

@@ -58,20 +58,20 @@ switch ($do)
                     header('Location: ../pages/ucp.php');
                     exit;
                 } else { 
-                    $content = msg(_wrong_pw);
+                    $disp = msg(_wrong_pw);
                 }
             } else { 
-                $content = msg(_user_not_found);
+                $disp = msg(_user_not_found);
             } 
         } else { 
-            $content = msg(_fields_missing);  
+            $disp = msg(_fields_missing);  
         }
         break;
     case 'register':
         if($_POST['username'] == "" || $_POST['firstname'] == "" ||
            $_POST['lastname'] == "" || $_POST['mail'] == "" ||
            $_POST['password'] == "" || $_POST['password2'] == "") {
-                $content = msg(_fields_missing);
+                $disp = msg(_fields_missing);
         } else {
             $nick 	= $_POST['username'];
             $firstname	= $_POST['firstname'];
@@ -79,16 +79,16 @@ switch ($do)
             $email      =  $_POST['mail'];
 
             if ($_POST['password'] != $_POST['password2']){
-                $content = msg(_pass_dont_match);
+                $disp = msg(_pass_dont_match);
             } else 
             if (!check_email_address($_POST['mail'])){
-                $content = msg(_mailcheck_failed);
+                $disp = msg(_mailcheck_failed);
             } else
             if (db("Select id "
                     . "FROM users "
                     . "where user LIKE ".strtolower(sqlString($nick))." "
                     . "OR email LIKE ".sqlString($email),'rows') > 0) {
-                $content = msg(_already_exists);
+                $disp = msg(_already_exists);
             } else {
                 //Passwort generieren
                 $rounds = rand(5000,10000);
@@ -98,10 +98,10 @@ switch ($do)
                 if (up("INSERT INTO users (id, name, pass, email, rounds, user, street, firstname, lastname, country, main_group) "
                         . "VALUES (NULL, ".sqlString($nick).", ".sqlString($pass).", ".sqlString($email).", ".sqlInt($rounds).", ".strtolower(sqlString($nick)).", '', ".sqlString($firstname).", ".sqlString($lastname).", '', '0')"))
                 {
-                    $content = msg(_regist_sucess);
+                    $disp = msg(_regist_sucess);
                 }
                 else {
-                    $content = msg(_regist_failed);
+                    $disp = msg(_regist_failed);
                 }
            }
         }
