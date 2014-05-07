@@ -1,6 +1,5 @@
 <?php	
 $installation = false;
-require_once("../inc/auth.php");
 if (file_exists("../inc/config.php")) {
     include("../inc/config.php");
 }
@@ -8,10 +7,11 @@ if (file_exists("../inc/config.php")) {
     spl_autoload_register(null, false);
     spl_autoload_extensions('.class.php');
     spl_autoload_register('classLoader');
+    
     function classLoader($class)
     {
         $filename = $class . '.class.php';
-        $file ='../inc/' . $filename;
+        $file ='../inc/core/' . $filename;
         if (!file_exists($file))
         {
             return false;
@@ -23,6 +23,7 @@ if (file_exists("../inc/config.php")) {
     Db::init(Config::$sql);
     Config::loadSettings();
     Config::loadLanguage();
+    Auth::checkStatus();
 
 //Parameter auslesen für allegemeine Settings
         if (isset($_GET['s'])) { $style = $_GET['s']; }
@@ -50,12 +51,7 @@ if (file_exists("../inc/config.php")) {
     $file['init'] = $path['include']."init.php";
     $path['lang'] = $path['content']."language/";
 
-    if (!$installation) {
-        $settings = db("select * from settings",'object');
-        $style = $settings->style;
-    } else {
-        $style = "default";
-    }
+
 
     $path['style'] = "../templates/".$style."/";
     $path['css'] = $path['style']."_css/";
@@ -123,10 +119,4 @@ if (file_exists("../inc/config.php")) {
                 die($input);
             }
             return true;
-    }
-    
-        function error($error)
-    {
-        global $errors;
-        $errors .= $error."<br>";
     }

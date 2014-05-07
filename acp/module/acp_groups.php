@@ -3,6 +3,9 @@
 /**--**/  $meta['title'] = _acp_groups;
 //------------------------------------------------
 $id = isset($_GET['id']) ? sqlInt($_GET['id']) : NULL;
+
+$te = new TemplateEngine();
+
 if ($do == "")
 {
     switch ($action)
@@ -10,18 +13,22 @@ if ($do == "")
         case 'edit_group':
             $row['permission_list'] = "";
             $groups = Db::npquery('SELECT * FROM groups WHERE id = '.$id.' LIMIT 1');
+			$case = array();
             foreach($groups as $permission => $value){
                 if ($permission != 'id' && $permission != 'groupid'){
-                    $case = array(
-                        'permission_title' => '[s_'.$permission.']',
+                    $case[] = array(
+                        'permission_title' => '{s_'.strtoupper($permission).'}',
                         'permission' => $permission,
                         'checked' => $value ? 'checked' : ''
                         );
-                    $row['permission_list'] .= show("acp/acp_groups_edit_tr",$case);
                 }
-            } 
+            }
+			$te->addArr('permission_list', $case);
+			$te->setHtml(show("acp/acp_groups_edit"));
+			$te->render();
             $row['id'] = $id;
-            $disp = show("acp/acp_groups_edit",$row);
+			$row['group'] = $groups['groupid'];
+            $disp = show($te->getHtml(),$row);
             break;
             default:
         $groups = db('SELECT id,groupid FROM groups');

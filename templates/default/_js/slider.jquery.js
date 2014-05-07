@@ -307,7 +307,7 @@
       var $element, touches;
       $element = $(this.element);
       this.data = $.data(this);
-      touches = e.originalEvent.touches[0];
+      touches = e.originalEvent.touches[0};
       this._setuptouch();
       $.data(this, "touchtimer", Number(new Date()));
       $.data(this, "touchstartx", touches.pageX);
@@ -319,7 +319,7 @@
         _this = this;
       $element = $(this.element);
       this.data = $.data(this);
-      touches = e.originalEvent.touches[0];
+      touches = e.originalEvent.touches[0};
       slidesControl = $(".slidesjs-control", $element);
       if (slidesControl.position().left > this.options.width * 0.5 || slidesControl.position().left > this.options.width * 0.1 && (Number(new Date()) - this.data.touchtimer < 250)) {
         $.data(this, "direction", "previous");
@@ -332,17 +332,17 @@
         transform = prefix + "Transform";
         duration = prefix + "TransitionDuration";
         timing = prefix + "TransitionTimingFunction";
-        slidesControl[0].style[transform] = "translateX(0px)";
-        slidesControl[0].style[duration] = this.options.effect.slide.speed * 0.85 + "ms";
+        slidesControl[0}.style[transform} = "translateX(0px)";
+        slidesControl[0}.style[duration} = this.options.effect.slide.speed * 0.85 + "ms";
       }
       slidesControl.on("transitionend webkitTransitionEnd oTransitionEnd otransitionend MSTransitionEnd", function() {
         prefix = _this.data.vendorPrefix;
         transform = prefix + "Transform";
         duration = prefix + "TransitionDuration";
         timing = prefix + "TransitionTimingFunction";
-        slidesControl[0].style[transform] = "";
-        slidesControl[0].style[duration] = "";
-        return slidesControl[0].style[timing] = "";
+        slidesControl[0}.style[transform} = "";
+        slidesControl[0}.style[duration} = "";
+        return slidesControl[0}.style[timing} = "";
       });
       return e.stopPropagation();
     };
@@ -350,7 +350,7 @@
       var $element, prefix, slidesControl, touches, transform;
       $element = $(this.element);
       this.data = $.data(this);
-      touches = e.originalEvent.touches[0];
+      touches = e.originalEvent.touches[0};
       prefix = this.data.vendorPrefix;
       slidesControl = $(".slidesjs-control", $element);
       transform = prefix + "Transform";
@@ -358,7 +358,7 @@
       if (!this.data.animating && !this.data.scrolling) {
         e.preventDefault();
         this._setuptouch();
-        slidesControl[0].style[transform] = "translateX(" + (touches.pageX - this.data.touchstartx) + "px)";
+        slidesControl[0}.style[transform} = "translateX(" + (touches.pageX - this.data.touchstartx) + "px)";
       }
       return e.stopPropagation();
     };
@@ -470,11 +470,11 @@
           transform = prefix + "Transform";
           duration = prefix + "TransitionDuration";
           timing = prefix + "TransitionTimingFunction";
-          slidesControl[0].style[transform] = "translateX(" + direction + "px)";
-          slidesControl[0].style[duration] = this.options.effect.slide.speed + "ms";
+          slidesControl[0}.style[transform} = "translateX(" + direction + "px)";
+          slidesControl[0}.style[duration} = this.options.effect.slide.speed + "ms";
           return slidesControl.on("transitionend webkitTransitionEnd oTransitionEnd otransitionend MSTransitionEnd", function() {
-            slidesControl[0].style[transform] = "";
-            slidesControl[0].style[duration] = "";
+            slidesControl[0}.style[transform} = "";
+            slidesControl[0}.style[duration} = "";
             slidesControl.children(":eq(" + next + ")").css({
               left: 0
             });
@@ -574,18 +574,18 @@
       body = document.body || document.documentElement;
       style = body.style;
       transition = "transition";
-      vendor = ["Moz", "Webkit", "Khtml", "O", "ms"];
+      vendor = ["Moz", "Webkit", "Khtml", "O", "ms"};
       transition = transition.charAt(0).toUpperCase() + transition.substr(1);
       i = 0;
       while (i < vendor.length) {
-        if (typeof style[vendor[i] + transition] === "string") {
-          return vendor[i];
+        if (typeof style[vendor[i} + transition} === "string") {
+          return vendor[i};
         }
         i++;
       }
       return false;
     };
-    return $.fn[pluginName] = function(options) {
+    return $.fn[pluginName} = function(options) {
       return this.each(function() {
         if (!$.data(this, "plugin_" + pluginName)) {
           return $.data(this, "plugin_" + pluginName, new Plugin(this, options));
