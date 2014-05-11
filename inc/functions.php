@@ -14,7 +14,9 @@
         }
         foreach($tags as $name => $value)
         {
-            $file_content = str_replace('{'.$name.'}', $value, $file_content);
+            if (!is_array($value) && !is_object($value)) {
+                $file_content = str_replace('{'.$name.'}', $value, $file_content);
+            }
         }
         return preg_replace("/\s+/", " ", $file_content);
     }
@@ -213,8 +215,7 @@
     return $output;
   }
   
-  function dispCommentInput($site = 0, $subsite = 0)
-  {
+  function dispCommentInput($site = 0, $subsite = 0) {
      $gravatar = get_gravatar($_SESSION['email'], 52, false);
      return show("ucp/comment_input", 
           array(
@@ -225,8 +226,7 @@
                  )); 
   }
   
-  function dispComments($site, $subsite)
-  {
+  function dispComments($site, $subsite) {
      return show("ucp/comment_body", array("comments" => getComments($site,$subsite), "input" => dispCommentInput($site,$subsite)));
   }
   
@@ -313,6 +313,7 @@
     }
     
     function backSideFix() {
+        if (isset($_SESSION['last_site']))
         $_SESSION['current_site'] = $_SESSION['last_site'];
     }
     
@@ -354,7 +355,16 @@
         
         $mail->CharSet  =  "utf-8";
         $mail->Subject = $subject;
-        $mail->msgHTML($content);
+        $mail->msgHTML(
+            show(
+                'mail/layout',
+                array(
+                    'title' => $subject,
+                    'content' => $content,
+                    'date' => date('l jS \am F Y H:i:s',time())
+                )
+            )
+        );
         $mail->addAddress($receiver);
         if ($mail->send()) {
             return true;
@@ -379,4 +389,12 @@
         else {
             return date("F j, g:i a", $datein);
         }
+    }
+
+    function goBack() {
+        header('Location: '.$_SESSION['last_site']);
+    }
+
+    function con_to_lang($str) {
+        return '{s_'.$str.'}';
     }

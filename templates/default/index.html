@@ -3,7 +3,7 @@
     <head>
         <title>{title}</title>
         <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-        <meta http-equiv="content-type"	content="text/html; charset=windows-1252" />
+        <meta http-equiv="content-type"	content="text/html; charset=utf-8" />
 
         <meta name="author" content="{author}" />
         <meta name="keywords" content="{keywords}" />
@@ -30,14 +30,15 @@
     </head>
     <body>
         <a href="#head" style="position: fixed; z-index:1; bottom:20px; right:20px;"><img class="linkboxgt" alt="Top" width="50" src="{style}images/icons/icon_arrow.png" /></a>
-        <div id="wrapper">
-            <div id="head">
+            <div id="head" class="main">
                     {slider}
             </div>
-            <div id="menu">
-                    {menu}
+        <div class="wrapper_width">
+            <div id="menu" class="main">
+                {menu}
             </div>
-            <div id="main">
+        </div>
+            <div id="main" class="main">
                 <div id="right">
                     <div class="box_h"> Ucp-Panel</div>
                     <div class="box_r">							
@@ -51,23 +52,21 @@
                     {content}
                 </div>		
                 <div style="clear:both;"></div>
-                <div id="footbar">
-                    <div class="inlineblock part">
-                      {mail_abo}
-                    </div>
-                    <div class="inlineblock part">
-                        <a href="http://validator.w3.org/check?uri=http%3A%2F%2Fcms.d4ho.de%2Fpages%2Fnews.php"><img class="linkboxgt" width="200" src="{style}/images/w3c-valid-html5.png" alt="" /></a>
-                        <a href="http://jigsaw.w3.org/css-validator/validator?uri=http%3A%2F%2Fcms.d4ho.de%2Fpages%2Fnews.php"><img class="linkboxgt" width="200" src="{style}/images/w3c-valid-css3.png" alt="" /></a>
-                    </div>
-                    <div class="inlineblock part">
-                        {dyn_counter}
-                    </div>
+
+            </div>
+            <div id="footbar" class="main">
+                <div class="inlineblock part">
+
+                </div>
+                <div class="inlineblock part">
+                </div>
+                <div class="inlineblock part">
+                    {dyn_counter}
                 </div>
             </div>
             <div id="foot">
                 <br />
                 <div id="copyright">{copyright}</div>
             </div>
-        </div>
     </body> 
 </html>

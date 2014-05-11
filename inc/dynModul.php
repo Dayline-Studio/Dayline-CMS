@@ -1,5 +1,5 @@
 <?php
-include('base.php');
+require_once 'base.php';
 
 backSideFix();
 

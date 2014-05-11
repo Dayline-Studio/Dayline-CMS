@@ -12,7 +12,6 @@ class TemplateEngine {
         $content = preg_replace("/\s+/", " ", $content);
         preg_match_all('/\[(.*)\|(.*)\|(.*)\]/',$content,$result);
         $result = $this->switchArrayPositions($result);
- 
         foreach ($result as $foreach) {
             $add = '';
             switch ($foreach[1])
@@ -62,6 +61,7 @@ class TemplateEngine {
     }
 
     private function switchArrayPositions($arr) {
+		$new = array();
         foreach($arr as $value) {
             foreach ($value as $num => $var) {
                 $new[$num][] = $value[$num];

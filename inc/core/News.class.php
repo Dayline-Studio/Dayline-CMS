@@ -8,6 +8,7 @@ class News {
     
     public function init() {
         if (self::$post === NULL) {
+            self::$post = array();
             $news = Db::npquery(
                     'SELECT '
                     . 'title,'
@@ -18,11 +19,12 @@ class News {
                     . 'description,'
                     . 'gplus,'
                     . 'news.id as id'
-                    . ',content'
-                    . ' FROM news '
-                    . 'LEFT JOIN users ON news.userid = users.id'
+                    . ',content '
+                    . 'FROM news '
+                    . 'LEFT JOIN users ON news.userid = users.id '
+                    . 'ORDER BY date DESC'
                     , PDO::FETCH_OBJ);
-            
+
             foreach ($news as $data) {
                 self::$post[$data->id] = new Post($data);
             }

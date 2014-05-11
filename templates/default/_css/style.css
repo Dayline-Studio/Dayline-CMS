@@ -1,9 +1,13 @@
-@import url(http://fonts.googleapis.com/css?family=Pontano+Sans);
-@import url(http://fonts.googleapis.com/css?family=Source+Code+Pro);
+@import url(https://fonts.googleapis.com/css?family=Pontano+Sans);
+@import url(https://fonts.googleapis.com/css?family=Source+Code+Pro);
 
 body {
-    background-image:linear-gradient(white 0%,#4CB6EA 30%,white 100%);
+    background-color: #000;
+    background-image: url(../images/bg_1.jpg);
+	background-repeat: repeat;
+    background-attachment: fixed;
     font-family:'Pontano Sans', sans-serif;
+    margin: 0;
 }
 
 img {
@@ -18,6 +22,21 @@ img {
     background:#Fff;
     margin-left:auto;
     margin-right:auto;
+}
+
+.main {
+    box-shadow:0px 10px 20px white;
+    height:auto;
+    min-width:300px;
+    max-width:1200px;
+    background:#Fff;
+    margin-left:auto;
+    margin-right:auto;
+}
+
+.wrapper_width {
+    width:100%;
+    background:#4cb6ea;
 }
 
 fieldset {
@@ -281,13 +300,13 @@ pre {
     height:10px;
     float:left;
     background-color:#FFF;
-    background:transparent url(http://shop.d4ho.de/content/style/default/images/bg_qaptcha.png) no-repeat;
+    background:transparent url(../images/bg_qaptcha.png) no-repeat;
 }
 
 .QapTcha .Slider {
     width:10px;
     height:10px;
-    background:transparent url(http://shop.d4ho.de/content/style/default/images/bg_draggable_qaptcha.png) no-repeat;
+    background:transparent url(../images/bg_draggable_qaptcha.png) no-repeat;
     cursor:e-resize;
     position:relative;
     top:0;

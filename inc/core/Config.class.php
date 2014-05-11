@@ -9,8 +9,12 @@ class Config {
     function init() {
 
         self::$sql = array(
-			//Config
-		);
+            'host' => 'localhost',
+            'user' => 'db31',
+            'db' => 'usr_db31_3',
+            'pw' => 'daY6LAFfUWyhrrNG',
+            'salt' => 'hejkw7je5n3k0ab2',
+        );
     }
     
     function loadSettings() {

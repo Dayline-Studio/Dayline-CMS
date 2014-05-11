@@ -9,7 +9,7 @@ class Db {
     }
     
     public static function connect($host,$db,$user,$pw) {
-        $handler = new PDO ("mysql:host=$host;dbname=$db",$user,$pw);
+        $handler = new PDO ("mysql:host=$host;dbname=$db;charset=utf8",$user,$pw);
         return $handler;
     }
     

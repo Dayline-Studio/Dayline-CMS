@@ -2,17 +2,17 @@
 	$.ajax(
 	{
 		type: "GET",
-		url: "../inc/dynModul.php?modulname=[panel_name}",
+		url: "../inc/dynModul.php?modulname={panel_name}",
 		data: "dyn_[panel_name}",
 		cache:false,
 		dataType:"html",
-		success: function(dyn_[panel_name})
+		success: function(dyn_{panel_name})
 	{
-		$('#dyn_[panel_name}').empty();
-		$(dyn_[panel_name}).appendTo('#dyn_[panel_name}');
+		$('#dyn_{panel_name}').empty();
+		$(dyn_{panel_name}).appendTo('#dyn_{panel_name}');
 	}
 	});   
 </script>
- <div id="dyn_[panel_name}" style="text-align:center;">
-     <img src="[style}images/ajax/ajax_loading.gif" alt="Loading" />			   
+ <div id="dyn_{panel_name}" style="text-align:center;">
+     <img src="{style}images/ajax/ajax_loading.gif" alt="Loading" />
 </div>
