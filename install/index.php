@@ -54,23 +54,27 @@ $files = array();
 		
 		case 'check_input':
 		    
-			if(mysqli_connect($_POST['sql_host'],$_POST['sql_user'],$_POST['sql_pass'],$_POST['sql_db']))
+			if($dblink = mysqli_connect($_POST['sql_host'],$_POST['sql_user'],$_POST['sql_pass'],$_POST['sql_db']))
 			{
 				foreach($tables as $table => $sql)
 				{
-					if(mysqli_query('DROP TABLE IF EXISTS '.$table))
+					if(mysqli_query($dblink, 'DROP TABLE IF EXISTS '.$table))
 					{
 						$disp .= "Datenbank " .$table. " wurde gel�scht, weil sie bereits vorhanden war<br>";
 					}
-					if(mysqli_query('CREATE TABLE '.$table.' ('.$sql.') '))
+					if(mysqli_query($dblink, 'CREATE TABLE '.$table.' ('.$sql.') '))
 					{
 						$disp .= "Datenbank " .$table. " wurde erfolgreich erstellt <br>";
 					}	
 					else
 					{
-						$disp .= "Erstellen der Datenbank ".$table." fehlgeschlagen.<br>";
-					}
+						$disp .= "Erstellen der Datenbank ".$table." fehlgeschlagen.<br>";       
+                                        }
 				}
+                               if(!isset($_POST['slq_host'])||!isset($_POST['sql_user'])||!isset($_POST['sql_pass'])||!isset($_POST['sql_db']))
+                               {
+                                   $disp .="Bitte alle Felder ausfüllen!<br>";
+                               }
 			}
 			else echo 'Nein';
                         
@@ -90,6 +94,17 @@ $files = array();
 	
 	}
 	
+        $config = @simplexml_load_file("config.xml");
+     
+	$case['version'] = $config->version; //platzhalter {version}
+	$case['released'] = 321432; //platzhalter {released}
+        $case['build'] = 0000.5;
+	
+	$meta['ucp'] = show(file_get_contents('html/version.html'), $case);
+        
+	
+	Disp::addMeta($meta);
 	Disp::$content = $disp;
 	Disp::renderMinStyle();
+
 	
