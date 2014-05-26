@@ -21,10 +21,8 @@ switch ($show) {
         break;
     case 'server':
         $server = $sm->server[$_GET['id']];
-        $server->load_status();
+        $server->load_informations();
         $infos = $server->getServerInformations();
-        $te->addArr('plugins', $infos['plugins']);
-        $infos['plugins'] = NULL;
         $infos['dispModul1'] = $server->dispModul1();
         $te->setHtml(show($server->getHtml(), $infos));
         $te->render();

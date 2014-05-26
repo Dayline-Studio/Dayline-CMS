@@ -20,8 +20,7 @@ class Minecraft extends Server {
         $this->htmlFile = 'servermanager/show_minecraft';
     }
 
-    public function load_status() {
-        require_once '../content/plugins/gameq/GameQ.php';
+    public function load_informations() {
         $gq = new GameQ();
         $gq->addServer($this->query);
         $gq->setOption('timeout', 4);
@@ -64,16 +63,17 @@ class Minecraft extends Server {
     public function kill () {
         return $this->robotAddCall('kill');
     }
-
-    //Buttons
-    public function dispModul1() {
-        $disp = "";
-        foreach ($this->functions as $function) {
-            $case['id'] = $this->id;
-            $case['action'] = $function;
-            $case['value'] = con_to_lang("server_".$function);
-            $disp .= show('servermanager/module/button', $case);
-        }
-        return $disp;
+    
+    private function preRenderInfos() {
+        $te = new TemplateEngine();
+        $te->setHtml(show($this->htmlFile));
+        $te->addArr('plugins', $this->plugins);
+        $this->plugins = NULL;
+        $te->render();
+        return $te->getHtml();
+    }
+    
+    public function getHtml() {
+        return $this->preRenderInfos();
     }
 }

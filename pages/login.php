@@ -12,21 +12,21 @@ if ($_SESSION['loggedin'])
 	header('Location: ucp.php');
 }
 
-$content = "";
+$disp = "";
 if ($do == "")
 {
 	switch ($show)
 	{
-            case 'register':
-		if (!isset($_POST['agree']) ||  !isset($_SESSION['agree'])) {
-                    $content = show("ucp/terms");
-                    $_SESSION['agree'] = true;
-                } else {
-                    $content = show("ucp/register");
-		}		
-		break;
-            default:  
-                $content = show("ucp/login");
+        case 'register':
+            if (!isset($_POST['agree']) ||  !isset($_SESSION['agree'])) {
+                        $disp = show("ucp/terms");
+                        $_SESSION['agree'] = true;
+                    } else {
+                        $disp = show("ucp/register");
+            }
+            break;
+        default:
+            $disp = show("ucp/login");
 	}
 }
 switch ($do)

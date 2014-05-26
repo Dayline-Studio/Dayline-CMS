@@ -1,7 +1,4 @@
 <?php
-
-    require_once 'cachesystem/fastcache.php';
-    require_once 'phpmailer/class.phpmailer.php';
     
     phpFastCache::$storage = "auto";
     phpFastCache::setup("path", "../inc/_cache");
@@ -31,6 +28,7 @@
         $chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
         srand((double)microtime()*1000000);
         $i = 0;
+        $tmp = "";
         while ($i < $length) 
         {
             $num = rand() % strlen($chars);
@@ -72,7 +70,7 @@
     {
         $d = 'wavatar';
         $r = 'g';
-        $url = 'http://www.gravatar.com/avatar/';
+        $url = 'https://www.gravatar.com/avatar/';
         $url .= md5( strtolower( trim( $email ) ) );
         $url .= "?s=$s&amp;d=$d&amp;r=$r";
         if ( $img ) 
@@ -84,7 +82,7 @@
 
     function msg($msg, $kind = 'stock')
     {
-        global $path, $meta;
+        global $meta;
         switch ($kind)
         {
             default:
@@ -93,7 +91,7 @@
 
         $meta['title'] = $msg;
         $msg = show ($file, array(	"msg" => 'Housslave: '.$msg,
-                                        "link" => $_SESSION['last_site']));
+                                    "link" => $_SESSION['last_site']));
         backSideFix();
         return $msg;
     }
@@ -142,7 +140,7 @@
 }
 
   function check_email_address($str_email_address) {
-    if('' != $str_email_address && !((eregi("^[_\.0-9a-z-]+@([0-9a-z-]+\.)+[a-z]{2,6}$",$str_email_address)))) {
+    if('' != $str_email_address && !((preg_match("/[_\.0-9a-z-]+@([0-9a-z-]+\.)+[a-z]{2,6}/i",$str_email_address)))) {
       return false;
     } else {
       return true;
@@ -249,18 +247,15 @@
         $cha->appendChild($bld);
         $bld ->appendChild($xml ->createElement('url',"http://dummyimage.com/120x61"));
 
-
-        $qry = db("SELECT * FROM news WHERE grp = 2 AND public_show = 1 ORDER BY date DESC");
-        while($rss_feed = mysqli_fetch_assoc($qry))
+        $qry = Db::npquery('SELECT * FROM news WHERE grp = 2 AND public_show = 1 ORDER BY date DESC');
+        foreach($qry as $rss_feed);
         {
             $new = $xml->createElement('item');
-            $cha->appendChild($new); 
-
-
+            $cha->appendChild($new);
             $rss['title'] = $rss_feed['title'];
             $image = '&lt;img style="border: 0px none; margin: 0px; padding: 0px;" align="right" alt="" width="60" height="60" src="'.$rss_feed['main_image'].'" &gt;';
             $rss['description'] = $image.$rss_feed['description'];
-            $rss['language'] = $lang;
+            $rss['language'] = Config::$settings->lang;
             $rss['link'] = "http://cms.d4ho.de/pages/news.php?id=".$rss_feed['id'];
             $rss['pubDate'] = date("D, j M Y H:i:s ", $rss_feed['date']);
             $hea = $xml ->createElement('image');
@@ -297,6 +292,7 @@
 
     function convertMatchDyn($matches)
     {
+        $new = array();
         foreach ($matches as $value)
         {
             $new["dyn_".$value] = show("allround/ajax_loading", array('panel_name' => $value));

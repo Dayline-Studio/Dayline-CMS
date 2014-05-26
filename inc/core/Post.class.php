@@ -2,13 +2,19 @@
 
 class Post {
 
-    public $comments;
-    
+    public $id,
+           $comments,
+           $comment_count,
+           $date;
+
+
     public function __construct($data) {
         foreach ($data as $var => $value) {
             $this->$var = $value; 
         }
 		$this->date_out = convertDateOutput($this->date);
+        $this->loadComments();
+        $this->comment_count = (String) sizeof($this->comments);
     }
     
     public function update() {
@@ -26,12 +32,16 @@ class Post {
             foreach ($comments as $comment) {
                 $this->comments[$comment['id']] = new Comment($comment);
             }
+            if ($this->comments === NULL) {
+                $this->comments = array();
+            }
         }
         return $this->comments;
     }
     
     public function getComments() {
         $this->loadComments();
+        $comments = array();
         foreach ($this->comments as $id => $obj) {
             foreach ($obj->infos as $name => $value) {
                 $comments[$id][$name] = $value;

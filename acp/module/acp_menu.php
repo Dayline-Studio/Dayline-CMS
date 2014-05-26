@@ -51,7 +51,7 @@ if ($do == "") {
     }
 } else {
     switch($do) {
-        case create_menu:
+        case 'create_menu':
             if(permTo('create_menu')) {
                 if (isset($_POST['newtab'])) {
                     $newtab = $_POST['newtab'];
@@ -71,7 +71,7 @@ if ($do == "") {
                         . ",0)"
                    )) {
                     __c("files")->delete("menu");
-                    $disp = msg(_change_sucessful);
+                    goBack();
                    } else {
                        $disp = msg(_change_failed);
                    }
@@ -79,11 +79,11 @@ if ($do == "") {
                 $disp = msg(_no_permissions);
             }
             break;
-        case delete_menu:
+        case 'delete_menu':
             if (permTo('delete_menu')) {
                 if (up('DELETE FROM menu WHERE id = '.sqlInt($_GET['id']))) {
                     __c("files")->delete("menu");
-                    $disp = msg(_delete_succesfull);
+                    goBack();
                 } else {
                     $disp = $msg(_delete_failed);
                 }
@@ -91,16 +91,18 @@ if ($do == "") {
                 $disp = msg(_no_permissions);
             }
             break;
-        case update_menu:
+        case 'update_menu':
             if (permTo('update_menu')) {
+                print_r($_POST);
                 foreach($_POST as $id => $data) {
+
                     if(!up('UPDATE menu SET title = '.sqlString($data['up_title']).', subfrom = '.sqlInt($data['up_subfrom']).', link = '.sqlString($data['up_link']).', newtab = '.sqlInt($data['up_newtab']).' WHERE id = '.$id)) {
                         $disp = msg(_update_failed);
                         break;
                     }
                 }
                 __c("files")->delete("menu");
-                $disp = msg(_update_succesfull);
+                goBack();
             } else {
                 $disp = msg(_no_permissions);
             }

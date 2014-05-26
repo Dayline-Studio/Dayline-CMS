@@ -33,4 +33,4 @@ define ('_msg_delete_sucessful', 'Nachricht erfolgreich entfernt');
 define ('_msg_sent_successful', 'Nachricht erfolgreich gesendet');
 define ('_msg_sent_failed', 'Nachricht senden fehlgeschlagen');
 define ('_command_already_in_progress', 'Es wird bereits ein anderer Befehl ausgeführt');
-define ('_commend_send_successful', 'Dein Befehl wurde zum Server weitergeleitet. Dies kann maximal 60 Sekunden in Anspruch nehmen.');
+define ('_command_send_successful', 'Dein Befehl wurde zum Robot weitergeleitet. Dies kann maximal 60 Sekunden in Anspruch nehmen.');

@@ -10,7 +10,7 @@ if ($do == "")
     switch ($show)
     {
         default:
-        $disp = show('contact/form');
+        $disp = show('contact/contact');
         break;
     }
 }

@@ -58,7 +58,7 @@ if ($do == "")
 
                 //Loading Meta            
                 $meta['title'] = $get_site->title;
-                $meta['author'] = $user->name;
+                //$meta['author'] = $user->name;
                 $meta['keywords'] =	$get_site->keywords;
                 $meta['description'] = $get_site->description;
         }
@@ -74,7 +74,7 @@ else {
         case  'update':
             if (permTo('site_edit')){
                 if (up("update sites Set content = '".mysql_real_escape_string($_POST['mce_0'])."', editby = ".sqlString($_SESSION['name']).", lastedit = ".time()." where title LIKE ".sqlString($show))){
-                        $disp = msg(_change_sucessful);
+                        goBack();
                 } else {
                     $disp = msg(_change_failed);
                 }

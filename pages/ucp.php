@@ -13,7 +13,7 @@ if (!$_SESSION['loggedin'])
 }
 if ($do == "")
 {
-    $meta['title'] = "[s_".$show."]";
+    $meta['title'] = "{s_".$show."}";
     switch ($show)
     {
         case  "profile_edit":
@@ -151,7 +151,7 @@ switch ($do)
     case 'delete_msg':
         if (isset($_GET['id'])) {
             if (deleteMessage($_GET['id'],$_SESSION['userid'])) {
-                $disp = msg(_msg_delete_sucessful);
+                goBack();
             } else {
                 $disp = msg(_msg_delete_failed);
             }

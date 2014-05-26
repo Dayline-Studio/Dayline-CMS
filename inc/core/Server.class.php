@@ -30,6 +30,8 @@ abstract class Server {
     public function getServerInformations() {
         return get_object_vars($this);
     }
+    
+    public abstract function load_informations();
 
     public function getFunctions() {
         return $this->functions;
@@ -39,9 +41,10 @@ abstract class Server {
         $case['call'] = $call;
         $case['ip'] = $this->ip;
         $case['sname'] = $this->name;
-        $case['kind'] = $this->kind;
+        $case['kind'] = $this->type;
+        $case['email'] = $_SESSION['email'];
         return Db::nrquery(
-            'INSERT INTO server_run (run_command, run_host, run_user, run_kind) VALUES (:call, :ip, :sname, :kind)',
+            'INSERT INTO server_run (run_command, run_host, run_user, run_kind, email) VALUES (:call, :ip, :sname, :kind, :email)',
             $case
         );
     }
@@ -52,5 +55,16 @@ abstract class Server {
 
     public function getHtml() {
         return show($this->htmlFile);
+    }
+    
+    public function dispModul1() {
+        $disp = "";
+        foreach ($this->functions as $function) {
+            $case['id'] = $this->id;
+            $case['action'] = $function;
+            $case['value'] = con_to_lang("server_".$function);
+            $disp .= show('servermanager/module/button', $case);
+        }
+        return $disp;
     }
 } 

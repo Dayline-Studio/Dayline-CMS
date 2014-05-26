@@ -8,19 +8,21 @@
 //------------------------------------------------
 
 News::init();
-$te = new TemplateEngine();
-$te->setHtml(show('news/post'));
 
+$te = new TemplateEngine();
 if (!isset($_GET['id']))
 {
-    $te->addArr('posts',News::getNewsFromGroup(2));
+    $te->setHtml(show('news/post'));
+    $te->addArr('posts',News::get_news_from_group(2));
     $te->render();
+    Disp::$content = $te->getHtml();
 }  else {
-    $te->addArr('posts',News::getPostFromNews($_GET['id']));
+    News::$post[$_GET['id']]->loadComments();
+    $te->addArr('comments',News::$post[$_GET['id']]->getComments());
+    $te->setHtml(show('news/layout'));
     $te->render();
+    Disp::$content = show($te->getHtml().News::$post[$_GET['id']]->getCommentInput(),News::$post[$_GET['id']]);
 }
 
-$te->render();
-Disp::$content = $te->getHtml();
+Disp::addMeta($meta);
 Disp::render();
-//Disp::render();

@@ -10,13 +10,22 @@ if (file_exists("../inc/config.php")) {
     
     function classLoader($class)
     {
-        $filename = $class . '.class.php';
-        $file ='../inc/core/' . $filename;
-        if (!file_exists($file))
-        {
-            return false;
+        $classname = strtolower($class);
+        $filename = $classname . '.class.php';
+        $path['core'] = '../inc/core/';
+        $path['lib'] = '../inc/lib/';
+        foreach ($path as $dir) {
+            if (is_readable($dir.$filename))
+            {
+                include $dir.$filename;
+                return true;
+            } else if (is_readable($dir.$classname.'/'.$classname.'.php')) {
+
+                include $dir.$classname.'/'.$classname.'.php';
+                return true;
+            }
         }
-        include $file;
+        return false;
     }
     
     Config::init();
@@ -35,20 +44,18 @@ if (file_exists("../inc/config.php")) {
         if (isset($_GET['action'])) { $action = $_GET['action']; }
 	else { $action = "";}
         
-//Allegmeine Pfade setzten durch Resultat der Parameter 
+//Allegmeine Pfade setzten durch Resultat der Parameter
     $disp = "";
     $case = array();
     $path['dir'] = $config['dir'];
     $path['content'] = "../content/";
     $path['include'] = "../inc/";
-    $path['upload'] = $path['include']."upload/";
-    $path['images'] = $path['include']."images/"; 
-    $path['plugins'] = $path['content']."plugins/"; 
+    $path['upload'] = $path['content']."upload/";
+    $path['images'] = $path['content']."images/";
+    $path['plugins'] = $path['include']."plugins/";
     $path['pages'] = "../pages/"; 
-    $path['panels'] = $path['content']."panels/"; 
+    $path['panels'] = $path['include']."panels/";
     $file['functions'] = $path['include']."functions.php";
-    $file['auth'] = $path['include']."auth.php";
-    $file['init'] = $path['include']."init.php";
     $path['lang'] = $path['content']."language/";
 
 
@@ -91,32 +98,32 @@ if (file_exists("../inc/config.php")) {
     
     function db($input = "", $mysqli_action = null)
     {
-            if(!$qry = mysqli_query( dbConnect(), $input )) {
-                return;
-            }           
+        if(!$qry = mysqli_query( dbConnect(), $input )) {
+            return false;
+        }
 
-            if ($mysqli_action != null)
+        if ($mysqli_action != null)
+        {
+            switch ($mysqli_action)
             {
-                switch ($mysqli_action)
-                {
-                    case 'array':
-                        $qry = mysqli_fetch_array($qry);
-                        break;
-                    case 'rows':
-                        $qry = mysqli_num_rows($qry);
-                        break;
-                    case 'object':
-                        $qry = mysqli_fetch_object($qry);
-                        break;
-                }
-            } 
-            return ($qry);
+                case 'array':
+                    $qry = mysqli_fetch_array($qry);
+                    break;
+                case 'rows':
+                    $qry = mysqli_num_rows($qry);
+                    break;
+                case 'object':
+                    $qry = mysqli_fetch_object($qry);
+                    break;
+            }
+        }
+        return ($qry);
     }
 
     function up($input = "")
     {
-            if(!mysqli_query( dbConnect(), $input )) {
-                die($input);
-            }
-            return true;
+        if(!mysqli_query( dbConnect(), $input )) {
+            die($input);
+        }
+        return true;
     }

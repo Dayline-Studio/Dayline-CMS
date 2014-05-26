@@ -22,6 +22,7 @@ class Disp {
         self::$meta['copyright'] = Config::$settings->copyright;
         self::$meta['google_analytics'] = Config::$settings->google_analytics;
         self::$meta['domain'] = $_SERVER['HTTP_HOST'];
+        self::$meta['title'] .= ' | '.Config::$settings->website_title;
 
         self::$meta['css'] = $path['css'];
         self::$meta['style'] = $path['style'];
@@ -34,6 +35,7 @@ class Disp {
 
         $init = show($init,self::$meta);
         $init = show($init, convertMatch(searchBetween("{s_", $init, "}")));
+        $init = preg_replace("/\{\w\}/", "", $init);
         self::display($init);
     }
     
@@ -49,7 +51,8 @@ class Disp {
         self::$meta['conten'] = self::$content;
      //   $init = show(self::$content, convertMatch(searchBetween("{s_", self::$content, "}")));
         $meta = array_merge(self::$meta, array('content' => self::$content));
-		$init = show(file_get_contents('../templates/default/index.html'), $meta);
+        $init = show(file_get_contents('../templates/default/index.html'), $meta);
+        $init = preg_replace("/\{(/w+)\}/", "", $init);
         self::display($init);
     }
 

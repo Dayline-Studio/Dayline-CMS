@@ -27,7 +27,7 @@ if (isset($_GET['acp'])) {
         if ($item != ".." && $item != ".") 
         {
             $filename = substr($item,0,-4);
-            $item_stack .= '<li><a class="buttonStyle" href="index.php?acp='.$filename.'">[s_'.$filename.']</a></li>';
+            $item_stack .= '<li><a class="buttonStyle" href="index.php?acp='.$filename.'">{s_'.$filename.'}</a></li>';
             if ($filename == $acp) {
                 $file_exist = true;
             }    
@@ -55,7 +55,7 @@ if ($error == "") {
             $li = "";
             foreach ($acp_settings->subsites[0] as $sub)
             {
-                $li .= '<li><a class="buttonStyle" href="?acp='.$_GET['acp'].'&AMP;action='.$sub.'" >[s_'.$sub.']</a></li>';
+                $li .= '<li><a class="buttonStyle" href="?acp='.$_GET['acp'].'&AMP;action='.$sub.'" >{s_'.$sub.'}</a></li>';
             }
             $submenu = show('acp/acp_horiz_list', array('li' => $li));
         }
