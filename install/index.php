@@ -8,9 +8,9 @@ require_once ('mysql.php');
 $_POST['salt']	= randomstring(32);	
 
 $files = array();
-$files['config'] = '../inc/config.php';
-$files['upload'] = '../inc/upload';
-$files['cach'] = '../inc/_cache';
+$files[] = array('../inc/config.php',777);
+$files[] = array('../inc/upload',777);
+$files[] = array('../inc/_cache',777);
 
 if (!isset($_GET['action'])) {
        $action = "";
@@ -28,26 +28,33 @@ switch($action)
          break;
      case 'permissions': 
          $permissions_no_error = true;
-
+			
+		$case['permission_table'] = '';
+		
          foreach($files as $path)
          {
-             if( 777 != substr(sprintf('%o', fileperms($path)), -3))
+             $case_tr['file'] = $path[0];
+             $case_tr['is_file'] = is_file($path[1]) ? 'Datei' : 'Ordner';
+             $case_tr['permission'] = $path[1];
+             if( $path[1] != substr(sprintf('%o', fileperms($path[0])), -3))
              {
-                 show ;
-                 $disp .= $path.' muss auf 777 gesetzt werden. <br/>';
-                 $permissions_no_error =false;	
+                
+		$case['permission_table'] .= show(file_get_contents("html/permissions_tr_red.html"), $case_tr);
+                $permissions_no_error = false;	
              } else {
-                 $disp .= $path.' wurde auf 777 gesetzt. <br/>';
+                $case['permission_table'] .= show(file_get_contents('html/permissions_tr_green.html'), $case_tr);
              }
-
          }
-         if ($permissions_no_error) {
-             $disp  .= ' Permissions wurden richtig gesetzt<br>';   
-             $disp .= file_get_contents("html/permissions.html");
-
-         }
-         $disp .= 'Permissions wurden nicht richtig gesetzt<br>';
-         $disp .= file_get_contents("html/reload.html");
+         if ($permissions_no_error)
+		 {
+            $case['submit'] .= file_get_contents("html/permissions_true.html");
+         } else {
+			$case['submit'] = '';		
+		}
+		 
+                $disp = 'Sehr geehrter Herr Admin, es wird empfohlen, dass alle Dateien oder Ordner, welche unter diesem Text vermerkt wurden die entsprechenden Rechte, welche ebenfalls vermerkt wurden, gesetzt sind, wurden.';
+		$disp .= show(file_get_contents("html/permissions.html"), $case);
+       
          break;
     case 'mysql_connection':
         $disp = file_get_contents("html/install.html");
@@ -107,12 +114,13 @@ foreach($navi_lang as $sitename => $language)
 {
     if ($sitename == $action) {
         $file = "naviagtion_tr_selected";
+		$meta['title'] = $language;
     }
     else {
        $file = "navigation_tr";
     }
     $meta['navi'] .= show(file_get_contents('html/'.$file.'.html'),array('text' => $language));
-
+	
 }
 $meta['navi'] = show(
         file_get_contents('html/navigation.html'),
