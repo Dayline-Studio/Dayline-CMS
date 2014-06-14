@@ -55,6 +55,7 @@ switch ($do)
                     $_SESSION['email'] = $user->email;
                     $_SESSION['login_time'] = time();
                     $_SESSION['group_main_id'] = $user->main_group;
+                    if (permTo('fm_access')) $_SESSION['fm_access'] = TRUE;
                     header('Location: ../pages/ucp.php');
                     exit;
                 } else { 

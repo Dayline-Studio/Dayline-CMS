@@ -25,27 +25,31 @@ if ($do == "")
                                                     "street" => $user->street));
             break;
         case 'inbox':
-            $qry_in = getInbox($_SESSION['userid']);
+
+            $msgbox = new Msgbox($_SESSION['userid']);
+           // echo $msgbox->inbox[17]->content;
+            $te = new TemplateEngine();
+
             $case['inbox'] = "";
-            if (mysqli_num_rows($qry_in) == 0){
+            if (sizeof($msgbox->inbox) == 0){
                 $case['inbox'] = show('ucp/msg_inbox_empty');
             } else {
-                while ($data = _assoc($qry_in)) {
-                    $msg_case['title'] = $data['title'];
+                foreach ($msgbox->inbox as $data) {
+                    $msg_case['title'] = $data->title;
                     if (isset($data['name'])) {
-                        $msg_case['sender'] = $data['name'];
+                        $msg_case['sender'] = $data->name;
                     } else {
-                        $msg_case['sender'] = $data['memail'];
+                        $msg_case['sender'] = $data->email;
                     }
-                    $msg_case['gravatar'] = get_gravatar($data['email']);
-                    $msg_case['date'] = date("m.d.y H:i:s",$data['date']);
-                    $msg_case['id'] = $data['id'];
+                    $msg_case['gravatar'] = get_gravatar($data->email);
+                    $msg_case['date'] = date("m.d.y H:i:s",$data->date);
+                    $msg_case['id'] = $data->id;
 
-                    if ($data['opened']) {
+                    if ($data->opened) {
                         $case['inbox'] .= show('ucp/msg_inbox_read', $msg_case);
                     } else {
                         $case['inbox'] .= show('ucp/msg_inbox_unread', $msg_case);
-                    } 
+                    }
                 }
             }
             $qry_out = getOutbox($_SESSION['userid']);

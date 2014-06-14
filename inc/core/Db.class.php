@@ -39,4 +39,24 @@ class Db {
     public static function closeConnection() {
         self::$sql = null;
     }
+
+    public static function update($table, $id, $new = array()) {
+
+        $sql = "UPDATE $table SET ";
+        foreach($new as $col => $value) {
+            $up[] = "`$col` = '$value' ";
+        }
+        $sql .= implode(',',$up)." WHERE id = $id LIMIT 1";
+        self::nrquery($sql);
+    }
+
+    public static function insert($table, $new = array()) {
+        $sql = "INSERT INTO $table (";
+        foreach($new as $col => $value) {
+            $tab[] = "`$col`";
+            $val[] = "'$value'";
+        }
+        $sql .= implode(',',$tab).") VALUES (".implode(',',$val).")";
+        self::nrquery($sql);
+    }
 }

@@ -14,7 +14,7 @@ switch ($do)
             if (permTo('reset_counter')) {
                 if (up('TRUNCATE `counter`') && up('TRUNCATE `counter_user`')) {
                     $disp = msg(_counter_reset_successful);
-                } else { 
+                } else {
                     $disp = msg(_counter_reset_failed);
                 }
             } else $disp = msg(_no_permissions);

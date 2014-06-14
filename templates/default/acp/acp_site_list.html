@@ -1,6 +1,9 @@
-<form method="POST" action="index.php?acp=acp_site&AMP;do=delete_site">
-    <select name="id">
-        {options}
-    </select>
-    <input class="buttonStyle" type="submit" value="Delete" />
-</form>
+<table class="tableStyle">
+    <tr>
+        <th>ID</th><th>Seitename</th><th></th><th></th>
+    </tr>
+    [array|sites|
+    <tr>
+        <td>{id}</td><td>{sub_tag}{site_name}</td><td></td>
+    </tr>]
+</table>

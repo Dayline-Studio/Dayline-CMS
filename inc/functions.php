@@ -7,7 +7,9 @@
     {
         if(file_exists(Config::$path['template']."/".$file_content.".html"))
         {
-            $file_content = file_get_contents(Config::$path['template']."/".$file_content.".html");		
+            $file_content = file_get_contents(Config::$path['template']."/".$file_content.".html");
+        } else if (file_exists("../templates/default/".$file_content.".html")){
+            $file_content = file_get_contents("../templates/default/".$file_content.".html");
         }
         foreach($tags as $name => $value)
         {
@@ -309,8 +311,9 @@
     }
     
     function backSideFix() {
-        if (isset($_SESSION['last_site']))
-        $_SESSION['current_site'] = $_SESSION['last_site'];
+        if (isset($_SESSION['last_site'])) {
+            $_SESSION['current_site'] = $_SESSION['last_site'];
+        }
     }
     
     function tagConverter($tags) {
@@ -321,7 +324,7 @@
         return explode(",", $tags);
     }
     
-    function sendMessage($sender, $receiver, $content, $title, $email = "",$server = false) {
+    function sendMessage($sender, $receiver, $content, $title, $email = "") {
         sendmail($content, $title, getUserInformations($receiver, 'email')->email);
         return up('INSERT INTO messages ('
             . 'sender_id,'

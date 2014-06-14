@@ -6,18 +6,18 @@ class Config {
     public static $template = array();
     public static $settings;
     
-    function init() {
-
+    public static function init() {
+        global $config;
         self::$sql = array(
-            'host' => 'localhost',
-            'user' => 'db31',
-            'db' => 'usr_db31_3',
-            'pw' => 'daY6LAFfUWyhrrNG',
-            'salt' => 'hejkw7je5n3k0ab2',
+            'host' => $config['sql_host'],
+            'user' => $config['sql_user'],
+            'db' => $config['sql_db'],
+            'pw' => $config['sql_pass'],
+            'salt' => $config['salt'],
         );
     }
     
-    function loadSettings() {
+    public static function loadSettings() {
         //Default settings
         self::$settings['lang'] = 'de';
         self::$settings['style'] = 'default';
@@ -42,7 +42,7 @@ class Config {
         );
     }
     
-    function loadLanguage() {
+    public static function loadLanguage() {
 
         include(self::$path['language']."global.php");
 
@@ -58,7 +58,7 @@ class Config {
                 if ($lang_file != ".." && $lang_file != ".") {
                         include(self::$path['language'].$language.'/'.$lang_file);
                 }
-        } 	  
+        }
         closedir($lang_dir);
     }
 }

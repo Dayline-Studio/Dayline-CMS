@@ -17,6 +17,6 @@ class Comment {
     }
     
     public function renderComment() {
-          return show("ucp/comment", $this->info+s);
+          return show("ucp/comment", $this->infos);
     }
 }

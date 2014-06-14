@@ -7,79 +7,71 @@
 /**--**/  $meta['page_id'] = 3;
 //------------------------------------------------
 
+$disp = '';
 if ($do == "")
 {
     if (permTo('site_edit')){
         $file = "site/content_editable";
-       // $set_cache = false;
+    } else {
+        $file = "site/content";
     }
-    else{
-        $file = "site/content"; 
-       // $keyword_webpage = md5($_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'].$_SERVER['QUERY_STRING']);
-       // $content = __c("files")->get($keyword_webpage);
-       // $set_cache = true;
+    $case['show'] = str_replace("_"," ",$show);
+
+    $sm = new SiteManager(array($show));
+    $site = $sm->get_first_site();
+    if (!empty($site)) {
+        $user = getUserInformations($site->userid, "name");
+        if ($site->show_author) {
+            $case['author'] = "Written by ".$user->name." - ".date("F j, Y, g:i a",$site->date);
+        } else {
+            $case['author'] = "";
+        }
+        if ($site->show_headline) {
+            $case['title'] = $site->title;
+        } else {
+            $case['title'] = "";
+        }
+        if ($site->lastedit != "" && $site->show_lastedit) {
+            $case['edited'] = "Last edit by ".$site->editby." - ".date("F j, Y, g:i a",$site->lastedit);
+        } else {
+            $case['edited'] = "";
+        }
+        if ($site->show_print) {
+            $case['print'] = show('site/print');
+        } else {
+            $case['print'] = "";
+        }
+        $case['content'] = $site->content;
+        $case['site_id'] = $show;
+        $disp = show(show("site/head").show($file),$case);
+
+        //Print
+        $_SESSION['print_content'] = $site->content;
+        $_SESSION['print_title'] = $site->title;
+
+        //Loading Meta
+        $meta['title'] = $site->title;
+        //$meta['author'] = $user->name;
+        $meta['keywords'] =	$site->keywords;
+        $meta['description'] = $site->description;
+    } else {
+        $disp = msg(_site_not_found);
     }
-   
-   // if ($content == null)
-   // {
-        //show to id
-        $case['show'] = str_replace("_"," ",$show);
-
-        if ($get_site = db("select * from sites where title Like ".sqlString($case['show']),'object'))
-        {
-                $user = getUserInformations($get_site->userid, "name");
-                if ($get_site->show_author) {
-                    $case['author'] = "Written by ".$user->name." - ".date("F j, Y, g:i a",$get_site->date);
-                } else {
-                    $case['author'] = "";
-                }
-                if ($get_site->show_headline) {
-                    $case['title'] = $get_site->title;
-                } else {
-                    $case['title'] = "";
-                }
-                if ($get_site->lastedit != "" && $get_site->show_lastedit) {
-                    $case['edited'] = "Last edit by ".$get_site->editby." - ".date("F j, Y, g:i a",$get_site->lastedit);
-                } else {
-                    $case['edited'] = "";
-                }
-                if ($get_site->show_print) {
-                    $case['print'] = show('site/print');
-                } else {
-                    $case['print'] = "";
-                }
-                $case['content'] = $get_site->content;
-                $case['site_id'] = $show;
-                $disp = show(show("site/head").show($file),$case);
-
-                //Print
-                $_SESSION['print_content'] = $get_site->content;
-                $_SESSION['print_title'] = $get_site->title;
-
-                //Loading Meta            
-                $meta['title'] = $get_site->title;
-                //$meta['author'] = $user->name;
-                $meta['keywords'] =	$get_site->keywords;
-                $meta['description'] = $get_site->description;
-        }
-        else {
-            $disp = msg(_site_not_found);
-        }
-        //if ($set_cache) __c("files")->set($keyword_webpage,$content, 30);
-    //}
 }
 else {
     switch ($do)
     {
         case  'update':
             if (permTo('site_edit')){
-                if (up("update sites Set content = '".mysql_real_escape_string($_POST['mce_0'])."', editby = ".sqlString($_SESSION['name']).", lastedit = ".time()." where title LIKE ".sqlString($show))){
-                        goBack();
-                } else {
-                    $disp = msg(_change_failed);
-                }
-            }
-            else {
+                    $sm = new SiteManager(array($show));
+                    $site = $sm->get_first_site();
+                    $site->content = mysql_real_escape_string($_POST['mce_0']);
+                    $site->editby = $_SESSION['name'];
+                    $site->lastedit = time();
+                    $site->title = $show;
+                    $site->update();
+                    goBack();
+            } else {
                $disp = msg(_change_failed);
             }
             break;

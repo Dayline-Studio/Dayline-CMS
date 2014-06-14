@@ -29,5 +29,4 @@ class Inbox {
     public static function loadOutbox() {
 
     }
-
 } 

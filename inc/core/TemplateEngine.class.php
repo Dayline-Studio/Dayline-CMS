@@ -6,6 +6,7 @@ class TemplateEngine {
 
     public function render() {
         $this->html = $this->renderContent($this->html);
+        return $this->html;
     }
     
     private function renderContent($content) {
