@@ -32,40 +32,10 @@ if ($do == "")
 switch ($do)
 {
     case 'login': 
-        if ($_POST['username'] != "" && $_POST['passwort'] != "")
-        {
-            if (!check_email_address($_POST['username'])) {
-                    $sql = "user";
-            } else {
-                    $sql = "email";
-            }
-            if (db("SELECT id FROM users WHERE ".$sql." LIKE ".sqlString(strtolower($_POST['username'])),'rows') == 1)
-            {
-                $username = $_POST['username'];
-                $passwort = $_POST['passwort'];
-
-                $user = db('Select * From users Where '.$sql.' like '.sqlString(strtolower($username)),'object');
-
-                if (customHasher($passwort,$user->rounds) == $user->pass)
-                {
-                    $_SESSION['loggedin'] = true;
-                    $_SESSION['name'] = $user->name;
-                    $_SESSION['user'] = $user->user;
-                    $_SESSION['userid'] = $user->id;
-                    $_SESSION['email'] = $user->email;
-                    $_SESSION['login_time'] = time();
-                    $_SESSION['group_main_id'] = $user->main_group;
-                    if (permTo('fm_access')) $_SESSION['fm_access'] = TRUE;
-                    header('Location: ../pages/ucp.php');
-                    exit;
-                } else { 
-                    $disp = msg(_wrong_pw);
-                }
-            } else { 
-                $disp = msg(_user_not_found);
-            } 
-        } else { 
-            $disp = msg(_fields_missing);  
+        if(Auth::login($_POST['username'], $_POST['passwort'])) {
+            header('Location: '.Config::$path['pages'].'ucp.php');
+        } else {
+            $disp = msg(_login_failed);
         }
         break;
     case 'register':
@@ -108,8 +78,7 @@ switch ($do)
         }
         break;
     case 'logout':
-        session_destroy();
-
+        Auth::logout();
         header('Location: ../');
         break;
 }

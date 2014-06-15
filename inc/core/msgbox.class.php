@@ -26,17 +26,30 @@ class Msgbox {
                 r.name receiver_name,
                 r.email receiver_email,
                 s.name sender_name,
-                s.email sender_email
+                s.email sender_email,
+                m.email sender_email_empty
             FROM messages m
-            RIGHT JOIN users r ON (m.receiver_id = r.id)
-            RIGHT JOIN users s ON (m.sender_id = s.id)
-            WHERE receiver_id = $userid AND sender_id = $userid",PDO::FETCH_OBJ);
+            LEFT JOIN users r ON (m.receiver_id = r.id)
+            LEFT JOIN users s ON (m.sender_id = s.id)
+            WHERE receiver_id = $userid OR sender_id = $userid",PDO::FETCH_OBJ);
         foreach ($messages as $message){
             if ($message->receiver_id == $userid) {
-                $this->inbox[$message->id] = new Message($message);
+                if ($message->inbox == 1) {
+                    $this->inbox[$message->id] = new Message($message);
+                }
             } else {
-                $this->outbox[$message->id] = new Message($message);
+                if($message->outbox) {
+                    $this->outbox[$message->id] = new Message($message);
+                }
             }
         }
+    }
+
+    public function get_message_by_id($id) {
+        if (array_key_exists($id,$this->inbox)) {
+            return $this->inbox[$id];
+        } else if (array_key_exists($id, $this->outbox)) {
+            return $this->outbox[$id];
+        } return false;
     }
 } 

@@ -27,43 +27,40 @@ if ($do == "")
         case 'inbox':
 
             $msgbox = new Msgbox($_SESSION['userid']);
-           // echo $msgbox->inbox[17]->content;
             $te = new TemplateEngine();
 
             $case['inbox'] = "";
             if (sizeof($msgbox->inbox) == 0){
                 $case['inbox'] = show('ucp/msg_inbox_empty');
             } else {
-                foreach ($msgbox->inbox as $data) {
-                    $msg_case['title'] = $data->title;
-                    if (isset($data['name'])) {
-                        $msg_case['sender'] = $data->name;
+                foreach ($msgbox->inbox as $msg) {
+                    $msg_case['title'] = $msg->title;
+                    if (isset($msg->sender_name)) {
+                        $msg_case['sender'] = $msg->sender_name;
                     } else {
-                        $msg_case['sender'] = $data->email;
+                        $msg_case['sender'] = $msg->sender_email;
                     }
-                    $msg_case['gravatar'] = get_gravatar($data->email);
-                    $msg_case['date'] = date("m.d.y H:i:s",$data->date);
-                    $msg_case['id'] = $data->id;
+                    $msg_case['gravatar'] = get_gravatar($msg->sender_email);
+                    $msg_case['date'] = date("m.d.y H:i:s",$msg->date);
+                    $msg_case['id'] = $msg->id;
 
-                    if ($data->opened) {
+                    if ($msg->opened) {
                         $case['inbox'] .= show('ucp/msg_inbox_read', $msg_case);
                     } else {
                         $case['inbox'] .= show('ucp/msg_inbox_unread', $msg_case);
                     }
                 }
             }
-            $qry_out = getOutbox($_SESSION['userid']);
             $case['outbox'] = "";
-            if (mysqli_num_rows($qry_out) == 0){
-                $case['outbox'] = show('ucp/msg_outbox_empty');
+            if (sizeof($msgbox->outbox) == 0){
+                $case['outbox'] = show('ucp/msg_inbox_empty');
             } else {
-                while ($data = _assoc($qry_out)) {
-                    $msg_case['title'] = $data['title'];
-                    $msg_case['receiver'] = $data['name'];
-                    $msg_case['gravatar'] = get_gravatar($data['email'],32);
-                    $msg_case['date'] = date("m.d.y H:i:s",$data['date']);
-                    $msg_case['id'] = $data['id'];
-                    
+                foreach ($msgbox->outbox as $msg) {
+                    $msg_case['title'] = $msg->title;
+                    $msg_case['receiver'] = $msg->receiver_name;
+                    $msg_case['gravatar'] = get_gravatar($msg->receiver_email,32);
+                    $msg_case['date'] = date("m.d.y H:i:s",$msg->date);
+                    $msg_case['id'] = $msg->id;
                     $case['outbox'] .= show('ucp/msg_outbox_read', $msg_case);
                 }
             }
@@ -79,20 +76,23 @@ if ($do == "")
             $disp = show('ucp/msg_new', $case);
             break;
         case 'msg_viewer':
-            if($data = getMessage($_SESSION['userid'],$_GET['id'])) {
-                $msg_case['sender'] = $data->name;
-                $msg_case['date'] = date("m.d.y H:i:s",$data->date);
-                $msg_case['subject'] = $data->title;
-                $msg_case['content'] = $data->content;
-                $meta['title'] = "Msg: ".$data->title;
-                if ($data->receiver_id == $_SESSION['userid']) {
-                    $disp = show('ucp/msg_viewer', $msg_case);
-                    up('UPDATE messages SET opened = 1 WHERE id = '.sqlInt($_GET['id']));
-                } else {
-                    $disp = show('ucp/msg_viewer_outbox', $msg_case);
-                }
+            $msgbox = new Msgbox($_SESSION['userid']);
+            if (isset($msgbox->inbox[$_GET['id']])) {
+                $msg = $msgbox->inbox[$_GET['id']];
+                $msg_case['user_info'] = _to.': '.$msg->sender_name;
+                $msg->set_message_read();
+            } else if (isset($msgbox->outbox[$_GET['id']])) {
+                $msg = $msgbox->outbox[$_GET['id']];
+                $msg_case['user_info'] = _from.': '.$msg->receiver_name;
+            }
+            if(isset($msg)) {
+                $msg_case['date'] = date("m.d.y H:i:s",$msg->date);
+                $msg_case['subject'] = $msg->title;
+                $msg_case['content'] = $msg->content;
+                $disp = show('ucp/msg_viewer', $msg_case);
+                $meta['title'] = $msg->title;
             } else {
-                $disp = msg(_msg_not_found);
+                $disp =  msg(_site_not_found);
             }
             break;
         default:
@@ -154,11 +154,10 @@ switch ($do)
         break;
     case 'delete_msg':
         if (isset($_GET['id'])) {
-            if (deleteMessage($_GET['id'],$_SESSION['userid'])) {
-                goBack();
-            } else {
-                $disp = msg(_msg_delete_failed);
-            }
+            $msgbox = new Msgbox($_SESSION['userid']);
+            $msg = $msgbox->get_message_by_id($_GET['id']);
+            $msg->delete();
+            goBack();
         } else {
             $disp = msg(_msg_delete_failed);
         }
@@ -169,46 +168,3 @@ switch ($do)
 Disp::$content = $disp;
 Disp::addMeta($meta);
 Disp::render();
-
-function getMessage($userid, $msgid) {
-    return db("SELECT m.email memail,m.receiver_id,m.date,m.title,m.content,u.name,u.email as email "
-            . "FROM messages as m "
-            . "LEFT JOIN users as u ON m.sender_id = u.id "
-            . "WHERE (m.receiver_id || m.sender_id = " . sqlInt($userid).') '
-            . 'AND m.inbox = 1 '
-            . 'AND m.id = ' . sqlInt($msgid)
-            ,'object');
-}
-
-function getInbox($userid) {
-    return db("SELECT m.id,m.opened,m.email memail,m.date,m.title,m.content,u.name,u.email as email "
-            . "FROM messages m "
-            . "LEFT JOIN users u ON m.sender_id = u.id "
-            . "WHERE m.receiver_id = ".sqlInt($userid).' '
-            . 'AND m.inbox = 1 '
-            . 'ORDER BY date DESC');
-}
-
-function getOutbox($userid) {
-    return db("SELECT m.id,m.opened,m.email as memail,m.date,m.title,m.content,u.name,u.email as email "
-            . "FROM messages as m "
-            . "LEFT JOIN users as u ON m.receiver_id = u.id "
-            . "WHERE m.sender_id = ".sqlInt($userid).' '
-            . 'AND m.outbox = 1 '
-            . 'ORDER BY date DESC');
-}
-
-function deleteMessage($id, $userid)
-{
-    $qry = db('SELECT sender_id s, receiver_id r FROM messages WHERE id = '.sqlInt($id),'object');
-    if ($qry->r == $userid) {
-        if (up('UPDATE messages SET inbox = 0 WHERE id = '.sqlInt($id))) {
-            return true;
-        } 
-    } else if ($qry->s == $userid) {
-        if (up('UPDATE messages SET outbox = 0 WHERE id = '.sqlInt($id))) {
-            return true;
-        } 
-    }
-    return false;
-}

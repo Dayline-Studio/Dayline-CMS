@@ -25,3 +25,5 @@ define ('_password_current', "Aktuelles Passwort");
 define ('_user_lobby', 'User Lobby');
 define ('_sent', 'Gesendet');
 define ('_received', 'Empfangen');
+define ('_to', 'An');
+define ('_from', 'Von');

@@ -100,22 +100,22 @@
 
     function getNews($groupid = 0)
     {
-            $news_posts = db("Select * From news where public_show = 1 AND grp = ".$groupid." ORDER BY date DESC");
-            $list_news = "";
-            while ($get_news = _assoc($news_posts))
-            {
-                $list_news .= show("news/post",array(
-                    "news_headline" => $get_news['title'],
-                    "news_date" => date("F j, Y, G:i",$get_news['date']),
-                    "news_content" => $get_news['content'],
-                    "id" => $get_news['id'],
-                    "post_comment" => '<a href="../pages/news.php?id='.$get_news['id'].'#comments">Kommentare: '.db("SELECT count(id) as counted FROM comments where site = 2 AND subsite = ".$get_news['id'],'object')->counted.'</a>'
-                                                ));
-            }
-            if ($list_news == ""){
-                $list_news = _news_not_found;
-            }
-            return show("news/layout_posts", array("posts" => $list_news));
+        $news_posts = db("Select * From news where public_show = 1 AND grp = ".$groupid." ORDER BY date DESC");
+        $list_news = "";
+        while ($get_news = _assoc($news_posts))
+        {
+            $list_news .= show("news/post",array(
+                "news_headline" => $get_news['title'],
+                "news_date" => date("F j, Y, G:i",$get_news['date']),
+                "news_content" => $get_news['content'],
+                "id" => $get_news['id'],
+                "post_comment" => '<a href="../pages/news.php?id='.$get_news['id'].'#comments">Kommentare: '.db("SELECT count(id) as counted FROM comments where site = 2 AND subsite = ".$get_news['id'],'object')->counted.'</a>'
+                                            ));
+        }
+        if ($list_news == ""){
+            $list_news = _news_not_found;
+        }
+        return show("news/layout_posts", array("posts" => $list_news));
     }
 
     function permTo($permission)
@@ -128,107 +128,26 @@
     }
 
     function con($txt) {
-    $txt = stripslashes($txt);
-    $txt = str_replace("& ","&amp; ",$txt);
-    $txt = str_replace("[","&#91;",$txt);
-    $txt = str_replace("]","&#93;",$txt);
-    $txt = str_replace("\"","&#34;",$txt);
-    $txt = str_replace("<","&#60;",$txt);
-    $txt = str_replace(">","&#62;",$txt);
-    $txt = str_replace("(", "&#40;", $txt);
-    $txt = str_replace("'", "&lsquo;", $txt);
-    $txt = str_replace("(", "&#40;", $txt);
-    return str_replace(")", "&#41;", $txt);
-}
-
-  function check_email_address($str_email_address) {
-    if('' != $str_email_address && !((preg_match("/[_\.0-9a-z-]+@([0-9a-z-]+\.)+[a-z]{2,6}/i",$str_email_address)))) {
-      return false;
-    } else {
-      return true;
-    }
-  }
-  
-  function getCommentBox($site, $subsite = 0)
-  {
-      return getComments($site,$subsite).dispCommentInput();
-  }
-  
-  function getComment($comment)
-  {
-    $com_disp = "";
-    $date = ((time()-$comment['date'])/60);
-    if ($date*60 < 60){
-        $out = (int)($date*60) . " sec ago";
-    }
-    else if ($date < 60) {
-        $out = (int)$date." min ago";
-    }
-    else if ($date > 59 && $date/60 < 24){
-        $out = "vor ".(int)($date/60)."h at ". date("h:i A",$comment['date']);
-    }
-    else if ($date/60 > 23 && $date/60/24 < 4) {
-        $out = (int)($date/60/24)." day(s) ago at ". date("h:i A",$comment['date']);
-    }
-    else {
-        $out = date("F j, g:i a", $comment['date']);
+        $txt = stripslashes($txt);
+        $txt = str_replace("& ","&amp; ",$txt);
+        $txt = str_replace("[","&#91;",$txt);
+        $txt = str_replace("]","&#93;",$txt);
+        $txt = str_replace("\"","&#34;",$txt);
+        $txt = str_replace("<","&#60;",$txt);
+        $txt = str_replace(">","&#62;",$txt);
+        $txt = str_replace("(", "&#40;", $txt);
+        $txt = str_replace("'", "&lsquo;", $txt);
+        $txt = str_replace("(", "&#40;", $txt);
+        return str_replace(")", "&#41;", $txt);
     }
 
-    $comment_view = substr($comment['content'], 0, 200);
-    $comment_expand = substr($comment['content'], 0, -200);
-    $gravatar = get_gravatar($comment['email'], 52, false);
-    $com_disp .= show("ucp/comment", array("user" => $comment['name'],
-                                            "gravatar" => $gravatar,
-                                            "content" => $comment_view,
-                                            "content_expand" => $comment_expand,
-                                            "id" => $comment['id'],
-                                            "date" => $out));
-
-    
-    return $com_disp;
+    function check_email_address($str_email_address) {
+        if('' != $str_email_address && !((preg_match("/[_\.0-9a-z-]+@([0-9a-z-]+\.)+[a-z]{2,6}/i",$str_email_address)))) {
+          return false;
+        } else {
+            return true;
+        }
     }
-    
-  
-  function getComments($site = 0, $subsite = 0)
-  {
-    $comments = db("SELECT "
-                    . "c.id as id,"
-                    . "c.content as content,"
-                    . "u.name as name,"
-                    . "u.email as email,"
-                    . "c.date as date"
-                . " FROM "
-                    . "comments as c,"
-                    . " users as u "
-                . "WHERE c.site = ".$site." "
-                . "AND u.id = c.userid "
-                . "AND c.active = 1 "
-                . "AND c.subsite = ".$subsite." "
-                . "ORDER BY c.date ASC"
-            );
-    
-    $output ='';
-    while ($comment = _assoc($comments))
-    {
-        $output .= getComment($comment);
-    }
-    return $output;
-  }
-  
-  function dispCommentInput($site = 0, $subsite = 0) {
-     $gravatar = get_gravatar($_SESSION['email'], 52, false);
-     return show("ucp/comment_input", 
-          array(
-               "gravatar" => $gravatar,
-               "user" => $_SESSION['name'],
-               "site" => $site,
-               "subsite" => $subsite,
-                 )); 
-  }
-  
-  function dispComments($site, $subsite) {
-     return show("ucp/comment_body", array("comments" => getComments($site,$subsite), "input" => dispCommentInput($site,$subsite)));
-  }
   
     function updateRSS() {
         global $path;
@@ -240,9 +159,9 @@
         $roo->setAttribute('version', '2.0');
         $xml->appendChild($roo);
         $cha = $xml->createElement('channel');
-        $roo->appendChild($cha); 
+        $roo->appendChild($cha);
         $new = $xml->createElement('title', 'CMS - News');
-        $cha->appendChild($new); 
+        $cha->appendChild($new);
         $new = $xml->createElement('description','D4ho.de - CMS');
         $cha->appendChild($new);
         $bld = $xml->createElement('image');
@@ -261,7 +180,7 @@
             $rss['link'] = "http://cms.d4ho.de/pages/news.php?id=".$rss_feed['id'];
             $rss['pubDate'] = date("D, j M Y H:i:s ", $rss_feed['date']);
             $hea = $xml ->createElement('image');
-            $new ->appendChild($hea);					
+            $new ->appendChild($hea);
             $img = $xml ->createElement('url',$rss_feed['main_image']);
             $hea ->appendChild($img);
 
@@ -274,7 +193,7 @@
 
         if($xml->save($path['upload'].'rss/rss.xml')) {
                 return true;
-        }		
+        }
         return false;
     }
         

@@ -32,7 +32,8 @@ class Config {
             'plugins' => '../content/plugins/',
             'pages' => '../pages/',
             'panels' => '../content/panels/',
-            'funktions' => '../include/functions.php',
+            'functions' => '../include/functions.php',
+            'gallery' => '../content/upload/gallery/',
             'language' => '../content/language/',
             'template' => '../templates/'.self::$settings->style.'/'
         );

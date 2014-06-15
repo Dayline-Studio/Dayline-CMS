@@ -2,7 +2,7 @@
 include('config/config.php');
 
 if (USE_ACCESS_KEYS == TRUE){
-	if (!$_SESSION['fm_access']) {
+	if (!isset($_SESSION['fm_access'])) {
 		die('Access Denied!');
 	}
 }

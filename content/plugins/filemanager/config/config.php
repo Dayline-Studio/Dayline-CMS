@@ -19,7 +19,8 @@ mb_internal_encoding('UTF-8');
 //    |   |   |   |- responsivefilemanager
 //    |   |   |   |   |- plugin.min.js
 
-$base_url ="http://".$_SERVER['HTTP_HOST'];  // DON'T TOUCH (base url (only domain) of site (without final /)).
+$http = $_SESSION['https'] ? 'https' : 'http';
+$base_url ="$http://".$_SERVER['HTTP_HOST'];
 $upload_dir = '/content/upload/'; // path from base_url to base of upload folder (with start and final /)
 $current_path = '../../upload/'; // relative path from filemanager folder to upload folder (with final /)
 //thumbs folder can't put inside upload folder
@@ -46,7 +47,7 @@ define('USE_ACCESS_KEYS', TRUE); // TRUE or FALSE
 // $akey = md5($username.$salt);
 // DO NOT use 'key' as access key!
 // Keys are CASE SENSITIVE!
-$access_keys = array('dsflFWR9u2xQa');
+$access_keys = array('key');
 
 //--------------------------------------------------------------------------------------------------------
 // YOU CAN COPY AND CHANGE THESE VARIABLES INTO FOLDERS config.php FILES TO CUSTOMIZE EACH FOLDER OPTIONS
