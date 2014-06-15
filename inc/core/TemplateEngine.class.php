@@ -3,6 +3,7 @@ class TemplateEngine {
 
     private $html;
     private $replace_content = array();
+    private $single_replace = array();
 
     public function render() {
         $this->html = $this->renderContent($this->html);
@@ -39,18 +40,29 @@ class TemplateEngine {
                         trigger_error('TemplateEngine - renderContent: file not found->'.$file);
                     }
                     break;
+                case 'if':
+                    //[if|var|html<else>html2]
+                    break;
             }
             $content = str_replace($foreach[0],$add,$content);
         }
-        return $content;
+        return show($content, $this->single_replace);
     }
 
     public function setHtml($html) {
-        $this->html = $html;
+        $this->html = show($html);
     }
     
     public function getHtml() {
         return $this->html;
+    }
+
+    public function add_var($tag, $value) {
+        $this->single_replace = array_merge($this->single_replace, array($tag => $value));
+    }
+
+    public function add_vars($case) {
+        $this->single_replace = array_merge($this->single_replace, $case);
     }
 
     public function addReplace($arr) {

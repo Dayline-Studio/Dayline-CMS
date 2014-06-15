@@ -16,21 +16,14 @@ if ($do == "")
             $te->setHtml(show("acp/acp_site_create", array('editor' => show('allround/input_editor'))));
             $disp = $te->render();
             break;
-        case 'site_list':
+        default:
             $sm = new SiteManager('*');
             $te = new TemplateEngine();
             foreach ($sm->sites as $site) {
-                $sites[] = array('id' => $site->id, 'site_name' => $site->title);
+                $sites[] = array('id' => $site->id, 'site_name' => $site->title, 'link' => $site->get_site_id());
             } $te->addArr('sites', $sites);
             $te->setHtml(show("acp/acp_site_list"));
             $disp = $te->render();
-            $disp = Render::navigation_back_from(24);
-
-
-            break;
-        default:
-            $disp = msg(_modul_not_exists);
-            break;
     }
 } else {
     switch ($do)
@@ -44,7 +37,9 @@ if ($do == "")
             break;
         case 'delete_site':
             if (permTo("delete_site")) {
-                if(up("DELETE FROM sites WHERE id = ".sqlInt($_POST['id']))) {
+                $sm = new SiteManager($_GET['id']);
+                $site = $sm->get_first_site();
+                if($site->delete()) {
                     goBack();
                 } else {
                     $disp = msg(_change_failed);

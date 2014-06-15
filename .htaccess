@@ -16,3 +16,6 @@ php_value max_input_time 200
 DirectoryIndex index.php
 
 Options All -Indexes
+
+RewriteEngine On
+RewriteRule ^acp/([0-9]+)$ acp/index.php$1

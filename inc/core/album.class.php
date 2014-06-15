@@ -2,15 +2,20 @@
 
 class Album {
 
-    public $id = NULL, $title, $path, $subfrom, $position, $main_path;
-    public $images = array();
+    public $id = NULL, $title, $subfrom, $position;
 
     public function __construct($data, $main_path) {
         foreach($data as $var => $value) {
             $this->$var = $value;
         }
-        $this->main_path = $main_path;
-        $this->scan_dir();
+        if(!empty($data->path)) {
+            $this->main_path = $main_path;
+            $this->is_category = FALSE;
+            $this->scan_dir();
+        } else {
+            unset($this->path);
+            $this->is_category = TRUE;
+        }
     }
 
     private function scan_dir() {

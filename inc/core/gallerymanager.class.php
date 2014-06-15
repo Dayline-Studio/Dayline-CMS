@@ -18,9 +18,9 @@ class GalleryManager {
                 }
                 $sql = "select * from gallery where (". implode(' OR ', $arr).')';
             }
-            $result = Db::npquery($sql,PDO::FETCH_ASSOC);
+            $result = Db::npquery($sql,PDO::FETCH_OBJ);
             foreach ($result as $album) {
-                $this->gallery[$album['id']] = new Album($album, Config::$path['gallery']);
+                $this->gallery[$album->id] = new Album($album, Config::$path['gallery']);
             }
         }
     }
@@ -34,7 +34,7 @@ class GalleryManager {
         foreach ($this->gallery as $album) {
             if ($album->subfrom == $id) {
                 if ($subalbum = $this->get_subalbum_from($album->id))
-                    $album->subsites= $subalbum;
+                    $album->subalbum= $subalbum;
                 $ret[] = $album;
             }
         }

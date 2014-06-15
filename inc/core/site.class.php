@@ -13,4 +13,12 @@ class Site {
     public function update() {
         Db::update('sites',$this->id,get_object_vars($this));
     }
+
+    public function get_site_id(){
+        return $this->id.'-'.str_replace(array(' ', '/', '.', '+'),'-', $this->title);
+    }
+
+    public function delete(){
+        return Db::delete('sites', $this->id);
+    }
 }

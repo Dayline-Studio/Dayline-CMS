@@ -27,7 +27,7 @@ if (isset($_GET['acp'])) {
         if ($item != ".." && $item != ".") 
         {
             $filename = substr($item,0,-4);
-            $item_stack .= '<li><a class="buttonStyle" href="index.php?acp='.$filename.'">{s_'.$filename.'}</a></li>';
+            $item_stack .= '<li><a class="buttonStyle" href="?acp='.$filename.'">{s_'.$filename.'}</a></li>';
             if ($filename == $acp) {
                 $file_exist = true;
             }    

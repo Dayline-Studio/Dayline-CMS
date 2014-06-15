@@ -3,25 +3,28 @@ class SiteManager {
 
     public $sites;
 
-    public function __construct($ids = 0) {
-        $this->load_sites($ids);
-    }
-
-    public function load_sites($ids = 0) {
-        if ($ids !== 0) {
-            if ($ids === '*') {
-                $sql = "select * from sites";
+    public function __construct() {
+        $ids = func_get_args();
+        if ($ids[0] !== 0) {
+            if ($ids[0] === '*') {
+                $sql = "select * from sites ORDER BY position";
             } else {
-                foreach ($ids as $name) {
-                    $arr[] = "title LIKE '$name'";
+                foreach ($ids as $id) {
+                    $this->filter_id($id);
+                    $arr[] = "id = '$id'";
                 }
-                $sql = "select * from sites where (". implode(' OR ', $arr).')';
+                $sql = "select * from sites where (". implode(' OR ', $arr).') ORDER BY position DESC';
             }
             $result = Db::npquery($sql,PDO::FETCH_ASSOC);
             foreach ($result as $site) {
                 $this->sites[$site['id']] = new Site($site);
             }
         }
+    }
+
+    public function filter_id($str) {
+        $tags = explode('-',$str);
+        return $tags[0];
     }
 
     public function wipe() {
@@ -51,7 +54,17 @@ class SiteManager {
        Db::insert('sites', $up);
     }
 
+    public function get_site_by_search($key, $search) {
+        foreach ($this->sites as $site) {
+            if (strtolower($site->$key) == strtolower ($search)) {
+                return $site;
+            }
+        }
+        return false;
+    }
+
     public function get_backside_list_from($id) {
+        $id = $this->filter_id($id);
         if (isset($this->sites[$id])) {
             return $this->get_site_list_from($this->sites[$id]);
         } return FALSE;

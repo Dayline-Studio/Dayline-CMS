@@ -15,9 +15,8 @@ if ($do == "")
     } else {
         $file = "site/content";
     }
-    $case['show'] = str_replace("_"," ",$show);
 
-    $sm = new SiteManager(array($show));
+    $sm = new SiteManager($show);
     $site = $sm->get_first_site();
     if (!empty($site)) {
         $user = getUserInformations($site->userid, "name");
@@ -41,6 +40,7 @@ if ($do == "")
         } else {
             $case['print'] = "";
         }
+        $case['link'] = $site->get_site_id();
         $case['content'] = $site->content;
         $case['site_id'] = $show;
         $disp = show(show("site/head").show($file),$case);
@@ -63,12 +63,14 @@ else {
     {
         case  'update':
             if (permTo('site_edit')){
-                    $sm = new SiteManager(array($show));
+                    $sm = new SiteManager($show);
                     $site = $sm->get_first_site();
                     $site->content = mysql_real_escape_string($_POST['mce_0']);
                     $site->editby = $_SESSION['name'];
                     $site->lastedit = time();
-                    $site->title = $show;
+                    if (isset($_POST['title'])) {
+                        $site->title = $_POST['title'];
+                    }
                     $site->update();
                     goBack();
             } else {

@@ -6,7 +6,7 @@ function navi()
     switch(substr(basename($_SERVER["PHP_SELF"]),0,-4))
     {
         case 'site':
-            $sm = new SiteManager(array($show));
+            $sm = new SiteManager($show);
             $content =  siteNaviBackward($sm->get_first_site()->id);
             break;
         default:
@@ -19,7 +19,7 @@ function navi()
    
    if (isset($meta['page_id']) && $meta['page_id'] == 3){
        $rn = new Render();
-       $site_navi = $rn->navigation_back_from($site->id);
+       $site_navi = $rn->navigation_back_from($show);
    } else {
        $site_navi = "";
    }
@@ -29,11 +29,12 @@ function navi()
 
 function siteNaviBackward($id)
 {
-    $site = db("SELECT subfrom, title from sites where id = ".$id." LIMIT 1",'object');
+    $sm = new SiteManager($id);
+    $site = $sm->get_first_site();
     $oversite = "";
     if ($site->subfrom != 0)
     {
         $oversite = siteNaviBackward($site->subfrom).' >> ';
     }
-    return $oversite.'<a href="../pages/site.php?show='.str_replace(" ","_",$site->title).'">'.$site->title.'</a>';
+    return $oversite.'<a href="../pages/site.php?show='.$site->get_site_id().'">'.$site->title.'</a>';
 }
