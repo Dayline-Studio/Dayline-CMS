@@ -10,48 +10,43 @@
 $disp = '';
 if ($do == "")
 {
-    if (permTo('site_edit')){
-        $file = "site/content_editable";
-    } else {
-        $file = "site/content";
-    }
-
     $sm = new SiteManager($show);
     $site = $sm->get_first_site();
     if (!empty($site)) {
+        $te = new TemplateEngine();
+        if (permTo('site_edit')){
+            $sites = new SiteManager('*');
+            foreach ($sites->sites as $s) {
+                $selected = $s->id == $site->subfrom ? 'selected' : '';
+                $title_sites[] = array('title' => $s->title, 'value' => $s->id, 'select' => $selected);
+            }
+            $case['headline_select'] = $site->show_headline ? 'checked' : '';
+            $case['print_select'] = $site->show_print ? 'checked' : '';
+            $case['author_select'] = $site->show_author ? 'checked' : '';
+            $case['lastedit_select'] = $site->show_lastedit ? 'checked' : '';
+            $te->addArr('title_sites',$title_sites);
+            $te->setHtml("site/content_editable");
+        } else {
+            $te->setHtml("site/content");
+        }
         $user = getUserInformations($site->userid, "name");
-        if ($site->show_author) {
-            $case['author'] = "Written by ".$user->name." - ".date("F j, Y, g:i a",$site->date);
-        } else {
-            $case['author'] = "";
-        }
-        if ($site->show_headline) {
-            $case['title'] = $site->title;
-        } else {
-            $case['title'] = "";
-        }
-        if ($site->lastedit != "" && $site->show_lastedit) {
-            $case['edited'] = "Last edit by ".$site->editby." - ".date("F j, Y, g:i a",$site->lastedit);
-        } else {
-            $case['edited'] = "";
-        }
-        if ($site->show_print) {
-            $case['print'] = show('site/print');
-        } else {
-            $case['print'] = "";
-        }
+        $case['author'] = $site->show_author ? "Written by ".$user->name." - ".date("F j, Y, g:i a",$site->date) : '';
+        $case['title'] = $site->show_headline ? $site->title : '';
+        $case['edited'] = $site->lastedit != "" && $site->show_lastedit ?
+            "Last edit by ".$site->editby." - ".date("F j, Y, g:i a",$site->lastedit) : '';
+        $case['print'] = $site->show_print ? show('site/print') : '';
         $case['link'] = $site->get_site_id();
         $case['content'] = $site->content;
         $case['site_id'] = $show;
-        $disp = show(show("site/head").show($file),$case);
 
-        //Print
+        $te->add_vars($case);
+        $disp = $te->render();
+
         $_SESSION['print_content'] = $site->content;
         $_SESSION['print_title'] = $site->title;
 
-        //Loading Meta
         $meta['title'] = $site->title;
-        //$meta['author'] = $user->name;
+        $meta['author'] = $user->name;
         $meta['keywords'] =	$site->keywords;
         $meta['description'] = $site->description;
     } else {
@@ -63,16 +58,15 @@ else {
     {
         case  'update':
             if (permTo('site_edit')){
-                    $sm = new SiteManager($show);
-                    $site = $sm->get_first_site();
-                    $site->content = mysql_real_escape_string($_POST['mce_0']);
-                    $site->editby = $_SESSION['name'];
-                    $site->lastedit = time();
-                    if (isset($_POST['title'])) {
-                        $site->title = $_POST['title'];
-                    }
-                    $site->update();
-                    goBack();
+                $sm = new SiteManager($show);
+                $site = $sm->get_first_site();
+                $site->content = mysql_real_escape_string($_POST['mce_0']);
+                $site->editby = $_SESSION['name'];
+                $site->lastedit = time();
+                $site->clear_checkboxes();
+                $site->set($_POST);
+                $site->update();
+                goBack();
             } else {
                $disp = msg(_change_failed);
             }
@@ -80,7 +74,6 @@ else {
     }
 }
 
-//Seite Rendern
 Disp::$content = $disp;
 Disp::addMeta($meta);
 Disp::render();

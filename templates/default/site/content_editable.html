@@ -1,33 +1,48 @@
-<a href="../acp/?acp_site&site_list" class="buttonStyle">Seiten Verwalten</a>
-<div class="site_content text">
-    <script type="text/javascript" src="../content/plugins/tinymce/tinymce.min.js"></script>
-    <script type="text/javascript">
-    tinymce.init({
-        selector: "h1.edit",
-        inline: true,
-        toolbar: "undo redo",
-        menubar: false
-    });
-
-       tinymce.init({
-            selector: "div.edit",
-            inline: true,
-
-            plugins: [
-                "advlist textcolor autolink youtube lists link image charmap print preview anchor",
-                "searchreplace visualblocks code fullscreen",
-                "insertdatetime media table responsivefilemanager contextmenu paste"
-            ],
-            toolbar: "insertfile undo redo | styleselect | youtube | bold italic forecolor backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image",
-           external_filemanager_path:"../content/plugins/filemanager/",
-           filemanager_title:"Responsive Filemanager" ,
-           external_plugins: { "filemanager" : "../filemanager/plugin.min.js"}
-        });
-    </script>
+<table width="100%">
+    <tr>
+        <td>
+            <h1>{title}</h1>
+        </td>
+        <td width="50%" align="right">
+            <a onclick="toggle_admin_room()"><img width="16" src="{style}images/icons/icon_edit.png"></a>
+        </td>
+    </tr>
+</table>
+<table width="100%">
+    <tr>
+        <td rowspan="2">
+            {print}
+        </td>
+        <td width="50%" align="right">
+            {author}
+        </td>
+    </tr>
+    <tr>
+        <td td width="50%" align="right">
+            {edited}
+        </td>
+    </tr>
+</table>
+<div id="admin_room">
     <form method="post" action="site.php?show={link}&do=update">
-                    <div class="edit">
-                            {content}
-                    </div>
-            <input type="submit" value="Anwenden" />
+        <a href="../acp/?acp=acp_site" class="buttonStyle">Seiten Verwalten</a>
+        <a onclick="toggle_content('open_1',0);" class="buttonStyle">Erweiterte Einstellungen</a>
+        <div class="open_1" style="display:none">
+            <table width="100%">
+                <tr><td>{s_title}:</td><td><input name="title" type="text" value="{title}"></td><td>{s_show_lastedit}</td><td><input type="checkbox" name="show_lastedit" value="1" {lastedit_select}/></td></tr>
+                <tr><td>{s_keywords}:</td><td><input name="keywords" type="text" value="{keywords}"></td><td>{s_show_author}</td><td><input type="checkbox" name="show_author" value="1" {author_select}/></td></tr>
+                <tr><td>{s_description}:</td><td><input name="description" type="text" value="{description}"></td><td>{s_show_print}</td><td><input type="checkbox" name="show_print" value="1" {print_select}/></td></tr>
+                <tr><td>{s_addafter}:</td><td><select name="subfrom"><option value="0">Keine Uebergeordnete Seite</option>[array|title_sites|<option value="{value}" {select}>{title}</option>]</select></td></td><td>{s_show_headline}</td><td><input type="checkbox" name="show_headline" value="1" {headline_select}/></td></tr>
+            </table>
+        </div>
+        <div class="site_content text">
+            <div class="edit">
+                    {content}
+            </div>
+            <input type="submit" class="buttonStyle" value="Anwenden" />
+        </div>
     </form>
+</div>
+<div id="user_room" class="site_content text">
+    {content}
 </div>

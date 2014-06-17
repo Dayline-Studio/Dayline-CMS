@@ -1,5 +1,7 @@
  <?php
  function ucp(){
+
+     $title = 'UCP-Panel';
 	if (!$_SESSION['loggedin'])
 	{
 		$login_panel = show("panels/login");
@@ -15,5 +17,5 @@
                             "Gravatar" => $gravatar
                         ));
 	}
-	return $login_panel;
+	return show("panels/box", array("content" => $login_panel, "title" => $title, "name" => __FUNCTION__));;
  }

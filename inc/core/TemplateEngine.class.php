@@ -19,17 +19,21 @@ class TemplateEngine {
             switch ($foreach[1])
             {
                 case 'array':
-                    foreach($this->replace_content[$foreach[2]] as $zeile) {
-                        $out = NULL;
-                        foreach ($zeile as $name => $value){
-                            if ($out === NULL) {
-                                $out = $foreach[3];
+                    if (isset($this->replace_content[$foreach[2]])) {
+                        foreach($this->replace_content[$foreach[2]] as $zeile) {
+                            $out = NULL;
+                            foreach ($zeile as $name => $value){
+                                if ($out === NULL) {
+                                    $out = $foreach[3];
+                                }
+                                if (is_string($value)) {
+                                    $out = str_replace('{'.$name.'}', $value, $out);
+                                }
                             }
-                            if (is_string($value)) {
-                                $out = str_replace('{'.$name.'}', $value, $out);
-                            }
+                            $add .= $out;
                         }
-                        $add .= $out;
+                    } else {
+                        die('Template-Engine->Error: Variable '.$foreach[2].' not defined');
                     }
                     break;
                 case 'include':
@@ -37,7 +41,7 @@ class TemplateEngine {
                     if(file_exists($file)) {
                         $add = $this->renderContent(file_get_contents($file)); 
                     } else {
-                        trigger_error('TemplateEngine - renderContent: file not found->'.$file);
+                        trigger_error('Template-Engine->Error: include file not found->'.$file);
                     }
                     break;
                 case 'if':

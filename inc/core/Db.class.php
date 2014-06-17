@@ -47,7 +47,12 @@ class Db {
             $up[] = "`$col` = '$value' ";
         }
         $sql .= implode(',',$up)." WHERE id = $id LIMIT 1";
-        self::nrquery($sql);
+        return self::nrquery($sql);
+    }
+
+    public static function delete($table, $id) {
+        $sql = "DELETE FROM $table WHERE id = :id";
+        return self::nrquery($sql,array('id' => $id));
     }
 
     public static function insert($table, $new = array()) {
@@ -57,6 +62,6 @@ class Db {
             $val[] = "'$value'";
         }
         $sql .= implode(',',$tab).") VALUES (".implode(',',$val).")";
-        self::nrquery($sql);
+        return self::nrquery($sql);
     }
 }

@@ -17,5 +17,12 @@ DirectoryIndex index.php
 
 Options All -Indexes
 
-RewriteEngine On
+Options +FollowSymLinks
+RewriteEngine on
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME}.php -f
+RewriteRule ^(.+)$ $1.php [L,QSA]
+
 RewriteRule ^acp/([0-9]+)$ acp/index.php$1

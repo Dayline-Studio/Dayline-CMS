@@ -1,5 +1,5 @@
 <?php
-define ('_title_site', "Titelseite");
+define ('_title', "Überschrift");
 define ('_keywords', "Suchbegriffe");
 define ('_description', "Beschreibung");
 define ('_addafter', "Unterordnen");
