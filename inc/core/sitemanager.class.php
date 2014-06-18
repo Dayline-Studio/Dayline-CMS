@@ -54,10 +54,23 @@ class SiteManager {
        Db::insert('sites', $up);
     }
 
-    public function get_site_by_search($key, $search) {
-        foreach ($this->sites as $site) {
-            if (strtolower($site->$key) == strtolower ($search)) {
-                return $site;
+    public function get_site_by_search($keys, $search, $accuracy = 1) {
+        if (!is_array($keys)) {
+            $keys = array($keys);
+        }
+        foreach ($keys as $key) {
+            foreach ($this->sites as $site) {
+                switch ($accuracy) {
+                    case 0:
+                        if (strpos(strtolower($site->$key),strtolower($search))) {
+                            return $site;
+                        }
+                        break;
+                    case 1:
+                        if (strtolower($site->$key) == strtolower ($search)) {
+                            return $site;
+                        }
+                }
             }
         }
         return false;

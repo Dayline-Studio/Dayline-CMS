@@ -13,23 +13,35 @@ if (isset($_GET['tags'])) {
 
 function search($tags)
 {
+    $search_results = '';
     $tags = exTags($tags);
     foreach ($tags as $tag)
     {
-        $search_results .= replaceTextBackground(searchEngine($tag),$tags);
+        $search_results .= replaceTextBackground(searchEngineNews($tag),$tags);
+        $search_results .= replaceTextBackground(searchEngineSites($tag),$tags);
     }
     if ($search_results == null) $search_results = "Nichts gefunden ...";
     return $search_results;
 }
 
-function searchEngine($tag)
+function searchEngineNews($tag)
 {
+    $res = "";
     $search = db("SELECT content,title FROM news WHERE content LIKE ".sqlString("%$tag%"));
     while ($result = _assoc($search))
     {
         $res = strip_tags($result['content']);
     }
     return $res;
+}
+
+function searchEngineSites($tag)
+{
+    $sm = new SiteManager('*');
+    if ($site = $sm->get_site_by_search(array('title','content'),$tag,0)) {
+        return $site->content;
+    }
+    return '';
 }
 
 function exTags($tags)

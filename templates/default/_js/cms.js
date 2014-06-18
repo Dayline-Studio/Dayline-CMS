@@ -20,30 +20,91 @@ function toggle_content_instand (id) {
 }
 
 function admin_toggler() {
-    if ($('#admin_room').length) {
-        $( '#admin_room').toggle();
+    var divs = $('div[id^="slide_admin_"]');
+    for (var i = 0; i<divs.length; i++) {
+        $(divs[i]).toggle();
     }
 }
 
-function toggle_admin_room() {
-    $( '#admin_room' ).slideToggle( "slow" );
-    $( '#user_room' ).slideToggle( "slow" );
+function toggle_admin_slide(div, id) {
+    $('#slide_admin_'+div+'_'+id ).slideToggle( "slow" );
+    $('#slide_user_'+div+'_'+id ).slideToggle( "slow" );
+}
+
+function set_modul_loading(div,id) {
+    $('#slide_admin_'+div+'_'+id ).slideUp( "slow" );
+    $('#slide_user_'+div+'_'+id ).slideDown( "slow" );
+    $('#slide_user_'+div+'_'+id).html('Loading ...');
+}
+
+function reload_module(div,id,modul) {
+    $('#slide_user_'+div+'_'+id).html(modul);
+    $('#slide_admin_'+div+'_'+id).toggle();
+}
+
+function init_tinymce() {
+    tinymce.init({
+        selector: "div.edit",
+        inline: true,
+
+        plugins: [
+            "advlist textcolor autolink youtube lists link image charmap print preview anchor",
+            "searchreplace visualblocks code fullscreen",
+            "insertdatetime media table responsivefilemanager contextmenu paste"
+        ],
+        toolbar: "insertfile undo redo | styleselect | youtube | bold italic forecolor backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image",
+        external_filemanager_path:"../content/plugins/filemanager/",
+        filemanager_title:"Responsive Filemanager" ,
+        external_plugins: { "filemanager" : "../filemanager/plugin.min.js"}
+    });
+}
+
+function load_form_function() {
+    $('form[id^="mod_"]').submit(function()
+    {
+        var module_id = $(this).data('id');
+        var module_name = $(this).data('module');
+        set_modul_loading(module_name,module_id);
+        var postData = $(this).serializeArray();
+        postData[1] = {name:"id", value:module_id};
+        postData[2] = {name:"module", value:module_name};
+        postData[0] = {name:"content", value:tinyMCE.get(postData[0]["name"])['bodyElement']['innerHTML']};
+        var formURL = $(this).attr("action");
+        $.ajax(
+            {
+                url : formURL,
+                type: "POST",
+                data : postData,
+                success:function(data, textStatus)
+                {
+                    reload_module(module_name,module_id,data);
+                    init_tinymce();
+                }
+            });
+        return false;
+    });
 }
 
 $(document).ready(function() {
+    load_form_function();
+    init_tinymce();
     admin_toggler();
-    var divs = get_toggle_cookie('open_');
-        for(var i= 0; i<divs.length;i++){
-            var split = divs[i].split('=')
-            var value = split[1];
-            var tag = split[0];
-            console.log('found '+tag+' with '+value);
-            if (value == 1) {
-                console.log('close '+tag);
-                toggle_content_instand(tag);
-            }
-        }
+    set_menu_from_cookie();
 });
+
+function set_menu_from_cookie() {
+    var divs = get_toggle_cookie('open_');
+    for(var i= 0; i<divs.length;i++){
+        var split = divs[i].split('=')
+        var value = split[1];
+        var tag = split[0];
+        console.log('found '+tag+' with '+value);
+        if (value == 1) {
+            console.log('close '+tag);
+            toggle_content_instand(tag);
+        }
+    }
+}
 
 function get_toggle_cookie(tag) {
     var ca = document.cookie.split(';');
@@ -88,24 +149,3 @@ $(function() {
 })
 (window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
-tinymce.init({
-    selector: "h1.edit",
-    inline: true,
-    toolbar: "undo redo",
-    menubar: false
-});
-
-tinymce.init({
-    selector: "div.edit",
-    inline: true,
-
-    plugins: [
-        "advlist textcolor autolink youtube lists link image charmap print preview anchor",
-        "searchreplace visualblocks code fullscreen",
-        "insertdatetime media table responsivefilemanager contextmenu paste"
-    ],
-    toolbar: "insertfile undo redo | styleselect | youtube | bold italic forecolor backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image",
-    external_filemanager_path:"../content/plugins/filemanager/",
-    filemanager_title:"Responsive Filemanager" ,
-    external_plugins: { "filemanager" : "../filemanager/plugin.min.js"}
-});

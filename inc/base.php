@@ -14,6 +14,7 @@ function classLoader($class)
     $filename = $classname . '.class.php';
     $path['core'] = '../inc/core/';
     $path['lib'] = '../inc/lib/';
+    $path['modules'] = '../inc/core/site_modules/';
     $path['servermanager'] = '../inc/core/servermanager/';
     foreach ($path as $dir) {
         if (is_readable($dir.$filename))
