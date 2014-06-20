@@ -39,7 +39,7 @@ abstract class MainModule {
         $case['module_render'] = $this->render();
         $case['id'] = $this->id;
         $case['module_name'] = get_class($this);
-        return show($file, $case);
+        return Disp::replace_paths(show($file, $case));
     }
 
     public function set_vars($data = array()) {

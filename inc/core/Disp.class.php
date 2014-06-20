@@ -39,17 +39,27 @@ class Disp {
         self::display($init);
     }
     
-    function renderMin() {
+    public static function replace_paths($init) {
+        global $path;
+        self::$meta['css'] = $path['css'];
+        self::$meta['style'] = $path['style'];
+        self::$meta['include'] = $path['include'];
+        self::$meta['js'] = $path['js'];
+        $init = show($init, self::$meta);
+        return $init;
+    }
+
+    public static function renderMin() {
         $init = show(self::$content, convertMatch(searchBetween("{s_", self::$content, "}")));
         self::display($init);
     }
-    
+
     public static function renderMinStyle() {
         self::$meta['css'] = '../templates/default/_css/';
         self::$meta['style'] = '../templates/default/';
         self::$meta['js'] = '../templates/default/_css/';
         self::$meta['conten'] = self::$content;
-     //   $init = show(self::$content, convertMatch(searchBetween("{s_", self::$content, "}")));
+     // $init = show(self::$content, convertMatch(searchBetween("{s_", self::$content, "}")));
         $meta = array_merge(self::$meta, array('content' => self::$content));
         $init = show(file_get_contents('../templates/default/index.html'), $meta);
         $init = preg_replace("/\{(/w+)\}/", "", $init);

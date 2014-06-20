@@ -1,3 +1,11 @@
+$(document).ready(function() {
+    load_create_function();
+    load_form_function();
+    init_tinymce();
+    admin_toggler();
+    set_menu_from_cookie();
+});
+
 function toggle_content (id, save) {
     var mainId = id;
     id = '.'+id;
@@ -24,10 +32,6 @@ function admin_toggler() {
     for (var i = 0; i<divs.length; i++) {
         $(divs[i]).toggle();
     }
-}
-
-function createModul(html) {
-
 }
 
 function toggle_admin_slide(id) {
@@ -74,16 +78,17 @@ function load_form_function() {
                 url : formURL,
                 type: "POST",
                 data : postData,
-                success:function(data, textStatus)
+                success:function(data)
                 {
                     renderModule(div,data);
-                    load_form_function();
                     init_tinymce();
                 }
             });
         return false;
     });
+}
 
+function load_create_function() {
     $('#create_mod').submit(function()
     {
         var action = 'create';
@@ -98,20 +103,14 @@ function load_form_function() {
                 success:function(data)
                 {
                     $('#modules').append(data);
-                    init_tinymce();
                     load_form_function();
-                    console.log(tinyMCE);
+                    init_tinymce();
                 }
             });
         return false;
     });
-
 }
 
-function splModName(id) {
-    var ex = id.split('_');
-    return ex;
-}
 
 function delete_module(div_id) {
     if (confirm('Willst Du wirklich löschen?'))
@@ -125,24 +124,16 @@ function delete_module(div_id) {
             success:function(data)
             {
                 init_tinymce();
-                load_form_function();
                 if (data == '1') $('#'+div_id).remove();
             }
         })
-
-    }
-    else
-    {
-
     }
 }
 
-$(document).ready(function() {
-    load_form_function();
-    init_tinymce();
-    admin_toggler();
-    set_menu_from_cookie();
-});
+function splModName(id) {
+    var ex = id.split('_');
+    return ex;
+}
 
 function set_menu_from_cookie() {
     var divs = get_toggle_cookie('open_');
