@@ -1,14 +1,15 @@
-<div id="mod_{module_name}_{id}">
+<div id="mod_{id}">
     <div class="{module_name}" style="display: inline-block; width: 100%; vertical-align: top; border: 1px solid #F2F2F2; margin-bottom: 5px" >
         <table width="100%" style="background-color: #A9E2F3">
-            <tr onclick="toggle_admin_slide('{module_name}',{id})">
-                <td width="50%" style="color: #fff;">{module_name} - {id}</td><td style="text-align: right;"><img width="16" src="{style}images/icons/icon_edit.png"></td>
+            <tr>
+                <td width="20%" style="color: #fff;">{module_name} - {id}</td><td style="text-align: right;" onclick="toggle_admin_slide('mod_{id}')"><img width="16" src="{style}images/icons/icon_edit.png"></td>
+                <td width="20"><img width="16" src="{style}images/icons/icon_delete.png" onclick="delete_module('mod_{id}')"></td>
             </tr>
         </table>
-        <div id="slide_admin_{module_name}_{id}">
+        <div class="slide_set">
             {module_render_admin}
         </div>
-        <div id="slide_user_{module_name}_{id}">
+        <div class="slide_prev">
             {module_render}
         </div>
     </div>

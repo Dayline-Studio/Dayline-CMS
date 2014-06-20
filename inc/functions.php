@@ -316,3 +316,19 @@
     function con_to_lang($str) {
         return '{s_'.$str.'}';
     }
+
+    function s_decode($str) {
+        $ret = new ArrayObject();
+        $vars = explode(';', $str);
+        foreach ($vars as $sstr) {
+            $ex = explode('=',$sstr);
+            $ret->$ex[0] = $ex[1];
+        } return $ret;
+    }
+
+    function s_encode($str) {
+        $con = array();
+        foreach ($str as $key => $value) {
+            $con[] = "$key=$value";
+        } return implode(';', $con);
+    }

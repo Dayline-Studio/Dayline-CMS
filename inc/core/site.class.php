@@ -1,8 +1,9 @@
 <?php
 class Site {
 
-    public $id = NULL, $title, $modules, $userid, $keywords, $description, $subfrom, $position, $lastedit, $editby, $date;
+    public $id = NULL, $title, $userid, $keywords, $description, $subfrom, $position, $lastedit, $editby, $date;
     public $show_lastedit, $show_author, $show_print, $show_headline, $show_socialbar;
+    private $modules;
 
     public function __construct($data) {
         foreach($data as $var => $value) {
@@ -10,16 +11,15 @@ class Site {
         }
     }
 
+    public function get_module($id) {
+        return $this->modules[$id];
+    }
+
     public function modules_load() {
-        $modules_loader = explode(';',$this->modules);
-        $modules = NULL;
-        foreach ($modules_loader as $module_load) {
-            $z = explode('-',$module_load);
-            $module_name = $z[0];
-            $module_id = $z[1];
-            $modules[strtolower($module_name).'_'.$module_id] = new $module_name($module_id);
+        $modules = Db::npquery("SELECT id, module FROM modules WHERE position LIKE 'site-".$this->id."'", PDO::FETCH_OBJ);
+        foreach ($modules as $module) {
+            $this->modules[$module->id] = new $module->module($module->id);
         }
-        $this->modules = $modules;
     }
 
     public function modules_render() {
@@ -35,11 +35,11 @@ class Site {
         Db::update('sites',$this->id,get_object_vars($this));
     }
 
-    public function get_site_id(){
+    public function get_site_id() {
         return $this->id.'-'.str_replace(array(' ', '/', '.', '+'),'-', $this->title);
     }
 
-    public function delete(){
+    public function delete() {
         return Db::delete('sites', $this->id);
     }
 

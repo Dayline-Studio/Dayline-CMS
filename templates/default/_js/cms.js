@@ -20,43 +20,38 @@ function toggle_content_instand (id) {
 }
 
 function admin_toggler() {
-    var divs = $('div[id^="slide_admin_"]');
+    var divs = $('div[class^="slide_set"]');
     for (var i = 0; i<divs.length; i++) {
         $(divs[i]).toggle();
     }
 }
 
-function toggle_admin_slide(div, id) {
-    $('#slide_admin_'+div+'_'+id ).slideToggle( "slow" );
-    $('#slide_user_'+div+'_'+id ).slideToggle( "slow" );
+function createModul(html) {
+
 }
 
-function set_modul_loading(div,id) {
-    $('#slide_admin_'+div+'_'+id ).slideUp( "slow" );
-    $('#slide_user_'+div+'_'+id ).slideDown( "slow" );
-    $('#slide_user_'+div+'_'+id).html('Loading ...');
+function toggle_admin_slide(id) {
+    sGet(id,'set').slideToggle('slow');
+    sGet(id,'prev').slideToggle('slow');
 }
 
-function reload_module(div,id,modul) {
-    $('#slide_user_'+div+'_'+id).html(modul);
-    $('#slide_admin_'+div+'_'+id).toggle();
+function sGet(id, type) {
+    return $('#'+id).find('.slide_'+type);
 }
 
-function init_tinymce() {
-    tinymce.init({
-        selector: "div.edit",
-        inline: true,
+function setModulLoading(id) {
+    sGet(id,'set').slideUp( "slow" );
+    sGet(id,'prev').slideDown( "slow" );
+    sGet(id,'prev').html('Loading ...');
+}
 
-        plugins: [
-            "advlist textcolor autolink youtube lists link image charmap print preview anchor",
-            "searchreplace visualblocks code fullscreen",
-            "insertdatetime media table responsivefilemanager contextmenu paste"
-        ],
-        toolbar: "insertfile undo redo | styleselect | youtube | bold italic forecolor backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image",
-        external_filemanager_path:"../content/plugins/filemanager/",
-        filemanager_title:"Responsive Filemanager" ,
-        external_plugins: { "filemanager" : "../filemanager/plugin.min.js"}
-    });
+function renderModule(id,modul) {
+    sGet(id,'prev').html(modul);
+    sGet(id,'set').toggle();
+}
+
+function cMN(id) {
+    return 'mod_'+id;
 }
 
 function load_form_function() {
@@ -64,11 +59,15 @@ function load_form_function() {
     {
         var module_id = $(this).data('id');
         var module_name = $(this).data('module');
-        set_modul_loading(module_name,module_id);
+        var action = 'update';
+        var div = cMN(module_id);
+        setModulLoading(div);
+
         var postData = $(this).serializeArray();
-        postData[1] = {name:"id", value:module_id};
-        postData[2] = {name:"module", value:module_name};
-        postData[0] = {name:"content", value:tinyMCE.get(postData[0]["name"])['bodyElement']['innerHTML']};
+        postData[5] = {name:"action", value:action};
+        postData[6] = {name:"id", value:module_id};
+        postData[7] = {name:"module", value:module_name};
+        postData[8] = {name:"content", value:tinyMCE.get(postData[0]["name"])['bodyElement']['innerHTML']};
         var formURL = $(this).attr("action");
         $.ajax(
             {
@@ -77,12 +76,65 @@ function load_form_function() {
                 data : postData,
                 success:function(data, textStatus)
                 {
-                    reload_module(module_name,module_id,data);
+                    renderModule(div,data);
+                    load_form_function();
                     init_tinymce();
                 }
             });
         return false;
     });
+
+    $('#create_mod').submit(function()
+    {
+        var action = 'create';
+        var postData = $(this).serializeArray();
+        postData[10] = {name:"action", value:'create'};
+        var formURL = $(this).attr("action");
+        $.ajax(
+            {
+                url : formURL,
+                type: "POST",
+                data : postData,
+                success:function(data)
+                {
+                    $('#modules').append(data);
+                    init_tinymce();
+                    load_form_function();
+                    console.log(tinyMCE);
+                }
+            });
+        return false;
+    });
+
+}
+
+function splModName(id) {
+    var ex = id.split('_');
+    return ex;
+}
+
+function delete_module(div_id) {
+    if (confirm('Willst Du wirklich löschen?'))
+    {
+        var id = splModName(div_id)[2];
+        var name = splModName(div_id)[1];
+        $.ajax({
+            url: 'ajax_handler.php',
+            type: 'POST',
+            data: [{name:'action', value:'delete'},{name:"id", value:id}, {name:'module', value:name}],
+            success:function(data)
+            {
+                init_tinymce();
+                load_form_function();
+                if (data == '1') $('#'+div_id).remove();
+            }
+        })
+
+    }
+    else
+    {
+
+    }
 }
 
 $(document).ready(function() {
@@ -114,11 +166,30 @@ function get_toggle_cookie(tag) {
     for(var i=0; i<ca.length; i++) {
         var c = ca[i].trim();
         if (c.substr(0,tagLngth) == tag){
-           arr[count] = c;
-           count++;
+            arr[count] = c;
+            count++;
         }
     }
     return arr;
+}
+
+//----------------------------------------------------------------------------------------
+
+function init_tinymce() {
+    tinymce.init({
+        selector: "div.edit",
+        inline: true,
+
+        plugins: [
+            "advlist textcolor autolink youtube lists link image charmap print preview anchor",
+            "searchreplace visualblocks code fullscreen",
+            "insertdatetime media table responsivefilemanager contextmenu paste"
+        ],
+        toolbar: "insertfile undo redo | styleselect | youtube | bold italic forecolor backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image",
+        external_filemanager_path:"../content/plugins/filemanager/",
+        filemanager_title:"Responsive Filemanager" ,
+        external_plugins: { "filemanager" : "../filemanager/plugin.min.js"}
+    });
 }
 
 $(function() {

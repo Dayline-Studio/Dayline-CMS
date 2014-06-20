@@ -44,9 +44,11 @@ class Db {
 
         $sql = "UPDATE $table SET ";
         foreach($new as $col => $value) {
-            $up[] = "`$col` = '$value' ";
+            $value = self::esc($value);
+            $up[] = "`$col` = $value";
         }
         $sql .= implode(',',$up)." WHERE id = $id LIMIT 1";
+        Debug::log($sql);
         return self::nrquery($sql);
     }
 
@@ -59,9 +61,17 @@ class Db {
         $sql = "INSERT INTO $table (";
         foreach($new as $col => $value) {
             $tab[] = "`$col`";
-            $val[] = "'$value'";
+            $val[] = self::esc($value);;
         }
         $sql .= implode(',',$tab).") VALUES (".implode(',',$val).")";
         return self::nrquery($sql);
+    }
+
+    public static function get_last_id() {
+        return self::$sql->lastInsertId();
+    }
+
+    public static function esc($val) {
+        return self::$sql->quote($val);
     }
 }
