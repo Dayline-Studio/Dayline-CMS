@@ -8,11 +8,14 @@ class Render {
         }
         $sites = $sm->get_backside_list_from($id);
         $menu = '<ul>';
-        foreach ($sites as $site) {
-            $menu .= '<li><a href="../pages/site?show='.$site->get_site_id().'" />'.$site->title.self::get_menu($site).'</a></li>';
+        if ($sites) {
+            foreach ($sites as $site) {
+                $menu .= '<li><a href="../pages/site?show='.$site->get_site_id().'" />'.$site->title.self::get_menu($site).'</a></li>';
+            }
+            $menu .= '</ul>';
+            return $menu;
         }
-        $menu .= '</ul>';
-        return $menu;
+        return $id;
     }
 
     private static function get_menu($site) {

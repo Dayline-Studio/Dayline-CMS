@@ -22,8 +22,20 @@
         <script src="../content/plugins/tinymce/tinymce.min.js" type="text/javascript"></script>
         <script src="{js}menu.jquery.min.js" type="text/javascript"></script>
         <script src="{js}cms.js" type="text/javascript"></script>
+        <script src="{js}jquery.socialshareprivacy.js" type="text/javascript"></script>
         <script src="{js}slider.jquery.min.js" type="text/javascript"></script>
         <script src="{js}lightbox.js" type="text/javascript"></script>
+        <script type="text/javascript">
+            jQuery(document).ready(function($){
+                if($('#socialshareprivacy').length > 0){
+                    $('#socialshareprivacy').socialSharePrivacy({
+                        "css_path"  : "{css}socialshareprivacy.css",
+                        "lang_path" : "{js}lang/",
+                        "language"  : "de"
+                    });
+                }
+            });
+        </script>
 
         <script type="text/javascript">
             ga('create', '{google_analytics}', '{domain}');

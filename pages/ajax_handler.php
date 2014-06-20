@@ -55,7 +55,6 @@ function update_module($module, $id, $up) {
 }
 
 function create_module($module, $vars) {
-    Debug::log('WARUM!!!');
     $module = new $module($vars['position'], true);
     echo $module->full_render();
 }

@@ -332,3 +332,11 @@
             $con[] = "$key=$value";
         } return implode(';', $con);
     }
+
+    function get_public_properties($object) {
+        $result = get_object_vars($object);
+        if ($result === NULL or $result === FALSE) {
+            throw new ValueException("Given $object parameter is not an object.");
+        }
+        return $result;
+    }

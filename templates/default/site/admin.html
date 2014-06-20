@@ -1,6 +1,13 @@
-<form method="post" action="site.php?show={link}&do=update">
+<form id="create_mod" action="ajax_handler.php">
     <a href="../acp/?acp=acp_site" class="buttonStyle">Seiten Verwalten</a>
     <a onclick="toggle_content('open_1',0);" class="buttonStyle">Erweiterte Einstellungen</a>
+    <input type="hidden" name="position" value="{position}" />
+    <select name="module">
+        {available_modules}
+    </select>
+    <input type="submit" class="buttonStyle" value="Add" />
+</form>
+<form method="post" action="site.php?show={link}&do=update">
     <div class="open_1" style="display:none">
         <table width="100%">
             <tr><td>{s_title}:</td><td><input name="title" type="text" value="{title}"></td><td>{s_show_lastedit}</td><td><input type="checkbox" name="show_lastedit" value="1" {lastedit_select}/></td></tr>
@@ -8,15 +15,6 @@
             <tr><td>{s_description}:</td><td><input name="description" type="text" value="{description}"></td><td>{s_show_print}</td><td><input type="checkbox" name="show_print" value="1" {print_select}/></td></tr>
             <tr><td>{s_addafter}:</td><td><select name="subfrom"><option value="0">Keine Uebergeordnete Seite</option>[array|title_sites|<option value="{value}" {select}>{title}</option>]</select></td></td><td>{s_show_headline}</td><td><input type="checkbox" name="show_headline" value="1" {headline_select}/></td></tr>
         </table>
+        <input type="submit" class="buttonStyle" value="Übernehmen" />
     </div>
-</form>
-<form>
-
-</form>
-<form id="create_mod" action="ajax_handler.php">
-    <input type="hidden" name="position" value="{position}" />
-    <select name="module">
-        {available_modules}
-    </select>
-    <input type="submit" class="buttonStyle" value="Add" />
 </form>

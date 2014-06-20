@@ -537,6 +537,11 @@ input[type=text]:focus,textarea:focus {
     opacity:1.0;
 }
 
+#socialshareprivacy {
+    max-width: 600px;
+    margin: auto;
+}
+
 #content {
     margin-right:300px;
     height:auto;

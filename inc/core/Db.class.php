@@ -16,24 +16,33 @@ class Db {
     public static function query($qry, $params = array(), $fetchmode = PDO::FETCH_ASSOC) {
         $stmt = self::$sql->prepare($qry);
         $stmt->setFetchMode($fetchmode);
+        $ret = false;
         if (!is_array($params)) $params = array();
-        return $stmt->execute($params) ? $stmt->fetchAll() : false;   
+        if ($stmt->execute($params)) {
+            $ret = $stmt->fetchAll();
+        } Debug::log($stmt, 'PDO', $qry);
+        return $ret;
     }
     
     public static function npquery($qry, $fetchmode = PDO::FETCH_ASSOC) {
         $stmt = self::$sql->prepare($qry);
         $stmt->setFetchMode($fetchmode);
+        $ret = false;
         if ($stmt->execute()) {
-            return strpos($qry,'LIMIT 1') ? $stmt->fetch() : $stmt->fetchAll();
-        }
-        return false;
+            $ret = strpos($qry,'LIMIT 1') ? $stmt->fetch() : $stmt->fetchAll();
+        } Debug::log($stmt, 'PDO', $qry);
+        return $ret;
     }
     
     public static function nrquery($qry, $params = array(), $fetchmode = PDO::FETCH_ASSOC) {
         $stmt = self::$sql->prepare($qry);
         $stmt->setFetchMode($fetchmode);
         if (!is_array($params)) $params = array();
-        return $stmt->execute($params) ? true : false;   
+        $ret = false;
+        if ($stmt->execute($params)) {
+            $ret = true;
+        } Debug::log($stmt, 'PDO', $qry);
+        return $ret;
     }
     
     public static function closeConnection() {
@@ -48,7 +57,6 @@ class Db {
             $up[] = "`$col` = $value";
         }
         $sql .= implode(',',$up)." WHERE id = $id LIMIT 1";
-        Debug::log($sql);
         return self::nrquery($sql);
     }
 

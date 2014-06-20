@@ -3,7 +3,7 @@ class Site {
 
     public $id = NULL, $title, $userid, $keywords, $description, $subfrom, $position, $lastedit, $editby, $date;
     public $show_lastedit, $show_author, $show_print, $show_headline, $show_socialbar;
-    private $modules;
+    protected $modules;
 
     public function __construct($data) {
         foreach($data as $var => $value) {
@@ -32,7 +32,7 @@ class Site {
     }
 
     public function update() {
-        Db::update('sites',$this->id,get_object_vars($this));
+        Db::update('sites',$this->id,get_public_properties($this));
     }
 
     public function get_site_id() {

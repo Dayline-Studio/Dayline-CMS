@@ -29,7 +29,6 @@ if (permTo('site_edit')){
     foreach ($arr as $value) {
         $options .= '<option value="'.$value->class.'">'."$value->title</option>";
     }
-    echo $options;
     $p['available_modules'] = $options;
 } else {
     $p['admin'] = '';
@@ -56,6 +55,24 @@ $meta['author'] = $user->name;
 $meta['keywords'] =	$site->keywords;
 $meta['description'] = $site->description;
 
+switch ($do)
+{
+    case  'update':
+        if (permTo('site_edit')){
+            $sm = new SiteManager($show);
+            $site = $sm->get_first_site();
+            $site->editby = $_SESSION['name'];
+            $site->lastedit = time();
+            $site->clear_checkboxes();
+            $site->set($_POST);
+            $site->update();
+            goBack();
+        } else {
+            $disp = msg(_change_failed);
+        }
+        break;
+}
+
 Disp::$content = $disp;
 Disp::addMeta($meta);
 Disp::render();
@@ -73,10 +90,4 @@ function get_available_modules_list() {
     }
     closedir($handle);
     return $list;
-}
-
-function get_options($keys,$values) {
-    $options = '';
-
-    return $options;
 }
