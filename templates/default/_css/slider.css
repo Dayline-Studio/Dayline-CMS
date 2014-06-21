@@ -6,8 +6,7 @@
  a.slidesjs-previous,
  a.slidesjs-play,
  a.slidesjs-stop {
-   background-image: url(../images/slider/btns-next-prev.png);
-   background-repeat: no-repeat;
+   background: url(../images/slider/btns-next-prev.png) no-repeat;
    display:block;
    width:12px;
    height:0px;
