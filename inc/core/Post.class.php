@@ -5,7 +5,7 @@ class Post {
     public $id,
            $comments,
            $comment_count,
-           $date;
+           $date, $content, $title, $grp, $public_show, $description, $main_image, $userid, $keywords;
 
 
     public function __construct($data) {
@@ -21,9 +21,8 @@ class Post {
         
     }
     
-    function deletePost() {
-        DB::nrquery('DELETE FROM news WHERE id = '.$this->id);
-        unset($this);
+    function delete() {
+        return DB::nrquery('DELETE FROM news WHERE id = '.$this->id);
     }
     
     public function loadComments() {

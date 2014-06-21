@@ -1,5 +1,5 @@
 <form action="?acp=acp_menu&AMP;do=create_menu" method="post">
-    <table width="100%">
+    <table style="width: 100%" class="table">
         <tr>
             <td>{s_name}</td>
             <td>{s_submenu}</td>
@@ -9,11 +9,10 @@
         </tr>
         {add}
     </table>
-    <input class="buttonStyle" type="submit" value="erstellen" />
+    <input class="btn btn-default" type="submit" value="erstellen" />
 </form>
-<hr />
 <form action="?acp=acp_menu&AMP;do=update_menu" method="post">
-    <table width="100%" class="tableStyle">
+    <table width="100%" class="table table-hover">
         <colgroup>
             <col />
             <col />
@@ -22,6 +21,6 @@
             <col width="20" />
         {list}
     </table>
-    <input class="buttonStyle" type="submit" value="Update" />
+    <input class="btn btn-default" type="submit" value="Update" />
 </form>
 

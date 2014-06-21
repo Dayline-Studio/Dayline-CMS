@@ -29,8 +29,9 @@ class News {
         }
     }
     
-    public static function createPost() {
-        
+    public static function createPost($arr) {
+        $arr['date'] = time();
+        return Db::insert('news', $arr);
     }
     
     public static function get_news_from_group($id) {

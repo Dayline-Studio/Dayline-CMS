@@ -5,6 +5,10 @@ class TemplateEngine {
     private $replace_content = array();
     private $single_replace = array();
 
+    public function __construct($content = '') {
+        $this->setHtml($content);
+    }
+
     public function render() {
         $this->html = $this->renderContent($this->html);
         return $this->html;

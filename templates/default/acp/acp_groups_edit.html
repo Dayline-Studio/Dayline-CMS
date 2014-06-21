@@ -1,6 +1,6 @@
 <h1> {group}</h1>
 <form action="index.php?acp=acp_groups&AMP;do=update_group&AMP;id={id}" method="POST">
-	<table>
+	<table class="table table-hover">
 	[array|permission_list|<tr>
 		<td>
 			{permission_title}
@@ -8,7 +8,7 @@
 		<td>
 			<input name={permission} type="checkbox" value="1" {checked}/>
 		</td>
-	</tr>}
+	</tr>]
 	</table>
-	<input type="submit" value="Absenden">
+	<input type="submit" class="btn btn-default" value="Absenden">
 </form>

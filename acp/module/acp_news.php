@@ -6,65 +6,49 @@
 /**--**/ if (!permTo("create_news")) { $error = msg(_no_permissions); }
 //------------------------------------------------
 
-$subsite[0] = "news_create";
-$subsite[1] = "news_manage";
-
 if ($do == "")
 {
     switch($action)
     {
         default:
-            $qry = db("SELECT groupid, id FROM groups ORDER BY groupid DESC");
-            $options = "";
-            while($group = mysqli_fetch_assoc($qry))
-            {
-                    $options .= '<option value="'.$group['id'].'">'.$group['groupid'].'</option>';
-            }
-            $disp = show("acp/acp_news_create",array("options_group" => $options));
+            $te = new TemplateEngine('acp/acp_news_create');
+            $groups = Db::npquery("SELECT groupid, id FROM groups ORDER BY groupid DESC", PDO::FETCH_OBJ);
+            foreach ($groups as $group) {
+                    $op[] = array('value' => $group->id, 'title' => $group->groupid);
+            } $te->add_var('groups',  get_options($op));
+            $te->add_var('editor', get_editor());
+            $disp = $te->render();
             break;
         case 'news_manage':
-            $news = db('SELECT title,id FROM news ORDER BY date DESC');
-            $options = "";
-            while ($post = _assoc($news)) {
-                $options .= show('acp/acp_select_option',
-                        array(
-                            'value' => $post['id'],
-                            'title' => $post['title']
-                        ));
-            }
-            $disp = show("acp/acp_news_manage", array('options' => $options));
-            break;
+            News::init();
+            $te = new TemplateEngine();
+            foreach (News::$post as $post) {
+                $news[] = array(
+                    'id' => $post->id,
+                    'title' => $post->title,
+                    'edit_link' => '?acp=acp_news&action=post_edit&id='.$post->id,
+                    'where' => $_GET['acp']
+                );
+            } $te->addArr('rows', $news);
+            $te->setHtml("acp/acp_list");
+            $disp = $te->render();
     }
 } else {
     switch($do)
     {
-        case 'create_news':
+        case 'create_post':
             if (permTo('create_news')) {
-                if(up("INSERT INTO news ("
-                        . "id, content, title, date, "
-                        . "grp, public_show, description, "
-                        . "main_image, userid, keywords) VALUES ("
-                        . "NULL, "
-                        .sqlString($_POST['mce_0']).", "
-                        .sqlString($_POST['title']).", "
-                        .sqlInt(time()).", "
-                        .sqlInt($_POST['groupid']).", "
-                        .sqlInt($_POST['visible']).", "
-                        .sqlString($_POST['description']).", "
-                        .sqlString($_POST['main_image']).", "
-                        .sqlInt($_SESSION['userid']).", "
-                        .sqlInt($_POST['keywords'])
-                        . ")"
-                   )){
+                if(News::createPost($_POST)) {
                         updateRSS();
                         $disp = msg(_entry_successful);
                      }
                 else { $disp = msg(_change_failed); }
             } else { $disp = msg(_no_permissions); }
             break;
-        case 'delete_news':
+        case 'delete':
             if (permTo('delete_news')) {
-                if(up("DELETE FROM news WHERE id = ".sqlInt($_POST['id']))) {
+                News::init();
+                if(News::$post[$_GET['id']]->delete()) {
                     $disp = msg(_change_sucessful);
                     updateRSS();
                  } else {

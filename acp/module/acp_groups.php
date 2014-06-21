@@ -4,13 +4,12 @@
 //------------------------------------------------
 $id = isset($_GET['id']) ? sqlInt($_GET['id']) : NULL;
 
-$te = new TemplateEngine();
-
 if ($do == "")
 {
     switch ($action)
     {	
         case 'edit_group':
+            $te = new TemplateEngine("acp/acp_groups_edit");
             $row['permission_list'] = "";
             $groups = Db::npquery('SELECT * FROM groups WHERE id = '.$id.' LIMIT 1');
 			$case = array();
@@ -24,11 +23,9 @@ if ($do == "")
                 }
             }
 			$te->addArr('permission_list', $case);
-			$te->setHtml(show("acp/acp_groups_edit"));
-			$te->render();
             $row['id'] = $id;
 			$row['group'] = $groups['groupid'];
-            $disp = show($te->getHtml(),$row);
+            $disp = show($te->render(),$row);
             break;
             default:
         $groups = db('SELECT id,groupid FROM groups');

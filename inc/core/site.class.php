@@ -6,9 +6,7 @@ class Site {
     protected $modules;
 
     public function __construct($data) {
-        foreach($data as $var => $value) {
-            $this->$var = $value;
-        }
+        $this->set($data);
     }
 
     public function get_module($id) {
@@ -45,7 +43,7 @@ class Site {
 
     public function set($arr) {
         foreach ($arr as $tag => $value) {
-            if (isset($this->$tag)) {
+            if (property_exists($this,$tag)) {
                 $this->$tag = $value;
             }
         }

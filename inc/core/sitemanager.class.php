@@ -39,7 +39,6 @@ class SiteManager {
     public function create_site($data) {
         $up = array(
             'title' => $data['title'],
-            'content' => $data['content'],
             'keywords' => $data['keywords'],
             'userid' => $_SESSION['userid'],
             'description' => $data['description'],

@@ -35,8 +35,14 @@ class Config {
             'functions' => '../include/functions.php',
             'gallery' => '../content/upload/gallery/',
             'language' => '../content/language/',
-            'template' => '../templates/'.self::$settings->style.'/'
+            'template' => '../templates/'.self::$settings->style.'/',
+            'fw_js' => '../inc/framework/js/',
+            'fw_css' => '../inc/framework/css/'
         );
+
+        self::$path['css'] = self::$path['template'].'_css/';
+        self::$path['js'] = self::$path['template'].'_js/';
+        self::$path['style'] = self::$path['template'];
 
         self::$template = array(
             'index' => self::$path['template'].'index.html'

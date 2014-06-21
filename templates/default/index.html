@@ -14,23 +14,33 @@
         <link href="{css}style.css" rel="stylesheet" type="text/css" />
         <link href="{css}menu.css" rel="stylesheet" type="text/css" />
         <link href="{css}slider.min.css" rel="stylesheet" type="text/css" />
-        <link href="{css}lightbox.css" rel="stylesheet" type="text/css"/>
+        <link href="{fw_css}lightbox.css" rel="stylesheet" type="text/css"/>
+        <link href="{fw_css}bootstrap.min.css" rel="stylesheet" type="text/css"/>
+        <link href="{css}bootstrap-theme.min.css" rel="stylesheet" type="text/css"/>
+
 
         <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js" type="text/javascript"></script>
         <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js" type="text/javascript"></script>
-        <script src="{js}captcha.jquery.min.js" type="text/javascript"></script>
+
         <script src="../content/plugins/tinymce/tinymce.min.js" type="text/javascript"></script>
-        <script src="{js}menu.jquery.min.js" type="text/javascript"></script>
-        <script src="{js}cms.js" type="text/javascript"></script>
-        <script src="{js}jquery.socialshareprivacy.js" type="text/javascript"></script>
-        <script src="{js}slider.jquery.min.js" type="text/javascript"></script>
-        <script src="{js}lightbox.js" type="text/javascript"></script>
+
+        <script src="{fw_js}cms.js" type="text/javascript"></script>
+        <script src="{fw_js}bootstrap.min.js" type="text/javascript"></script>
+
+        <script src="{fw_js}jquery.socialshareprivacy.js" type="text/javascript"></script>
+        <script src="{fw_js}jquery.captcha.js" type="text/javascript"></script>
+        <script src="{fw_js}jquery.bootstrap-growl.js" type="text/javascript"></script>
+        <script src="{fw_js}jquery.lightbox.js" type="text/javascript"></script>
+
+        <script src="{js}jquery.menu.min.js" type="text/javascript"></script>
+        <script src="{js}jquery.slider.min.js" type="text/javascript"></script>
+
         <script type="text/javascript">
             jQuery(document).ready(function($){
                 if($('#socialshareprivacy').length > 0){
                     $('#socialshareprivacy').socialSharePrivacy({
-                        "css_path"  : "{css}socialshareprivacy.css",
-                        "lang_path" : "{js}lang/",
+                        "css_path"  : "{fw_css}socialshareprivacy.css",
+                        "lang_path" : "{fw_js}lang/",
                         "language"  : "de"
                     });
                 }

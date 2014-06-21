@@ -1,21 +1,21 @@
-        <tr>
-            <td>
-                <input type="text" name="{id}[up_title]" value="{title}">
-            </td>
-            <td>
-                <select name="{id}[up_subfrom]">
-                    {options}
-                </select>
-            </td>
-            <td>
-                <input type="text" name="{id}[up_link]" value="{link}"/>
-            </td>
-            <td>
-                <input type="checkbox" name="{id}[up_newtab]" {checked} value="1" />
-            </td>
-            <td>
-                <a href="?acp=acp_menu&AMP;do=delete_menu&AMP;id={id}">
-                    <img src="{style}images/icons/icon_delete.png" alt="{s_delete}" width="15"/>
-                </a>
-            </td>
-        </tr>
+<tr>
+    <td>
+        <input type="text" name="{id}[up_title]" value="{title}" class="form-control">
+    </td>
+    <td>
+        <select name="{id}[up_subfrom]" class="form-control">
+            {options}
+        </select>
+    </td>
+    <td>
+        <input type="text" name="{id}[up_link]" value="{link}" class="form-control"/>
+    </td>
+    <td>
+        <input type="checkbox" name="{id}[up_newtab]" {checked} value="1" />
+    </td>
+    <td>
+        <a href="?acp=acp_menu&AMP;do=delete_menu&AMP;id={id}">
+            <img src="{style}images/icons/icon_delete.png" alt="{s_delete}" width="15"/>
+        </a>
+    </td>
+</tr>

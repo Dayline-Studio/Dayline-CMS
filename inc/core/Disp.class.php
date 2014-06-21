@@ -13,7 +13,6 @@ class Disp {
     
     public static function render()
     {
-        global $path; 
         $disp = file_get_contents(Config::$template['index']);
         
         $init = show(self::loadingPanels($disp),array("content" => self::$content));        
@@ -24,10 +23,7 @@ class Disp {
         self::$meta['domain'] = $_SERVER['HTTP_HOST'];
         self::$meta['title'] .= ' | '.Config::$settings->website_title;
 
-        self::$meta['css'] = $path['css'];
-        self::$meta['style'] = $path['style'];
-        self::$meta['include'] = $path['include'];
-        self::$meta['js'] = $path['js'];
+        self::$meta = array_merge(Config::$path, self::$meta);
         
         if (!isset(self::$meta['google_plus'])) {
             self::$meta['google_plus'] = "";
@@ -40,11 +36,9 @@ class Disp {
     }
     
     public static function replace_paths($init) {
-        global $path;
-        self::$meta['css'] = $path['css'];
-        self::$meta['style'] = $path['style'];
-        self::$meta['include'] = $path['include'];
-        self::$meta['js'] = $path['js'];
+
+        self::$meta = array_merge(Config::$path, self::$meta);
+
         $init = show($init, self::$meta);
         return $init;
     }
@@ -55,9 +49,8 @@ class Disp {
     }
 
     public static function renderMinStyle() {
-        self::$meta['css'] = '../templates/default/_css/';
-        self::$meta['style'] = '../templates/default/';
-        self::$meta['js'] = '../templates/default/_css/';
+        self::$meta = array_merge(Config::$path, self::$meta);
+
         self::$meta['conten'] = self::$content;
      // $init = show(self::$content, convertMatch(searchBetween("{s_", self::$content, "}")));
         $meta = array_merge(self::$meta, array('content' => self::$content));

@@ -8,7 +8,7 @@
         if(file_exists(Config::$path['template']."/".$file_content.".html"))
         {
             $file_content = file_get_contents(Config::$path['template']."/".$file_content.".html");
-        } else if (file_exists("../templates/default/".$file_content.".html")){
+        } else if (file_exists("../templates/default/".$file_content.".html")) {
             $file_content = file_get_contents("../templates/default/".$file_content.".html");
         }
         foreach($tags as $name => $value)
@@ -31,7 +31,7 @@
         srand((double)microtime()*1000000);
         $i = 0;
         $tmp = "";
-        while ($i < $length) 
+        while ($i < $length)
         {
             $num = rand() % strlen($chars);
             $tmp = substr($chars, $num, 1);
@@ -39,7 +39,7 @@
         }
         return $tmp;
     }
-    
+
     function customHasher($pw, $rounds)
     {
         global $config;
@@ -243,28 +243,6 @@
         return explode(",", $tags);
     }
     
-    function sendMessage($sender, $receiver, $content, $title, $email = "") {
-        sendmail($content, $title, getUserInformations($receiver, 'email')->email);
-        return up('INSERT INTO messages ('
-            . 'sender_id,'
-            . 'receiver_id,'
-            . 'opened,'
-            . 'inbox,'
-            . 'outbox,'
-            . 'email,'
-            . 'date,'
-            . 'content,'
-            . 'title'
-            . ') VALUES ( '
-            . sqlInt($sender).','
-            . sqlInt($receiver).','
-            . '0,1,1,'
-            . sqlString($email).','
-            . time().','
-            . sqlString($content).','
-            . sqlString($title).')');
-    }
-    
     function sendmail($content, $subject, $receiver) {
         $mail = new PHPMailer();
         $mail->isSendmail();
@@ -336,7 +314,18 @@
     function get_public_properties($object) {
         $result = get_object_vars($object);
         if ($result === NULL or $result === FALSE) {
-            throw new ValueException("Given $object parameter is not an object.");
+            throw new UnexpectedValueException("Given $object parameter is not an object.");
         }
         return $result;
+    }
+
+    function get_options($arr) {
+        $ret = "";
+        foreach ($arr as $array) {
+                $ret .= '<option value="'.$array['value'].'">'.$array['title'].'</option>';
+        } return $ret;
+    }
+
+    function get_editor($content = '') {
+        return show('allround/input_editor', array('content' => $content));
     }
