@@ -15,7 +15,7 @@ class News {
                     . 'keywords,'
                     . 'date,'
                     . 'description,'
-                    . 'gplus,'
+                    . 'gplus, public_show, '
                     . 'news.id as id'
                     . ',content '
                     . 'FROM news '

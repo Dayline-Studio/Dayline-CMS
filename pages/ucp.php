@@ -73,6 +73,7 @@ if ($do == "")
             while ($data = _assoc($qry)) {
                 $case['options'] .= show("allround/select_option", array('option' => $data['name'], 'value' => $data['id']));
             }
+            $case['content'] = '';
             $disp = show('ucp/msg_new', $case);
             break;
         case 'msg_viewer':
@@ -143,6 +144,7 @@ switch ($do)
         break;
     case 'msg_send':
         if (permTo('msg_send')) {
+
             if (sendMessage($_SESSION['userid'],$_POST['receiver'], $_POST['title'], $_POST['content'])) {
                 $disp = msg(_msg_sent_successful);
             } else {

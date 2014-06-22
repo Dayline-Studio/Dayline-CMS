@@ -7,7 +7,6 @@
 /**--**/  $meta['page_id'] = 3;
 //------------------------------------------------
 
-$modul = new EditableText(5);
 
 Disp::$content = $disp;
 Disp::addMeta($meta);

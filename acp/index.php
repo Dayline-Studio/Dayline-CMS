@@ -27,13 +27,13 @@ if (isset($_GET['acp'])) {
         if ($item != ".." && $item != ".") 
         {
             $filename = substr($item,0,-4);
-            $item_stack[] = '<a href="?acp='.$filename.'">{s_'.$filename.'}</a>';
+            $active = $filename == $acp ? ' active' : '';
+            $item_stack .= '<a class="btn btn-default'.$active.'" href="?acp='.$filename.'">{s_'.$filename.'}</a>';
             if ($filename == $acp) {
                 $file_exist = true;
             }    
         }
     }
-    $item_stack = implode(' | ', $item_stack);
     closedir($items);
 
 if ($file_exist)

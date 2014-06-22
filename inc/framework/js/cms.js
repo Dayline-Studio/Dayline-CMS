@@ -80,6 +80,9 @@ function load_form_function() {
                 data : postData,
                 success:function(data)
                 {
+                    $.bootstrapGrowl("Change Successful", {
+                        type: 'success'
+                    });
                     renderModule(div,data);
                     init_tinymce();
                 }
@@ -105,6 +108,9 @@ function load_create_function() {
                     $('#modules').append(data);
                     load_form_function();
                     init_tinymce();
+                    $.bootstrapGrowl("Modul added", {
+                        type: 'info'
+                    });
                 }
             });
         return false;
@@ -125,6 +131,9 @@ function delete_module(div_id) {
             {
                 init_tinymce();
                 if (data == '1') $('#'+div_id).remove();
+                $.bootstrapGrowl("Modul deleted", {
+                    type: 'danger'
+                });
             }
         })
     }

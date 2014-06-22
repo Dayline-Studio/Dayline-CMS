@@ -329,3 +329,25 @@
     function get_editor($content = '') {
         return show('allround/input_editor', array('content' => $content));
     }
+
+    function sendMessage($sender, $receiver, $content, $title, $email = "") {
+        sendmail($content, $title, getUserInformations($receiver, 'email')->email);
+        return up('INSERT INTO messages ('
+            . 'sender_id,'
+            . 'receiver_id,'
+            . 'opened,'
+            . 'inbox,'
+            . 'outbox,'
+            . 'email,'
+            . 'date,'
+            . 'content,'
+            . 'title'
+            . ') VALUES ( '
+            . sqlInt($sender).','
+            . sqlInt($receiver).','
+            . '0,1,1,'
+            . sqlString($email).','
+            . time().','
+            . sqlString($content).','
+            . sqlString($title).')');
+    }

@@ -1,15 +1,46 @@
 <form action="ucp.php?do=update_profile" method="post">
-	<table>
-		<tr><td>E-Mail:</td><td><input name="email" type="email" value="{email}"></td></tr>
-		<tr><td>Password:</td><td><input name="passwd" type="password" value=""></td></tr>
-		<tr><td>Confirm Password:</td><td><input name="cpasswd" type="password" value=""></td></tr>
-		<tr><td></td><td><br/></td></tr>
-		<tr><td>Vorname:</td><td><input name="firstname" type="text" value="{firstname}"></td></tr>
-		<tr><td>Nachname:</td><td><input name="lastname" type="text" value="{lastname}"></td></tr>
-		<tr><td>Street:</td><td><input name="street" type="text" value="{street}"></td></tr>
-		<tr><td>Country:</td><td><input name="country" type="text" value="{country}"></td></tr>		
-		<tr><td></td><td><br/></td></tr>
-		<tr><td>Current Password:</td><td><input name="pass" type="password" value=""></td></tr>	
-		<tr><td></td><td><input type="submit" value="Annehmen" /></td>
-	</table>
+    <table style="max-width: 400px; margin:auto" class="table">
+        <tr>
+            <td>
+                <label for="email">E-Mail Adress</label>
+                <input id="email" name="email" type="email" value="{email}" class="form-control">
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label for="passwd">Password</label>
+                <input name="passwd" id="passwd" type="password" class="form-control" placeholder="new password">
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <input name="cpasswd" type="password" class="form-control" placeholder="Confirm new password">
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label for="firstname">Firstname</label>
+                <input name="firstname" id="firstname" class="form-control" type="text" value="{firstname}">
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label for="lastname">Lastname</label>
+                <input name="lastname" id="lastname" class="form-control" type="text" value="{lastname}">
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label for="street">Adress</label>
+                <input name="street" id="street" type="text" value="{street}" placeholder="Street" class="form-control">
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <input name="country" type="text" value="{country}" placeholder="Country" class="form-control">
+            </td>
+        </tr>
+        <tr><td><input name="pass" type="password" placeholder="Current Password" class="form-control"></td></tr>
+        <tr><td><input type="submit" value="Annehmen" class="btn btn-default"/></td>
+    </table>
 </form>
