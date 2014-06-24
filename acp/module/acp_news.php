@@ -40,17 +40,18 @@ if ($do == "")
             if (permTo('create_news')) {
                 if(News::createPost($_POST)) {
                         updateRSS();
-                        $disp = msg(_entry_successful);
+                        goToWithMsg('?acp=acp_news&action=news_manage', 'Post added', 'success');
                      }
                 else { $disp = msg(_change_failed); }
             } else { $disp = msg(_no_permissions); }
             break;
         case 'delete':
+
             if (permTo('delete_news')) {
                 News::init();
                 if(News::$post[$_GET['id']]->delete()) {
-                    $disp = msg(_change_sucessful);
                     updateRSS();
+                    goToWithMsg('back', 'Post deleted', 'warning');
                  } else {
                      $disp = msg(_change_failed);
                  }

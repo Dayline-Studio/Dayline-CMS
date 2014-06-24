@@ -1,10 +1,12 @@
 <?php
 
-class UserManager {
+class UserManager
+{
 
     public $users;
 
-    public function __construct($ids) {
+    public function __construct($ids)
+    {
 
     }
 

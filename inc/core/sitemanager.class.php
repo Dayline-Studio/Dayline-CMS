@@ -1,9 +1,12 @@
 <?php
-class SiteManager {
+
+class SiteManager
+{
 
     public $sites;
 
-    public function __construct() {
+    public function __construct()
+    {
         $ids = func_get_args();
         if ($ids[0] !== 0) {
             if ($ids[0] === '*') {
@@ -13,30 +16,34 @@ class SiteManager {
                     $this->filter_id($id);
                     $arr[] = "id = '$id'";
                 }
-                $sql = "select * from sites where (". implode(' OR ', $arr).') ORDER BY position DESC';
+                $sql = "select * from sites where (" . implode(' OR ', $arr) . ') ORDER BY position DESC';
             }
-            $result = Db::npquery($sql,PDO::FETCH_ASSOC);
+            $result = Db::npquery($sql, PDO::FETCH_ASSOC);
             foreach ($result as $site) {
                 $this->sites[$site['id']] = new Site($site);
             }
         }
     }
 
-    public function filter_id($str) {
-        $tags = explode('-',$str);
+    public function filter_id($str)
+    {
+        $tags = explode('-', $str);
         return $tags[0];
     }
 
-    public function wipe() {
+    public function wipe()
+    {
         unset($sites);
         $this->sites = NULL;
     }
 
-    public function get_first_site() {
+    public function get_first_site()
+    {
         return reset($this->sites);
     }
 
-    public function create_site($data) {
+    public function create_site($data)
+    {
         $up = array(
             'title' => $data['title'],
             'keywords' => $data['keywords'],
@@ -50,10 +57,11 @@ class SiteManager {
             'show_print' => isset($data['show_print']) ? 1 : 0,
             'show_headline' => isset($data['show_headline']) ? 1 : 0
         );
-       Db::insert('sites', $up);
+        Db::insert('sites', $up);
     }
 
-    public function get_site_by_search($keys, $search, $accuracy = 1) {
+    public function get_site_by_search($keys, $search, $accuracy = 1)
+    {
         if (!is_array($keys)) {
             $keys = array($keys);
         }
@@ -61,12 +69,12 @@ class SiteManager {
             foreach ($this->sites as $site) {
                 switch ($accuracy) {
                     case 0:
-                        if (strpos(strtolower($site->$key),strtolower($search))) {
+                        if (strpos(strtolower($site->$key), strtolower($search))) {
                             return $site;
                         }
                         break;
                     case 1:
-                        if (strtolower($site->$key) == strtolower ($search)) {
+                        if (strtolower($site->$key) == strtolower($search)) {
                             return $site;
                         }
                 }
@@ -75,17 +83,20 @@ class SiteManager {
         return false;
     }
 
-    public function get_backside_list_from($id) {
+    public function get_backside_list_from($id)
+    {
         $id = $this->filter_id($id);
         if (isset($this->sites[$id])) {
             return $this->get_site_list_from($this->sites[$id]);
-        } return FALSE;
+        }
+        return FALSE;
     }
 
-    private function get_site_list_from($s_site) {
+    private function get_site_list_from($s_site)
+    {
         $z = array($s_site);
         foreach ($this->sites as $site) {
-            if($site->subfrom == $s_site->subfrom && $s_site != $site) {
+            if ($site->subfrom == $s_site->subfrom && $s_site != $site) {
                 $z[] = $site;
             }
         }
@@ -97,12 +108,13 @@ class SiteManager {
         return $z;
     }
 
-    public function get_subsites_from($id) {
+    public function get_subsites_from($id)
+    {
         $ret = false;
         foreach ($this->sites as $site) {
             if ($site->subfrom == $id) {
                 if ($subsites = $this->get_subsites_from($site->id))
-                    $site->subsites= $subsites;
+                    $site->subsites = $subsites;
                 $ret[] = $site;
             }
         }

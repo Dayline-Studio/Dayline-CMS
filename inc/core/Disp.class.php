@@ -18,17 +18,23 @@ class Disp {
         $init = show(self::loadingPanels($disp),array("content" => self::$content));        
         $init = show($init, convertMatchDyn(searchBetween("{dyn_", $init, "}")));
         $init = preg_replace("/\s+/", " ", $init);
+
+        //unset($_SESSION['note']);
         self::$meta['copyright'] = Config::$settings->copyright;
         self::$meta['google_analytics'] = Config::$settings->google_analytics;
         self::$meta['domain'] = $_SERVER['HTTP_HOST'];
         self::$meta['title'] .= ' | '.Config::$settings->website_title;
 
         self::$meta = array_merge(Config::$path, self::$meta);
-        
+
         if (!isset(self::$meta['google_plus'])) {
             self::$meta['google_plus'] = "";
         }
 
+        $sn = !empty($_SESSION['simple_note']) ? $_SESSION['simple_note'] : '';
+        $init = show($init, array('simple_note' => $sn));
+        $_SESSION['simple_note'] = NULL;
+        Debug::log('test123');
         $init = show($init,self::$meta);
         $init = show($init, convertMatch(searchBetween("{s_", $init, "}")));
         $init = preg_replace("/\{\w\}/", "", $init);

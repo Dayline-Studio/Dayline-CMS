@@ -1,9 +1,9 @@
 <?php
 // Include CMS System
-/**--**/ include "../inc/base.php";
+include "../inc/base.php";
 //------------------------------------------------
 // Site Informations
-/**--**/  $meta['title'] = "MyServers";
+$meta['title'] = "MyServers";
 //------------------------------------------------
 
 if (isset($_POST['show'])) {
@@ -16,7 +16,7 @@ $sm = new Servermanager();
 switch ($show) {
     default:
         $te->setHtml(show('servermanager/layout_list'));
-        $te->addArr('server',$sm->getServerInformations());
+        $te->addArr('server', $sm->getServerInformations());
         $te->render();
         break;
     case 'server':

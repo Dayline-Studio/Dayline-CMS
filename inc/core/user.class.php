@@ -1,10 +1,12 @@
 <?php
 
-class User {
+class User
+{
 
     public $id, $gplus, $name, $pass, $email, $rounds, $user, $street, $firstname, $lastname, $country, $groups;
 
-    public function __construct($data) {
+    public function __construct($data)
+    {
         if (is_array($data)) {
             $this->set_data($data);
         } else if (is_numeric($data)) {
@@ -14,9 +16,10 @@ class User {
         }
     }
 
-    protected function set_data($data) {
-        foreach($data as $key => $value) {
-            if (property_exists($this,$key)) {
+    protected function set_data($data)
+    {
+        foreach ($data as $key => $value) {
+            if (property_exists($this, $key)) {
                 $this->$key = $value;
             }
         }

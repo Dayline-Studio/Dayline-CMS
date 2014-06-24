@@ -1,10 +1,11 @@
 <?php
 // Include CMS System
-/**--**/ include "../inc/base.php";
+/**--**/
+include "../inc/base.php";
 //------------------------------------------------
 // Site Informations
-/**--**/  $meta['title'] = "Gallery";
-/**--**/  $meta['page_id'] = 25;
+$meta['title'] = "Gallery";
+$meta['page_id'] = 25;
 //------------------------------------------------
 
 if (isset($_GET['id'])) {
@@ -15,7 +16,7 @@ if (isset($_GET['id'])) {
     $te->addArr('images', $album->images);
     $te->add_var('title', $album->title);
     $te->setHtml('gallery/album');
-    $meta['title'] = $album->title.' - Album';
+    $meta['title'] = $album->title . ' - Album';
     $disp = $te->render();
 }
 
@@ -26,25 +27,27 @@ Disp::addMeta($meta);
 Disp::render();
 
 
-function navigation_back_from($id) {
+function navigation_back_from($id)
+{
 
     $sm = new GalleryManager('*');
     print_r($sm->get_subalbum_from(0));
     $sites = $sm->get_subalbum_from($id);
     $menu = '<ul>';
     foreach ($sites as $site) {
-        $menu .= '<li>'.$site->title.get_menu($site).'</li>';
+        $menu .= '<li>' . $site->title . get_menu($site) . '</li>';
     }
     $menu .= '</ul>';
     return $menu;
 }
 
-function get_menu($site) {
+function get_menu($site)
+{
     $menu = '';
     if (isset($site->subsites)) {
         $menu .= '<ul>';
-        foreach($site->subsites as $subsite) {
-            $menu .= '<li>'.$subsite->title.get_menu($subsite).'</li>';
+        foreach ($site->subsites as $subsite) {
+            $menu .= '<li>' . $subsite->title . get_menu($subsite) . '</li>';
         }
         $menu .= '</ul>';
     }

@@ -1,16 +1,19 @@
 <?php
 
-class EditableText extends MainModule{
+class EditableText extends MainModule
+{
 
     public $content = '';
 
-    public function render() {
+    public function render()
+    {
         $file = 'site/modules/editabletext_show';
-        return show($file,array('content' => $this->content));
+        return show($file, array('content' => $this->content));
     }
 
-    public function render_admin() {
+    public function render_admin()
+    {
         $file = 'site/modules/editabletext_admin';
-        return show($file,array('content' => $this->content, 'id' => $this->id));
+        return show($file, array('content' => $this->content, 'id' => $this->id));
     }
 }

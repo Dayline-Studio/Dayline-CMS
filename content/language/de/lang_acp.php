@@ -49,6 +49,8 @@ define ('_DELETE_GROUP','Gruppe l&ouml;schen');
 define ('_CREATE_MENU','Men&uuml;punkt erstellen');
 define ('_DELETE_MENU','Men&uuml;punkt l&ouml;schen');
 define ('_UPDATE_MENU','Men&uuml;punkt bearbeiten');
+define ('_group_list','Gruppen');
+define ('_edit_user','User Bearbeiten');
 define ('_FM_ACCESS','Filemanager');
 define ('_acp_filemanager', 'FileM.');
 define ('_show_lastedit', 'Show last Editor');

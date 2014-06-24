@@ -1,10 +1,12 @@
 <?php
 
-abstract class MainModule {
+abstract class MainModule
+{
 
     public $id;
 
-    public function __construct($id, $create = false) {
+    public function __construct($id, $create = false)
+    {
         if ($create) {
             $i['position'] = $id;
             $i['module'] = get_class($this);
@@ -16,8 +18,9 @@ abstract class MainModule {
         $this->load_setup();
     }
 
-    public function load_setup() {
-        $setup = Db::npquery("SELECT params FROM modules WHERE id = ".$this->id, PDO::FETCH_OBJ);
+    public function load_setup()
+    {
+        $setup = Db::npquery("SELECT params FROM modules WHERE id = " . $this->id, PDO::FETCH_OBJ);
         if ($params = json_decode($setup[0]->params)) {
             foreach ($params as $key => $value) {
                 $this->$key = $value;
@@ -29,7 +32,8 @@ abstract class MainModule {
 
     public abstract function render_admin();
 
-    public function full_render() {
+    public function full_render()
+    {
         if ($_SESSION['userid'] == 1) {
             $file = 'site/module_box_admin';
             $case['module_render_admin'] = $this->render_admin();
@@ -42,7 +46,8 @@ abstract class MainModule {
         return Disp::replace_paths(show($file, $case));
     }
 
-    public function set_vars($data = array()) {
+    public function set_vars($data = array())
+    {
         foreach ($data as $var => $value) {
             if (isset($this->$var)) {
                 $this->$var = $value;
@@ -50,12 +55,14 @@ abstract class MainModule {
         }
     }
 
-    public function update() {
-        Db::update('modules',$this->id, array('params' => json_encode(get_object_vars($this))));
+    public function update()
+    {
+        Db::update('modules', $this->id, array('params' => json_encode(get_object_vars($this))));
     }
 
-    public function delete() {
-        Db::delete('modules',$this->id);
+    public function delete()
+    {
+        Db::delete('modules', $this->id);
         unset($this);
     }
 }
