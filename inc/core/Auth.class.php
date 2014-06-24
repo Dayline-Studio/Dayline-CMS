@@ -1,8 +1,15 @@
 <?php
 
-class Auth {
-    
-    public static function checkStatus() {
+class Auth
+{
+
+    /**
+     * Checking Session status
+     *
+     * @since 0.4
+     */
+    public static function checkStatus()
+    {
         self::check_header();
 
         session_start();
@@ -13,30 +20,43 @@ class Auth {
             $_SESSION['group_main_id'] = '2';
             $_SESSION['group'] = 'gast';
             $_SESSION['userid'] = 0;
-         }
+        }
 
         if (!isset($_SESSION['current_ip'])) {
-           $_SESSION['current_ip'] = $_SERVER['REMOTE_ADDR'];
+            $_SESSION['current_ip'] = $_SERVER['REMOTE_ADDR'];
         }
 
         if (isset($_SESSION['last_site'])) {
-           $_SESSION['back_site'] = $_SESSION['last_site'];
+            $_SESSION['back_site'] = $_SESSION['last_site'];
         }
         if (isset($_SESSION['current_site'])) {
-           $_SESSION['last_site'] = $_SESSION['current_site'];
+            $_SESSION['last_site'] = $_SESSION['current_site'];
         }
         $_SESSION['current_site'] = self::getCurrentUrl();
     }
-    
-    private static function getCurrentUrl() {
-        return ((empty($_SERVER['HTTPS'])) ? 'http' : 'https') . "://". $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+
+    /**
+     * gibt aktuelle URL zurück
+     *
+     * @since 0.4
+     * @return string
+     */
+    private static function getCurrentUrl()
+    {
+        return ((empty($_SERVER['HTTPS'])) ? 'http' : 'https') . "://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
     }
 
-    public static function logout() {
+    /**
+     * User logged out
+     * @since 0.4
+     */
+    public static function logout()
+    {
         session_destroy();
     }
 
-    private static function check_header() {
+    private static function check_header()
+    {
         if (Config::$settings->force_domain) {
             $https = (empty($_SERVER['HTTPS'])) ? 'http' : 'https';
             $host = $_SERVER['HTTP_HOST'];
@@ -44,12 +64,17 @@ class Auth {
                 $https = 'https';
             }
             if ($host != Config::$settings->domain) {
-                header('Location: '. $https . '://' . Config::$settings->domain . str_replace('.php','',$_SERVER['REQUEST_URI']));
+                header('Location: ' . $https . '://' . Config::$settings->domain . str_replace('.php', '', $_SERVER['REQUEST_URI']));
             }
         }
     }
 
-    private static function create_session($user) {
+    /**
+     * @param $user User Object for User Data
+     * @since 0.4
+     */
+    private static function create_session($user)
+    {
         $_SESSION['loggedin'] = true;
         $_SESSION['name'] = $user->name;
         $_SESSION['user'] = $user->user;
@@ -61,21 +86,25 @@ class Auth {
         if (permTo('fm_access')) $_SESSION['fm_access'] = TRUE;
     }
 
-    public static function login($username, $password) {
-        if ($username != "" && $password != "")
-        {
+    /**
+     * @since 0.4
+     * @param string $username username
+     * @param string $password user password
+     * @return bool returns true if the session is created successful
+     */
+    public static function login($username, $password)
+    {
+        if ($username != "" && $password != "") {
             if (!check_email_address($username)) {
                 $sql = "user";
             } else {
                 $sql = "email";
             }
-            if (db("SELECT id FROM users WHERE ".$sql." LIKE ".sqlString(strtolower($_POST['username'])),'rows') == 1)
-            {
+            if (db("SELECT id FROM users WHERE " . $sql . " LIKE " . sqlString(strtolower($_POST['username'])), 'rows') == 1) {
 
-                $user = db('Select * From users Where '.$sql.' like '.sqlString(strtolower($username)),'object');
+                $user = db('Select * From users Where ' . $sql . ' like ' . sqlString(strtolower($username)), 'object');
 
-                if (customHasher($password,$user->rounds) == $user->pass)
-                {
+                if (customHasher($password, $user->rounds) == $user->pass) {
                     self::create_session($user);
                     return true;
                 }

@@ -1,15 +1,17 @@
 <?php
 
-class Message {
+class Message
+{
 
-    public  $content,
-            $subject,
-            $receiver_id,
-            $sender_id,
-            $date,
-            $id;
+    public $content,
+        $subject,
+        $receiver_id,
+        $sender_id,
+        $date,
+        $id;
 
-    public function __construct($data) {
+    public function __construct($data)
+    {
         if (empty($data->sender_email)) {
             $data->sender_email = $data->sender_email_empty;
             $data->sender_name = $data->sender_email_empty;
@@ -19,15 +21,18 @@ class Message {
         }
     }
 
-    public function delete_inbox_sender() {
-        Db::nrquery('UPDATE messages SET outbox = 0 WHERE id ='. $this->id);
+    public function delete_inbox_sender()
+    {
+        Db::nrquery('UPDATE messages SET outbox = 0 WHERE id =' . $this->id);
     }
 
-    public function delete_inbox_receiver() {
-        Db::nrquery('UPDATE messages SET inbox = 0 WHERE id ='. $this->id);
+    public function delete_inbox_receiver()
+    {
+        Db::nrquery('UPDATE messages SET inbox = 0 WHERE id =' . $this->id);
     }
 
-    public function delete() {
+    public function delete()
+    {
         if ($this->sender_id == $_SESSION['userid']) {
             $this->delete_inbox_sender();
         } else {
@@ -35,11 +40,13 @@ class Message {
         }
     }
 
-    public function get_message() {
+    public function get_message()
+    {
         return get_object_vars(this);
     }
 
-    public function set_message_read() {
-        Db::nrquery('UPDATE messages SET opened = 1 WHERE id = '.$this->id);
+    public function set_message_read()
+    {
+        Db::nrquery('UPDATE messages SET opened = 1 WHERE id = ' . $this->id);
     }
 }

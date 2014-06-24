@@ -1,12 +1,21 @@
 <?php
-class Config {
-    
+
+/**
+ * Class Config Läd sämtliche configurationen wie Pfade, SQL-Zugang und Settings aus der Db.
+ */
+class Config
+{
+
     public static $sql = array();
     public static $path = array();
     public static $template = array();
     public static $settings;
-    
-    public static function init() {
+
+    /**
+     * Initialisiert die SQL Daten um direkt eine verbidnung zu den Settings in der Datenbank aufzubauen.
+     */
+    public static function init()
+    {
         global $config;
         self::$sql = array(
             'host' => $config['sql_host'],
@@ -16,13 +25,15 @@ class Config {
             'salt' => $config['salt'],
         );
     }
-    
-    public static function loadSettings() {
-        //Default settings
+
+    /**
+     * Läd Settings aus der Ladenbank, setzt ebenso Pfade für Template, include und upload.
+     */
+    public static function loadSettings()
+    {
         self::$settings['lang'] = 'de';
         self::$settings['style'] = 'default';
 
-        //Loading Settings from Database
         self::$settings = Db::npquery('SELECT * FROM settings LIMIT 1', PDO::FETCH_OBJ);
         self::$path = array(
             'dir' => './',
@@ -35,36 +46,43 @@ class Config {
             'functions' => '../include/functions.php',
             'gallery' => '../content/upload/gallery/',
             'language' => '../content/language/',
-            'template' => '../templates/'.self::$settings->style.'/',
+            'template' => '../templates/' . self::$settings->style . '/',
             'fw_js' => '../inc/framework/js/',
             'fw_css' => '../inc/framework/css/'
         );
 
-        self::$path['css'] = self::$path['template'].'_css/';
-        self::$path['js'] = self::$path['template'].'_js/';
+        self::$path['css'] = self::$path['template'] . '_css/';
+        self::$path['js'] = self::$path['template'] . '_js/';
         self::$path['style'] = self::$path['template'];
 
         self::$template = array(
-            'index' => self::$path['template'].'index.html'
+            'index' => self::$path['template'] . 'index.html'
         );
     }
-    
-    public static function loadLanguage() {
 
-        include(self::$path['language']."global.php");
+    /**
+     * Läd die Sprachdateien der angegebenen Sprache.
+     */
+    public static function loadLanguage()
+    {
 
-        if (isset($_GET['l'])) { $language = $_GET['l']; } 
-        else { $language = "de"; }
-        
-        if ( $language != 'de' || $language != 'en') {
-               $language = self::$settings->language;
+        include(self::$path['language'] . "global.php");
+
+        if (isset($_GET['l'])) {
+            $language = $_GET['l'];
+        } else {
+            $language = "de";
         }
-     
-        $lang_dir = opendir(self::$path['language'].$language);
+
+        if ($language != 'de' || $language != 'en') {
+            $language = self::$settings->language;
+        }
+
+        $lang_dir = opendir(self::$path['language'] . $language);
         while ($lang_file = readdir($lang_dir)) {
-                if ($lang_file != ".." && $lang_file != ".") {
-                        include(self::$path['language'].$language.'/'.$lang_file);
-                }
+            if ($lang_file != ".." && $lang_file != ".") {
+                include(self::$path['language'] . $language . '/' . $lang_file);
+            }
         }
         closedir($lang_dir);
     }
