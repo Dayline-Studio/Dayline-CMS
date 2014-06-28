@@ -1,0 +1,51 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="de" xml:lang="de">
+<head>
+    <title>{title}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"/>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+
+    <link href="https://d4ho.de/inc/framework/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+    <link href="{css}style.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<div id="wrapper">
+    <div id="main" class="main">
+        <div id="right">
+            <div class="box_h"> Informationen</div>
+            <div class="box_r">
+                Version: {version} <br>
+                Release: {released} <br>
+                Build: {build} <br>
+            </div>
+            <div class="list-group">
+                [array|navi_menu|
+                    <a class="list-group-item" href="#" {active}>{text}</a>
+                ]
+            </div>
+        </div>
+        <div id="content">
+            <h1>{title}</h1>
+            {content}
+        </div>
+        <div style="clear:both;"></div>
+    </div>
+    <div id="footbar" class="main">
+        <div class="inlineblock part">
+
+        </div>
+        <div class="inlineblock part">
+        </div>
+        <div class="inlineblock part">
+
+        </div>
+    </div>
+    <div id="foot">
+        <br/>
+
+        <div id="copyright"></div>
+    </div>
+</div>
+</body>
+</html>

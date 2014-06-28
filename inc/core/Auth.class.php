@@ -75,6 +75,7 @@ class Auth
      */
     private static function create_session($user)
     {
+        setcookie('email', $user->email);
         $_SESSION['loggedin'] = true;
         $_SESSION['name'] = $user->name;
         $_SESSION['user'] = $user->user;

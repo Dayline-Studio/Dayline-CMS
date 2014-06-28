@@ -31,10 +31,9 @@ class Config
      */
     public static function loadSettings()
     {
-        self::$settings['lang'] = 'de';
-        self::$settings['style'] = 'default';
+        self::$settings->language = 'de';
+        self::$settings->style = 'default';
 
-        self::$settings = Db::npquery('SELECT * FROM settings LIMIT 1', PDO::FETCH_OBJ);
         self::$path = array(
             'dir' => './',
             'content' => "../content/",
@@ -58,6 +57,10 @@ class Config
         self::$template = array(
             'index' => self::$path['template'] . 'index.html'
         );
+    }
+
+    public static function set_settings($settings) {
+        self::$settings = $settings;
     }
 
     /**

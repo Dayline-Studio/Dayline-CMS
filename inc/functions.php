@@ -9,6 +9,8 @@ function show($file_content = "", $tags = array(null => null))
         $file_content = file_get_contents(Config::$path['template'] . "/" . $file_content . ".html");
     } else if (file_exists("../templates/default/" . $file_content . ".html")) {
         $file_content = file_get_contents("../templates/default/" . $file_content . ".html");
+    } else if (file_exists($file_content)) {
+        $file_content = file_get_contents($file_content);
     }
     foreach ($tags as $name => $value) {
         if (!is_array($value) && !is_object($value)) {

@@ -31,6 +31,12 @@ function classLoader($class)
 
 Config::init();
 Db::init(Config::$sql);
+if ($set = Db::npquery('SELECT * FROM settings LIMIT 1', PDO::FETCH_OBJ)) {
+    Config::set_settings($set);
+} else {
+    //Default settings
+
+}
 Config::loadSettings();
 Config::loadLanguage();
 Auth::checkStatus();

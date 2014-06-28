@@ -6,10 +6,19 @@ class TemplateEngine
     private $html;
     private $replace_content = array();
     private $single_replace = array();
+    private $template_dir;
 
     public function __construct($content = '')
     {
         $this->setHtml($content);
+    }
+
+    /**
+     * @param String $dir Pfad mit endslash
+     */
+    public function set_dir($dir)
+    {
+        $this->template_dir = $dir;
     }
 
     public function render()
@@ -34,7 +43,7 @@ class TemplateEngine
                                 if ($out === NULL) {
                                     $out = $foreach[3];
                                 }
-                                if (is_string($value)) {
+                                if (is_string($value) | is_int($value) | is_double($value)) {
                                     $out = str_replace('{' . $name . '}', $value, $out);
                                 }
                             }
@@ -63,7 +72,15 @@ class TemplateEngine
 
     public function setHtml($html)
     {
-        $this->html = show($html);
+        if (!empty($this->template_dir)) {
+            if ($htm = file_get_contents($this->template_dir . $html)) {
+                $this->html = show($htm);
+            } else {
+                $this->html = show($html);
+            }
+        } else {
+            $this->html = show($html);
+        }
     }
 
     public function getHtml()

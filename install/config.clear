@@ -1,0 +1,8 @@
+<?php 
+    $config = Array();
+    $config['sql_host'] ='[sql_host]';
+    $config['sql_db'] = '[sql_db]';
+    $config['sql_user']= '[sql_user]';
+    $config['sql_pass'] = '[sql_pass]';
+    $config['dir'] = './';
+    $config['salt'] = '[salt]';

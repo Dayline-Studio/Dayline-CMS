@@ -62,10 +62,10 @@ switch ($do) {
                         //Passwort generieren
                         $rounds = rand(5000, 10000);
                         $pass = customHasher($_POST['password'], $rounds);
-
+						$group_id = $_SESSION['admin'] ? 1:3;
                         //sql insert
                         if (up("INSERT INTO users (id, name, pass, email, rounds, user, street, firstname, lastname, country, main_group) "
-                            . "VALUES (NULL, " . sqlString($nick) . ", " . sqlString($pass) . ", " . sqlString($email) . ", " . sqlInt($rounds) . ", " . strtolower(sqlString($nick)) . ", '', " . sqlString($firstname) . ", " . sqlString($lastname) . ", '', '0')")
+                            . "VALUES (NULL, " . sqlString($nick) . ", " . sqlString($pass) . ", " . sqlString($email) . ", " . sqlInt($rounds) . ", " . strtolower(sqlString($nick)) . ", '', " . sqlString($firstname) . ", " . sqlString($lastname) . ", '', ".$group_id.")")
                         ) {
                             $disp = msg(_regist_sucess);
                         } else {
