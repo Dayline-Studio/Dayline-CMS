@@ -13,9 +13,12 @@ class Db
 
     private static $sql;
 
-    public static function init($sql = array())
+    public static function init($sql)
     {
-        self::$sql = self::connect($sql['host'], $sql['db'], $sql['user'], $sql['pw']);
+		if(!empty($sql)) {
+		    self::connect($sql['host'], $sql['db'], $sql['user'], $sql['pw']);
+			Debug::log('test123');
+		}
     }
 
     /**
@@ -30,7 +33,12 @@ class Db
      */
     public static function connect($host, $db, $user, $pw)
     {
+		$db = "mysql:host=$host;dbname=$db;charset=utf8 - User:$user - Password: - $pw";
         $handler = new PDO ("mysql:host=$host;dbname=$db;charset=utf8", $user, $pw);
+		if (!$handler) {
+			Debug::log("SQL Error: $db" );
+		}
+		self::$sql = $handler;
         return $handler;
     }
 
@@ -45,15 +53,15 @@ class Db
      */
     public static function query($qry, $params = array(), $fetchmode = PDO::FETCH_ASSOC)
     {
-        $stmt = self::$sql->prepare($qry);
-        $stmt->setFetchMode($fetchmode);
-        $ret = false;
-        if (!is_array($params)) $params = array();
-        if ($stmt->execute($params)) {
-            $ret = $stmt->fetchAll();
-        }
-        Debug::log($stmt, 'PDO', $qry);
-        return $ret;
+		$stmt = self::$sql->prepare($qry);
+		$stmt->setFetchMode($fetchmode);
+		$ret = false;
+		if (!is_array($params)) $params = array();
+		if ($stmt->execute($params)) {
+            $ret = strpos($qry, 'LIMIT 1') ? $stmt->fetch() : $stmt->fetchAll();
+		}
+		Debug::log($stmt, 'PDO', $qry);
+		return $ret;
     }
 
     /**
@@ -66,14 +74,18 @@ class Db
      */
     public static function npquery($qry, $fetchmode = PDO::FETCH_ASSOC)
     {
-        $stmt = self::$sql->prepare($qry);
-        $stmt->setFetchMode($fetchmode);
-        $ret = false;
-        if ($stmt->execute()) {
-            $ret = strpos($qry, 'LIMIT 1') ? $stmt->fetch() : $stmt->fetchAll();
-        }
-        Debug::log($stmt, 'PDO', $qry);
-        return $ret;
+		if (self::$sql) {
+			$stmt = self::$sql->prepare($qry);
+			$stmt->setFetchMode($fetchmode);
+			$ret = false;
+			if ($stmt->execute()) {
+				$ret = strpos($qry, 'LIMIT 1') ? $stmt->fetch() : $stmt->fetchAll();
+			}
+			Debug::log($stmt, 'PDO', $qry);
+			return $ret;
+		} else {
+			return false; 
+		}
     }
 
     /**
@@ -87,15 +99,19 @@ class Db
      */
     public static function nrquery($qry, $params = array(), $fetchmode = PDO::FETCH_ASSOC)
     {
-        $stmt = self::$sql->prepare($qry);
-        $stmt->setFetchMode($fetchmode);
-        if (!is_array($params)) $params = array();
-        $ret = false;
-        if ($stmt->execute($params)) {
-            $ret = true;
-        }
-        Debug::log($stmt, 'PDO', $qry);
-        return $ret;
+		if (self::$sql) {
+			$stmt = self::$sql->prepare($qry);
+			$stmt->setFetchMode($fetchmode);
+			if (!is_array($params)) $params = array();
+			$ret = false;
+			if ($stmt->execute($params)) {
+				$ret = true;
+			}
+			Debug::log($stmt, 'PDO', $qry);
+			return $ret;
+		} else {
+			return false; 
+		}
     }
 
     /**
@@ -119,14 +135,17 @@ class Db
      */
     public static function update($table, $id, $new = array())
     {
-
-        $sql = "UPDATE $table SET ";
-        foreach ($new as $col => $value) {
-            $value = self::esc($value);
-            $up[] = "`$col` = $value";
-        }
-        $sql .= implode(',', $up) . " WHERE id = $id LIMIT 1";
-        return self::nrquery($sql);
+		if (self::$sql) {
+			$sql = "UPDATE $table SET ";
+			foreach ($new as $col => $value) {
+				$value = self::esc($value);
+				$up[] = "`$col` = $value";
+			}
+			$sql .= implode(',', $up) . " WHERE id = $id LIMIT 1";
+			return self::nrquery($sql);
+		} else {
+			return false; 
+		}
     }
 
     /**
@@ -160,6 +179,12 @@ class Db
         }
         $sql .= implode(',', $tab) . ") VALUES (" . implode(',', $val) . ")";
         return self::nrquery($sql);
+    }
+
+    public static function drop($table)
+    {
+        $sql = "DROP TABLE $table";
+        self::npquery($sql);
     }
 
     /**

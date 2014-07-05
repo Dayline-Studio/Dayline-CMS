@@ -19,14 +19,14 @@ switch ($do) {
             $_POST['subject'] == "" ||
             $_POST['message'] == ""
         ) {
-            $disp = msg(_fields_missing);
-        } else if (!check_email_address($_POST['mail'])) {
+            goToWithMsg('back',_fields_missing,'danger');
+        } else if (!check_email_address($_POST['email'])) {
             $disp = msg(_mailcheck_failed);
         } else {
             if (sendMessage(0, 1, $_POST['message'], 'Kontaktformular: ' . $_POST['subject'], $_POST['email'], true)) {
-                $disp = msg(_mail_send_true);
+                goToWithMsg('../pages/news',_msg_sent_successful,'success');
             } else {
-                $disp = msg(_mail_send_false);
+                goToWithMsg('back',_msg_sent_failed,'danger');
             }
         }
         break;

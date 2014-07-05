@@ -25,9 +25,11 @@ class News
                 . 'ORDER BY date DESC'
                 , PDO::FETCH_OBJ);
 
-            foreach ($news as $data) {
-                self::$post[$data->id] = new Post($data);
-            }
+			if (!empty($news)) {
+				foreach ($news as $data) {
+					self::$post[$data->id] = new Post($data);
+				}
+			}				
         }
     }
 

@@ -31,7 +31,11 @@ function toggle_content_instand(id) {
 function admin_toggler() {
     var divs = $('div[class^="slide_set"]');
     for (var i = 0; i < divs.length; i++) {
-        $(divs[i]).toggle();
+        $(divs[i]).slideUp(0);
+    }
+    var divs = $('div[class^="slide_prev"]');
+    for (var i = 0; i < divs.length; i++) {
+        $(divs[i]).slideDown(0);
     }
 }
 
@@ -71,7 +75,9 @@ function load_form_function() {
         postData[5] = {name: "action", value: action};
         postData[6] = {name: "id", value: module_id};
         postData[7] = {name: "module", value: module_name};
-        postData[8] = {name: "content", value: tinyMCE.get(postData[0]["name"])['bodyElement']['innerHTML']};
+        if (module_name == 'EditableText') {
+            postData[8] = {name: "content", value: tinyMCE.get(postData[0]["name"])['bodyElement']['innerHTML']};
+        }
         var formURL = $(this).attr("action");
         $.ajax(
             {
@@ -106,6 +112,7 @@ function load_create_function() {
                     load_form_function();
                     init_tinymce();
                     $.bootstrapGrowl("Modul added");
+                    admin_toggler();
                 }
             });
         return false;
@@ -115,6 +122,7 @@ function load_create_function() {
 
 function delete_module(div_id) {
     if (confirm('Willst Du wirklich löschen?')) {
+        $('#'+div_id).slideUp('slow');
         var id = splModName(div_id)[2];
         var name = splModName(div_id)[1];
         $.ajax({

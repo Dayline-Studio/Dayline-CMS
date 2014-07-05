@@ -1,7 +1,7 @@
 <?php
 
 phpFastCache::$storage = "auto";
-phpFastCache::setup("path", "../inc/_cache");
+phpFastCache::setup("path", Config::$path['cache']);
 
 function show($file_content = "", $tags = array(null => null))
 {
@@ -20,9 +20,22 @@ function show($file_content = "", $tags = array(null => null))
     return preg_replace("/\s+/", " ", $file_content);
 }
 
+function get_template_dir_from($path) {
+    if(file_exists(Config::$path['template'] . "/" . $path)) {
+        return Config::$path['template'] . "/" . $path;
+    } else if (file_exists("../templates/default/" . "/" . $path)) {
+        return "../templates/default/" . "/" . $path;
+    } else if (file_exists($path)) {
+        return $path;
+    } else {
+        Debug::log('Template file not found -> '. $path);
+        return "";
+    }
+}
+
 function getUserInformations($userid, $informations)
 {
-    return db("SELECT " . $informations . " FROM users WHERE id = " . $userid, 'object');
+    return Db::npquery("SELECT $informations FROM users WHERE id = $userid LIMIT 1", PDO::FETCH_OBJ);
 }
 
 function randomstring($length = 6)
@@ -91,7 +104,7 @@ function msg($msg, $kind = 'stock')
     }
 
     $meta['title'] = $msg;
-    $msg = show($file, array("msg" => 'Housslave: ' . $msg,
+    $msg = show($file, array("msg" => $msg,
         "link" => $_SESSION['last_site']));
     backSideFix();
     return $msg;
@@ -119,8 +132,10 @@ function getNews($groupid = 0)
 function permTo($permission)
 {
     if (isset($_SESSION['group_main_id'])) {
-        $perm = db("SELECT " . $permission . " From groups WHERE id = " . sqlInt($_SESSION['group_main_id']), 'object')->$permission;
-        return $perm;
+        $perm = Db::query("SELECT " . $permission . " From groups WHERE id = :id LIMIT 1", array('id' => $_SESSION['group_main_id']), PDO::FETCH_OBJ);
+        if (isset($perm->$permission)) {
+            return $perm->$permission;
+        }
     }
     return 0;
 }
@@ -191,7 +206,7 @@ function updateRSS()
         }
     }
 
-    if ($xml->save($path['upload'] . 'rss/rss.xml')) {
+    if ($xml->save($path['rss'] . 'public-news.xml')) {
         return true;
     }
     return false;
@@ -206,15 +221,6 @@ function convertMatch($matches)
         } else {
             $new["s_" . $value] = "STRING_NOT_FOUND_" . strtoupper($value);
         }
-    }
-    return $new;
-}
-
-function convertMatchDyn($matches)
-{
-    $new = array();
-    foreach ($matches as $value) {
-        $new["dyn_" . $value] = show("allround/ajax_loading", array('panel_name' => $value));
     }
     return $new;
 }

@@ -19,6 +19,7 @@ class Site
 
     public function modules_load()
     {
+        $this->modules = array();
         $modules = Db::npquery("SELECT id, module FROM modules WHERE position LIKE 'site-" . $this->id . "'", PDO::FETCH_OBJ);
         foreach ($modules as $module) {
             $this->modules[$module->id] = new $module->module($module->id);

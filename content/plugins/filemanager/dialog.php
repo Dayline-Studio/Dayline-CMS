@@ -601,7 +601,7 @@ $files=array_merge(array($prev_folder),array($current_folder),$sorted);
 			    rename_folder($current_path.$subdir.$new_name,$new_name,$transliteration);
 			    $file=$new_name;
 			}
-			//add in thumbs folder if not exist 
+			//add in _thumbs folder if not exist
 			if (!file_exists($thumbs_path.$subdir.$file)) create_folder(false,$thumbs_path.$subdir.$file);
 			$class_ext = 3;			
 			if($file=='..' && trim($subdir) != '' ){
@@ -709,7 +709,7 @@ $files=array_merge(array($prev_folder),array($current_folder),$sorted);
 			    if(in_array($extension_lower, $ext_img)){
 				$src = $base_url . $cur_dir . rawurlencode($file);
 				$mini_src = $src_thumb = $thumbs_path.$subdir. $file;
-				//add in thumbs folder if not exist
+				//add in _thumbs folder if not exist
 				if(!file_exists($src_thumb)){
 				    try {
 					create_img_gd($file_path, $src_thumb, 122, 91);

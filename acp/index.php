@@ -7,13 +7,15 @@ include "../inc/base.php";
 /**--**/
 $meta['title'] = "ACP";
 //------------------------------------------------
-if (!permTo("menu_acp")) {
-    $error = msg(_no_permissions);
-}
 
 $error = "";
 $disp = "";
 $subsite = array();
+
+
+if (!permTo("menu_acp")) {
+    $error = msg(_no_permissions);
+}
 
 if (isset($_GET['acp'])) {
     $acp = $_GET['acp'];
@@ -65,5 +67,7 @@ if ($error == "") {
     Disp::addMeta($meta);
     Disp::render();
 } else {
-    init($error, $meta);
+    Disp::$content = $error;
+    Disp::addMeta($meta);
+    Disp::render();
 }

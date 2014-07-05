@@ -1,5 +1,5 @@
 <?php
-function socialbar()
+function socialbar($mode)
 {
     $title = 'Follow us';
         $content = show("panels/socialbar", array(
@@ -8,5 +8,5 @@ function socialbar()
             'youtube' => Config::$settings->link_youtube,
             'google' => Config::$settings->link_google
             ));
-    return show("panels/box", array("content" => $content, "title" => $title, "name" => __FUNCTION__));
+    return $mode ? show("panels/box", array("content" => $content, "title" => $title, "name" => __FUNCTION__)) : $content;
 }

@@ -94,8 +94,12 @@ if ($do == "") {
             }
             break;
         default:
+            News::init();
             $meta['title'] = _user_lobby;
-            $disp = getNews($_SESSION['group_main_id']);
+            $te = new TemplateEngine();
+            $te->setHtml('news/post');
+            $te->addArr('posts', News::get_news_from_group($_SESSION['group_main_id']));
+            $disp = $te->render();
             break;
     }
 } else {

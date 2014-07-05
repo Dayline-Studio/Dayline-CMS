@@ -15,10 +15,10 @@ class Disp
 
     public static function render()
     {
-        $disp = file_get_contents(Config::$template['index']);
+        $disp = show('index');
 
-        $init = show(self::loadingPanels($disp), array("content" => self::$content));
-        $init = show($init, convertMatchDyn(searchBetween("{dyn_", $init, "}")));
+        $init = show($disp, array_merge(array("content" => self::$content),self::loadingPanels($disp)));
+        $init = show($init, self::convertMatchDyn(searchBetween("{dyn_", $init, "}")));
         $init = preg_replace("/\s+/", " ", $init);
 
         self::$meta['copyright'] = Config::$settings->copyright;
@@ -35,7 +35,6 @@ class Disp
         $sn = !empty($_SESSION['simple_note']) ? $_SESSION['simple_note'] : '';
         $init = show($init, array('simple_note' => $sn));
         $_SESSION['simple_note'] = NULL;
-        Debug::log('test123');
         $init = show($init, self::$meta);
         $init = show($init, convertMatch(searchBetween("{s_", $init, "}")));
         $init = preg_replace("/\{\w\}/", "", $init);
@@ -53,6 +52,8 @@ class Disp
     public static function renderMin()
     {
         $init = show(self::$content, convertMatch(searchBetween("{s_", self::$content, "}")));
+        $sn = !empty($_SESSION['simple_note']) ? $_SESSION['simple_note'] : '';
+        $init = show($init, array('simple_note' => $sn));
         self::display($init);
     }
 
@@ -63,6 +64,8 @@ class Disp
         self::$meta['conten'] = self::$content;
         $meta = array_merge(self::$meta, array('content' => self::$content));
         $init = show($index, $meta);
+        $sn = !empty($_SESSION['simple_note']) ? $_SESSION['simple_note'] : '';
+        $init = show($init, array('simple_note' => $sn));
         $init = preg_replace("/\{\w\}/", "", $init);
         self::display($init);
     }
@@ -72,22 +75,37 @@ class Disp
         echo $content;
     }
 
-    function loadingPanels($disp)
+    private function loadingPanels($disp)
     {
-        global $path;
-        $panels = opendir($path['panels']);
-
-        while ($panel = readdir($panels)) {
-            if ($panel != ".." && $panel != "." && $panel != "disable") {
-                include($path['panels'] . $panel);
-                $panel = substr($panel, 0, -4);
-                if (function_exists($panel)) {
-                    $disp = show($disp, array($panel => $panel()));
+        $panels = searchBetween('{panel_', $disp, '}');
+        $new = array();
+        foreach ($panels as $panel) {
+            $panel = 'panel_'.$panel;
+            $arr = explode('_',$panel);
+            $name = $arr[1];
+            $mode = isset($arr[2]) ? $arr[2] : 1;
+            $file = Config::$path['panels'] . $name.'.php';
+            if (file_exists($file)) {
+                include ($file);
+                if (function_exists($name)) {
+                    $new[$panel] = $name($mode);
+                } else {
+                    $new[$panel] = 'Loading Panel failed';
                 }
+            } else {
+                $new[$panel] = 'Panel file not found - '.$file;
             }
         }
-        closedir($panels);
-
-        return $disp;
+        return $new;
     }
+
+    private function convertMatchDyn($matches)
+    {
+        $new = array();
+        foreach ($matches as $value) {
+            $new["dyn_" . $value] = show("allround/ajax_loading", array('panel_name' => $value));
+        }
+        return $new;
+    }
+
 }

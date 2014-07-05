@@ -1,7 +1,7 @@
 <?php
 $installation = false;
-if (file_exists("../inc/config.php")) {
-    include("../inc/config.php");
+if (file_exists("../dyn-content/config.php")) {
+    include("../dyn-content/config.php");
 }
 
 spl_autoload_register(null, false);
@@ -34,7 +34,6 @@ Db::init(Config::$sql);
 if ($set = Db::npquery('SELECT * FROM settings LIMIT 1', PDO::FETCH_OBJ)) {
     Config::set_settings($set);
 } else {
-    //Default settings
 
 }
 Config::loadSettings();
@@ -91,7 +90,7 @@ function dbConnect()
             return $db_link;
         }
     } else {
-        die("Es wurden nicht alle Datenbank Daten zur Verbindung angegeben");
+       // die("Es wurden nicht alle Datenbank Daten zur Verbindung angegeben");
     }
 }
 

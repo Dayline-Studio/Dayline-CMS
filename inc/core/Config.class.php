@@ -17,13 +17,15 @@ class Config
     public static function init()
     {
         global $config;
-        self::$sql = array(
-            'host' => $config['sql_host'],
-            'user' => $config['sql_user'],
-            'db' => $config['sql_db'],
-            'pw' => $config['sql_pass'],
-            'salt' => $config['salt'],
-        );
+		if (isset($config)) {
+			self::$sql = array(
+				'host' => $config['sql_host'],
+				'user' => $config['sql_user'],
+				'db' => $config['sql_db'],
+				'pw' => $config['sql_pass'],
+				'salt' => $config['salt']
+			);
+	    }
     }
 
     /**
@@ -31,19 +33,33 @@ class Config
      */
     public static function loadSettings()
     {
+		if (empty(self::$settings)) {
+			self::$settings = new ArrayObject();
+			self::$settings->force_domain = 0;
+			self::$settings->force_https = 0;
+			self::$settings->link_twitter = 'https://github.com/Dayline-Studio/CMS';
+			self::$settings->link_facebook = 'https://github.com/Dayline-Studio/CMS';
+			self::$settings->link_youtube = 'https://github.com/Dayline-Studio/CMS';
+			self::$settings->link_google = 'https://github.com/Dayline-Studio/CMS';
+		}
         self::$settings->language = 'de';
-        self::$settings->style = 'default';
+        if (isset($_GET['style'])) {
+            self::$settings->style = $_GET['style'];
+        }
 
         self::$path = array(
             'dir' => './',
             'content' => "../content/",
-            'upload' => '../include/upload/',
+            'cache' => "../dyn-content/_cache/",
+            'log' => "../dyn-content/_log/",
+            'upload' => '../dyn-content/_upload/',
             'images' => '../include/images/',
             'plugins' => '../content/plugins/',
             'pages' => '../pages/',
-            'panels' => '../content/panels/',
+            'rss' => '../dyn-content/_rss/',
+            'panels' => '../inc/panels/',
             'functions' => '../include/functions.php',
-            'gallery' => '../content/upload/gallery/',
+            'gallery' => '../dyn-content/_upload/gallery/',
             'language' => '../content/language/',
             'template' => '../templates/' . self::$settings->style . '/',
             'fw_js' => '../inc/framework/js/',

@@ -42,6 +42,7 @@ if ($do == "") {
         default:
             $menu = getMenuList();
             $menu = convertQryToArray($menu);
+            $list = '';
             foreach ($menu as $data) {
                 $newtab = '';
                 if ($data['newtab']) {

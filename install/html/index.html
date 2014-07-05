@@ -5,9 +5,15 @@
     <title>{title}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"/>
     <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+	
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.js" type="text/javascript"></script>
+	<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js" type="text/javascript"></script>
+    <link href="../inc/framework/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+	<link href="../inc/framework/js/jquery.bootstrap-growl.min.js" rel="stylesheet" type="text/css"/>
 
-    <link href="https://d4ho.de/inc/framework/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
     <link href="{css}style.css" rel="stylesheet" type="text/css"/>
+	
+	{simple_note}
 </head>
 <body>
 <div id="wrapper">
@@ -21,7 +27,7 @@
             </div>
             <div class="list-group">
                 [array|navi_menu|
-                    <a class="list-group-item" href="#" {active}>{text}</a>
+                    <a class="list-group-item" href="{link}" {active}>{text}</a>
                 ]
             </div>
         </div>

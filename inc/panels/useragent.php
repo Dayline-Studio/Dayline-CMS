@@ -1,7 +1,6 @@
 <?php
-function user_agent() {
+function useragent() {
     UserAgent::read();
-    echo UserAgent::$agent;
     $set['ip'] =  UserAgent::$ip;
     $set['browser'] = UserAgent::$browser;
     $set['os'] = UserAgent::$os;

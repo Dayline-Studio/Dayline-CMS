@@ -192,15 +192,6 @@ $tables['users'] = "
 					  `country` varchar(25) CHARACTER SET latin1 NOT NULL DEFAULT '',
 					  `main_group` int(5) NOT NULL DEFAULT '0',
 					  PRIMARY KEY (`id`)";					  
-					  
-					  
-					
-					
-					
-					
-					
-					
-					
 					
 					//Update
 $update[0.2]['users'] = ""; 

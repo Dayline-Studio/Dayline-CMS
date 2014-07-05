@@ -6,6 +6,7 @@ include "../inc/base.php";
 // url: ../pages/ajax_handler.php?module=editabletext&id=1&do=update&site_id=4
 
 if ($_SESSION['userid'] == 1) {
+    Debug::log($_POST);
     foreach ($_POST as $key => $value) {
         switch ($key) {
             case 'module':

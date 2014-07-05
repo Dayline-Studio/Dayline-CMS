@@ -6,15 +6,15 @@ function slider() {
     $slider_images = __c("files")->get('slider_images');
     if ($slider_images == null)
     {
-        $images = opendir($path['upload']."images/slider/");
+        $images = opendir(Config::$path['upload']."images/slider/");
         $slider_images = "";
         while ($image = readdir($images)) 
         {
             if ($image != ".." && $image != ".") 
             {
-                  $slider_images .= '<img src="'.$path['upload'].'images/slider/'.$image.'" alt="" />';
+                  $slider_images .= '<img src="'.Config::$path['upload'].'images/slider/'.$image.'" alt="" />';
             }
-        } 
+        }
         closedir($images);
         __c("files")->set('slider_images',$slider_images, 600);
     }

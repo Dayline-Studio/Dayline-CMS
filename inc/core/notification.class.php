@@ -7,7 +7,7 @@ class Notification
     private $msg;
     private $type;
 
-    public function __construct($msg, $type)
+    public function __construct($msg, $type = 'info')
     {
         $this->set($msg, $type);
     }

@@ -3,7 +3,7 @@
 class Debug
 {
 
-    private static $log_path = '../inc/_log/';
+    private static $log_path = '../dyn-content/_log/';
     private static $log_file_sql = 'sql_error.txt';
     private static $log_file = 'log.txt';
 
@@ -24,14 +24,16 @@ class Debug
 
     private static function write_log($str, $file = 'log.txt')
     {
-        $file = self::$log_path . $file;
-        $handle = fopen($file, "a+");
-        fseek($handle, -3, SEEK_END);
-        $str = '[' . date("Y-m-d H:i:s", time()) . '] ' . $str;
-        if (!fwrite($handle, $str . PHP_EOL)) {
-            die("keine Permissions auf $file");
-        }
-        fclose($handle);
+		if (is_writable($file) || !file_exists($file)) {
+			$file = self::$log_path . $file;
+			$handle = fopen($file, "a+");
+			fseek($handle, -3, SEEK_END);
+			$str = '[' . date("Y-m-d H:i:s", time()) . '] ' . $str;
+			fwrite($handle, $str . PHP_EOL);
+			fclose($handle);
+		}
+
+
     }
 
 }

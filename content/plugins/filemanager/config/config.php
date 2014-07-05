@@ -21,10 +21,10 @@ mb_internal_encoding('UTF-8');
 
 $http = $_SESSION['https'] ? 'https' : 'http';
 $base_url ="$http://".$_SERVER['HTTP_HOST'];
-$upload_dir = '/content/upload/'; // path from base_url to base of upload folder (with start and final /)
-$current_path = '../../upload/'; // relative path from filemanager folder to upload folder (with final /)
+$upload_dir = '/dyn-content/_upload/'; // path from base_url to base of upload folder (with start and final /)
+$current_path = '../../../dyn-content/_upload/'; // relative path from filemanager folder to upload folder (with final /)
 //thumbs folder can't put inside upload folder
-$thumbs_base_path = 'thumbs/'; // relative path from filemanager folder to thumbs folder (with final /)
+$thumbs_base_path = '../../../dyn-content/_thumbs/'; // relative path from filemanager folder to thumbs folder (with final /)
 
 // OPTIONAL SECURITY
 // if set to true only those will access RF whose url contains the access key(akey) like: 
@@ -57,7 +57,7 @@ $MaxSizeUpload = 100; //Mb
 
 // SERVER OVERRIDE
 if ((int)(ini_get('post_max_size')) < $MaxSizeUpload){
-	$MaxSizeUpload = (int)(ini_get('post_max_size'));
+    $MaxSizeUpload = (int)(ini_get('post_max_size'));
 }
 
 $default_language 	= "en_EN"; //default language file name
@@ -134,7 +134,7 @@ $ext = array_merge($ext_img, $ext_file, $ext_misc, $ext_video,$ext_music); //all
 
 /******************
  * AVIARY config
-*******************/
+ *******************/
 $aviary_active 	= TRUE;
 $aviary_key 	= "dvh8qudbp6yx2bnp";
 $aviary_secret	= "m6xaym5q42rpw433";
@@ -156,7 +156,7 @@ $hidden_folders = array();
 $hidden_files = array('config.php');
 
 /*******************
- * JAVA upload 
+ * JAVA upload
  *******************/
 $java_upload = TRUE;
 $JAVAMaxSizeUpload = 200; //Gb

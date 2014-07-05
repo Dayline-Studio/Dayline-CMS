@@ -6,11 +6,11 @@ include "../inc/base.php";
 //------------------------------------------------
 require_once('mysql.php');
 $meta['title'] = 'Installer';
-
-$_POST['salt'] = randomstring(32);
+Debug::log('test');
+$_POST['salt'] = randomstring(32); 
 
 $files = array();
-//$files[] = array('../inc/config.php', 777);
+$files[] = array('../inc/config.php', 777);
 $files[] = array('../content/upload', 777);
 $files[] = array('../inc/_cache', 777);
 
@@ -19,6 +19,8 @@ if (!isset($_GET['action'])) {
 } else {
     $action = $_GET['action'];
 }
+
+$config = @simplexml_load_file("config.xml");
 
 $te = new TemplateEngine();
 $te->set_dir('html/');
@@ -64,37 +66,48 @@ switch ($action) {
         break;
     case 'check_input':
         $action = 'mysql_connection';
-        if ($dblink = mysqli_connect($_POST['sql_host'], $_POST['sql_user'], $_POST['sql_pass'], $_POST['sql_db'])) {
+        if (Db::connect($_POST['sql_host'], $_POST['sql_db'], $_POST['sql_user'], $_POST['sql_pass'])) {
             foreach ($tables as $table => $sql) {
-                if (mysqli_query($dblink, 'DROP TABLE ' . $table)) {
+                if (Db::drop($table)) {
                     $disp .= "Datenbank " . $table . " wurde gelöscht, weil sie bereits vorhanden war<br>";
                 }
-                if (mysqli_query($dblink, 'CREATE TABLE ' . $table . ' (' . $sql . ') ')) {
+                if (Db::nrquery('CREATE TABLE ' . $table . ' (' . $sql . ') ')) {
                     $disp .= "Datenbank " . $table . " wurde erfolgreich erstellt <br>";
                 } else {
                     $disp .= "Erstellen der Datenbank " . $table . " fehlgeschlagen.<br>";
                 }
             }
-            if (!isset(
-                $_POST['slq_host']) || !isset($_POST['sql_user']) || !isset($_POST['sql_pass']) || !isset($_POST['sql_db'])
-            ) {
-                $disp .= "Bitte alle Felder ausfüllen!<br>";
-            }
-        } else echo 'Nein';
-        $disp .= file_get_contents("html/check_input.html");
-        break;
-    case 'create_config':
-        $te->setHtml('config.html');
-        $content = show(file_get_contents('config.clear'), $_POST);
-        $config_file = fopen('config.php', 'r+');
-        rewind($config_file);
-        fwrite($config_file, $content);
-        fclose($config_file);
-        $disp = $te->render();
-        break;
-
-    case 'create_user':
-        //$new_user = new User($user);
+			$_SESSION['admin'] = true;
+			$se['website_title'] = 'Titel deiner Website';
+			$se['publisher'] = 'Default-Publisher';
+			$se['copyright'] = 'Copyright '.date('Y');
+			$se['language'] = 'de';
+			$se['style'] = 'default';
+			$se['link_facebook'] = 'https://github.com/Dayline-Studio/CMS';
+			$se['link_twitter'] = 'https://github.com/Dayline-Studio/CMS';
+			$se['link_youtube'] = 'https://github.com/Dayline-Studio/CMS';
+			$se['link_google'] = 'https://github.com/Dayline-Studio/CMS';
+			$se['force_domain'] = 0;
+			$se['domain'] = '';
+			$se['force_https'] = 0;
+			$se['version'] = $config->version;
+			Db::insert('settings', $se);
+			$me = array(
+				'title' => 'ACP',
+				'subfrom' => 0,
+				'link' => '../acp/',
+				'part' => 2,
+				'position' => 0);
+			Db::insert('menu', $me);
+			Db::nrquery("INSERT INTO groups (`id`, `groupid`, `site_edit`, `create_site`, `menu_acp`, `comment`, `create_news`, `delete_site`, `reset_counter`, `delete_news`, `update_socialnetwork`, `mail_abo`, `msg_send`, `delete_group`, `create_menu`, `delete_menu`, `update_menu`, `fm_access`) VALUES ('1', 'Admin', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1'), ('2', 'Guest', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0');");
+			
+			$content = show(file_get_contents('config.clear'), $_POST);
+			$config_file = fopen('../inc/config.php', 'r+');
+			rewind($config_file);
+			fwrite($config_file, $content);
+			fclose($config_file);
+			} else $disp = 'Verbindung konnte nicht hergestellt werden!<br>';
+			$disp .= file_get_contents("html/check_input.html");
         break;
 }
 
@@ -102,17 +115,14 @@ $te_m = new TemplateEngine();
 $te_m->set_dir('html/');
 $te_m->setHtml('index.html');
 
-$config = @simplexml_load_file("config.xml");
-
-$te_m->add_var('version',$config->version);
-$te_m->add_var('released',321432);
-$te_m->add_var('build',0000.5);
+$te_m->add_var('version',(String)$config->version);
+$te_m->add_var('released',(String)$config->release);
+$te_m->add_var('build', (String)$config->build);
 
 $navi_lang = array(
     'agb' => 'Lizensbedingungen',
     'permissions' => 'Dateirechte',
     'mysql_connection' => 'Datenbank verbindung',
-    'create_config' => 'Erstellen der Config'
 );
 
 foreach ($navi_lang as $sitename => $language) {
@@ -124,7 +134,8 @@ foreach ($navi_lang as $sitename => $language) {
     }
     $n[] = array(
         'text' => $language,
-        'active' => $active
+        'active' => $active,
+		'link' => "?action=$sitename"
     );
 }
 $te_m->addArr('navi_menu', $n);
