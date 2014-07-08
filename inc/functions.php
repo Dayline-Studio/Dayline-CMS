@@ -46,25 +46,21 @@ function randomstring($length = 6)
     $tmp = "";
     while ($i < $length) {
         $num = rand() % strlen($chars);
-        $tmp = substr($chars, $num, 1);
+        $tmp .= substr($chars, $num, 1);
         $i++;
     }
     return $tmp;
 }
 
-function customHasher($pw, $rounds)
+function custom_verify($pw, $pw2) {
+    global $config;
+    return password_verify($pw.$config['salt'],$pw2);
+}
+
+function customHasher($pw)
 {
     global $config;
-    $hash = $pw;
-    for ($i = 0; $i < $rounds; $i++) {
-        if (!($i % 3.5)) {
-            $hash = sha1($hash . $config['salt']);
-        } else {
-            $hash = md5($config['salt'] . $hash);
-        }
-    }
-    sha1($hash);
-    return $hash;
+    return password_hash($pw.$config['salt'],PASSWORD_BCRYPT, array('cost' => 12));
 }
 
 function sqlString($param)
@@ -258,6 +254,7 @@ function sendmail($content, $subject, $receiver)
 
     $mail->CharSet = "utf-8";
     $mail->Subject = $subject;
+
     $mail->msgHTML(
         show(
             'mail/layout',
@@ -297,7 +294,7 @@ function goBack()
     exit();
 }
 
-function goToWithMsg($url, $msg, $type)
+function goToWithMsg($url, $msg, $type = 'info')
 {
     new Notification($msg, $type);
     if ($url == 'back') {
@@ -359,22 +356,13 @@ function get_editor($content = '')
 function sendMessage($sender, $receiver, $content, $title, $email = "")
 {
     sendmail($content, $title, getUserInformations($receiver, 'email')->email);
-    return up('INSERT INTO messages ('
-        . 'sender_id,'
-        . 'receiver_id,'
-        . 'opened,'
-        . 'inbox,'
-        . 'outbox,'
-        . 'email,'
-        . 'date,'
-        . 'content,'
-        . 'title'
-        . ') VALUES ( '
-        . sqlInt($sender) . ','
-        . sqlInt($receiver) . ','
-        . '0,1,1,'
-        . sqlString($email) . ','
-        . time() . ','
-        . sqlString($content) . ','
-        . sqlString($title) . ')');
+    $in = array(
+        'sender_id' => $sender,
+        'receiver_id' => $receiver,
+        'email' => $email,
+        'date' => time(),
+        'content' => $content,
+        'title' => $title
+    );
+    return Db::insert('messages', $in);
 }

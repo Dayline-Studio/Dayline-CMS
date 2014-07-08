@@ -6,7 +6,6 @@ include "../inc/base.php";
 // url: ../pages/ajax_handler.php?module=editabletext&id=1&do=update&site_id=4
 
 if ($_SESSION['userid'] == 1) {
-    Debug::log($_POST);
     foreach ($_POST as $key => $value) {
         switch ($key) {
             case 'module':
@@ -28,10 +27,16 @@ if ($_SESSION['userid'] == 1) {
             update_module($module, $id, $vars);
             break;
         case 'delete':
-            delete_module($module, $id);
+            delete_module($module);
             break;
         case 'create':
             create_module($module, $vars);
+            break;
+        case 'move_up':
+            move('up',$id);
+            break;
+        case 'move_down':
+            move('down',$id);
             break;
     }
 }
@@ -62,4 +67,10 @@ function create_module($module, $vars)
 {
     $module = new $module($vars['position'], true);
     echo $module->full_render();
+}
+
+function move($dir, $id) {
+    $module_name = get_module_name($id);
+    $module_obj = new $module_name($id);
+    echo $module_obj->move($dir);
 }

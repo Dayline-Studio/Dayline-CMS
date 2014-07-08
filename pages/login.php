@@ -22,6 +22,9 @@ if ($do == "") {
                 $disp = show("ucp/register");
             }
             break;
+        case 'lost_password':
+            $disp = show('ucp/lost_password');
+            break;
         default:
             $disp = show("ucp/login");
     }
@@ -52,21 +55,29 @@ switch ($do) {
                 if (!check_email_address($_POST['mail'])) {
                     $disp = msg(_mailcheck_failed);
                 } else
-                    if (db("Select id "
-                            . "FROM users "
-                            . "where user LIKE " . strtolower(sqlString($nick)) . " "
-                            . "OR email LIKE " . sqlString($email), 'rows') > 0
+                    if (sizeof(Db::query(
+                                "Select id FROM users where user LIKE :nick OR email LIKE :email",
+                                array(
+                                    'nick' => strtolower($nick),
+                                    'email' => $email)
+                            )
+                        ) > 0
                     ) {
                         $disp = msg(_already_exists);
                     } else {
                         //Passwort generieren
-                        $rounds = rand(5000, 10000);
-                        $pass = customHasher($_POST['password'], $rounds);
-						$group_id = $_SESSION['admin'] ? 1:3;
+                        $group_id = $_SESSION['admin'] ? 1 : 3;
                         //sql insert
-                        if (up("INSERT INTO users (id, name, pass, email, rounds, user, street, firstname, lastname, country, main_group) "
-                            . "VALUES (NULL, " . sqlString($nick) . ", " . sqlString($pass) . ", " . sqlString($email) . ", " . sqlInt($rounds) . ", " . strtolower(sqlString($nick)) . ", '', " . sqlString($firstname) . ", " . sqlString($lastname) . ", '', ".$group_id.")")
-                        ) {
+                        $up = array(
+                            'name' => $nick,
+                            'pass' => customHasher($_POST['password']),
+                            'email' => $email,
+                            'user' => strtolower($nick),
+                            'firstname' => $firstname,
+                            'lastname' => $lastname,
+                            'main_group' => $group_id
+                        );
+                        if (Db::insert('users', $up)) {
                             $disp = msg(_regist_sucess);
                         } else {
                             $disp = msg(_regist_failed);
@@ -78,8 +89,31 @@ switch ($do) {
         Auth::logout();
         header('Location: ../');
         break;
-}
+    case 'reset_password':
+        $user = Db::query('SELECT id FROM users WHERE email LIKE :email LIMIT 1', array('email' => $_POST['email']), PDO::FETCH_OBJ);
+        if (isset($user->id)) {
+            $user = new User($user->id);
+            $activation_code = rand(10000000000000, 99999999999999);
+            __c("files")->set('activation_' . $user->id, $activation_code, 600);
+            sendMessage(0, $user->id, show(_mail_password_reset_code, array('id' => $user->id, 'code' => $activation_code, 'user' => $user->name, 'domain' => Auth::get_clear_url())), 'Passwort reset');
+            goToWithMsg('back', _password_resetcode_send_successful, 'success');
+        }
+        goToWithMsg('back', _password_resetcode_send_failed, 'danger');
+        break;
+    case 'activate_new_password':
 
+        $activation_code = __c("files")->get('activation_' . $_GET['id']);
+        if ($activation_code != NULL) {
+            $new_password = randomstring(8);
+            $user = new User($_GET['id']);
+            $user->set_new_password($new_password);
+            $user->update_changes();
+            sendMessage(0, $user->id, show(_mail_new_password,array('password' => $new_password,'domain' => Auth::get_clear_url())), 'New Password');
+            __c("files")->delete('activation_' . $user->id);
+            $disp = _password_reset_successful;
+        } else $disp = _password_reset_failed;
+        break;
+}
 //Seite Rendern
 Disp::$content = $disp;
 Disp::addMeta($meta);

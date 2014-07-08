@@ -14,7 +14,7 @@ if ($do == "") {
     $meta['title'] = "{s_" . $show . "}";
     switch ($show) {
         case  "profile_edit":
-            $user = getUserInformations($_SESSION['userid'], "email,street,firstname,lastname,country,pass,rounds");
+            $user = new User($_SESSION['userid']);
             $disp = show("ucp/edit_profile", array("firstname" => $user->firstname,
                 "email" => $user->email,
                 "lastname" => $user->lastname,
@@ -107,14 +107,13 @@ if ($do == "") {
 }
 switch ($do) {
     case 'update_profile':
-        $user = getUserInformations($_SESSION['userid'], "email,street,firstname,lastname,country,pass,rounds");
-        $passwd = customHasher($_POST['pass'], $user->rounds);
+        $user = new User($_SESSION['userid']);
         $update = true;
-        if ($passwd == $user->pass) {
+        if (custom_verify($_POST['pass'],$user->pass)) {
             if (!empty($_POST['cpasswd'])) {
                 if ($_POST['cpasswd'] == $_POST['cpasswd']) {
                     if (strlen($_POST['cpasswd']) > 6) {
-                        $passwd = customHasher($_POST['cpasswd'], $user->rounds);
+                        $passwd = customHasher($_POST['cpasswd']);
                     } else {
                         $disp = msg(_password_syntax_failed);
                         $update = false;
@@ -129,27 +128,25 @@ switch ($do) {
             $update = false;
         }
         if ($update) {
-            if (db('Update users Set
-                pass = ' . sqlString($passwd) . ',
-                email = ' . sqlString($_POST['email']) . ',
-                firstname = ' . sqlString($_POST['firstname']) . ',
-                lastname = ' . sqlString($_POST['lastname']) . ',
-                country = ' . sqlString($_POST['country']) . ',
-                street = ' . sqlString($_POST['street']) . '
-                Where id =' . $_SESSION['userid'])
-            ) {
-                $disp = msg(_change_sucessful);
+            $up['email'] = $_POST['email'];
+            $up['firstname'] = $_POST['firstname'];
+            $up['lastname'] = $_POST['lastname'];
+            $up['country'] = $_POST['country'];
+            $up['street'] = $_POST['street'];
+            $up['pass'] = customHasher($_POST['cpasswd']);
+
+            if (Db::update('users', $_SESSION['userid'], $up)) {
+                goToWithMsg('back', _change_sucessful, 'success');
             } else {
                 $disp = msg(_change_failed);
             }
         }
-
         break;
     case 'msg_send':
         if (permTo('msg_send')) {
 
             if (sendMessage($_SESSION['userid'], $_POST['receiver'], $_POST['title'], $_POST['content'])) {
-                $disp = msg(_msg_sent_successful);
+                goToWithMsg('back', _msg_sent_successful, 'success');
             } else {
                 $disp = msg(_msg_sent_failed);
             }
@@ -162,7 +159,7 @@ switch ($do) {
             $msgbox = new Msgbox($_SESSION['userid']);
             $msg = $msgbox->get_message_by_id($_GET['id']);
             $msg->delete();
-            goBack();
+            goToWithMsg('back', _msg_delete_sucessful, 'success');
         } else {
             $disp = msg(_msg_delete_failed);
         }

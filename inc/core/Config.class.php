@@ -59,6 +59,7 @@ class Config
             'rss' => '../dyn-content/_rss/',
             'panels' => '../inc/panels/',
             'functions' => '../include/functions.php',
+            'filemanager' => '../content/plugins/filemanager/dialog.php',
             'gallery' => '../dyn-content/_upload/gallery/',
             'language' => '../content/language/',
             'template' => '../templates/' . self::$settings->style . '/',

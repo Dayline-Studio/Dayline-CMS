@@ -15,10 +15,9 @@ class Db
 
     public static function init($sql)
     {
-		if(!empty($sql)) {
-		    self::connect($sql['host'], $sql['db'], $sql['user'], $sql['pw']);
-			Debug::log('test123');
-		}
+        if (!empty($sql)) {
+            self::connect($sql['host'], $sql['db'], $sql['user'], $sql['pw']);
+        }
     }
 
     /**
@@ -33,12 +32,12 @@ class Db
      */
     public static function connect($host, $db, $user, $pw)
     {
-		$db = "mysql:host=$host;dbname=$db;charset=utf8 - User:$user - Password: - $pw";
+        $db = "mysql:host=$host;dbname=$db;charset=utf8 - User:$user - Password: - $pw";
         $handler = new PDO ("mysql:host=$host;dbname=$db;charset=utf8", $user, $pw);
-		if (!$handler) {
-			Debug::log("SQL Error: $db" );
-		}
-		self::$sql = $handler;
+        if (!$handler) {
+            Debug::log("SQL Error: $db");
+        }
+        self::$sql = $handler;
         return $handler;
     }
 
@@ -53,15 +52,15 @@ class Db
      */
     public static function query($qry, $params = array(), $fetchmode = PDO::FETCH_ASSOC)
     {
-		$stmt = self::$sql->prepare($qry);
-		$stmt->setFetchMode($fetchmode);
-		$ret = false;
-		if (!is_array($params)) $params = array();
-		if ($stmt->execute($params)) {
+        $stmt = self::$sql->prepare($qry);
+        $stmt->setFetchMode($fetchmode);
+        $ret = false;
+        if (!is_array($params)) $params = array();
+        if ($stmt->execute($params)) {
             $ret = strpos($qry, 'LIMIT 1') ? $stmt->fetch() : $stmt->fetchAll();
-		}
-		Debug::log($stmt, 'PDO', $qry);
-		return $ret;
+        }
+        Debug::log($stmt, 'PDO', $qry);
+        return $ret;
     }
 
     /**
@@ -74,18 +73,18 @@ class Db
      */
     public static function npquery($qry, $fetchmode = PDO::FETCH_ASSOC)
     {
-		if (self::$sql) {
-			$stmt = self::$sql->prepare($qry);
-			$stmt->setFetchMode($fetchmode);
-			$ret = false;
-			if ($stmt->execute()) {
-				$ret = strpos($qry, 'LIMIT 1') ? $stmt->fetch() : $stmt->fetchAll();
-			}
-			Debug::log($stmt, 'PDO', $qry);
-			return $ret;
-		} else {
-			return false; 
-		}
+        if (self::$sql) {
+            $stmt = self::$sql->prepare($qry);
+            $stmt->setFetchMode($fetchmode);
+            $ret = false;
+            if ($stmt->execute()) {
+                $ret = strpos($qry, 'LIMIT 1') ? $stmt->fetch() : $stmt->fetchAll();
+            }
+            Debug::log($stmt, 'PDO', $qry);
+            return $ret;
+        } else {
+            return false;
+        }
     }
 
     /**
@@ -99,19 +98,19 @@ class Db
      */
     public static function nrquery($qry, $params = array(), $fetchmode = PDO::FETCH_ASSOC)
     {
-		if (self::$sql) {
-			$stmt = self::$sql->prepare($qry);
-			$stmt->setFetchMode($fetchmode);
-			if (!is_array($params)) $params = array();
-			$ret = false;
-			if ($stmt->execute($params)) {
-				$ret = true;
-			}
-			Debug::log($stmt, 'PDO', $qry);
-			return $ret;
-		} else {
-			return false; 
-		}
+        if (self::$sql) {
+            $stmt = self::$sql->prepare($qry);
+            $stmt->setFetchMode($fetchmode);
+            if (!is_array($params)) $params = array();
+            $ret = false;
+            if ($stmt->execute($params)) {
+                $ret = true;
+            }
+            Debug::log($stmt, 'PDO', $qry);
+            return $ret;
+        } else {
+            return false;
+        }
     }
 
     /**
@@ -133,19 +132,19 @@ class Db
      * @param  array() $new Array mit inhalt der Spalten.
      * @return PDO Fetch Ergebnisse.
      */
-    public static function update($table, $id, $new = array())
+    public static function update($table, $id, $new)
     {
-		if (self::$sql) {
-			$sql = "UPDATE $table SET ";
-			foreach ($new as $col => $value) {
-				$value = self::esc($value);
-				$up[] = "`$col` = $value";
-			}
-			$sql .= implode(',', $up) . " WHERE id = $id LIMIT 1";
-			return self::nrquery($sql);
-		} else {
-			return false; 
-		}
+        if (self::$sql) {
+            $sql = "UPDATE $table SET ";
+            foreach ($new as $col => $value) {
+                $value = self::esc($value);
+                $up[] = "`$col` = $value";
+            }
+            $sql .= implode(',', $up) . " WHERE id = $id LIMIT 1";
+            return self::nrquery($sql);
+        } else {
+            return false;
+        }
     }
 
     /**

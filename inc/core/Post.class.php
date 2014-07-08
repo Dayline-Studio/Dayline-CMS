@@ -8,20 +8,31 @@ class Post
         $comment_count,
         $date, $content, $title, $grp, $public_show, $description, $main_image, $userid, $keywords;
 
-
     public function __construct($data)
+    {
+        $this->set($data);
+        $this->loadComments();
+        $this->comment_count = (String)sizeof($this->comments);
+    }
+
+    public function swap_visibility()
+    {
+        Db::nrquery('UPDATE news SET public_show = (public_show ^ 1) WHERE id = ' . $this->id);
+        $this->update();
+    }
+
+    public function set($data)
     {
         foreach ($data as $var => $value) {
             $this->$var = $value;
         }
         $this->date_out = convertDateOutput($this->date);
-        $this->loadComments();
-        $this->comment_count = (String)sizeof($this->comments);
     }
 
     public function update()
     {
-
+        $data = Db::npquery('SELECT * FROM news WHERE id =' . $this->id . ' LIMIT 1', PDO::FETCH_OBJ);
+        $this->set($data);
     }
 
     function delete()

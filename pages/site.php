@@ -9,9 +9,9 @@ $meta['page_id'] = 3;
 
 $sm = new SiteManager($show);
 $site = $sm->get_first_site();
-
+$p = array();
 $te = new TemplateEngine();
-if (permTo('site_edit')) {
+if (permTo('site_edit') && !$_SESSION['prev_mode']) {
     $sites = new SiteManager('*');
     foreach ($sites->sites as $s) {
         $selected = $s->id == $site->subfrom ? 'selected' : '';
@@ -21,6 +21,7 @@ if (permTo('site_edit')) {
     $c['print_select'] = $site->show_print ? 'checked' : '';
     $c['author_select'] = $site->show_author ? 'checked' : '';
     $c['lastedit_select'] = $site->show_lastedit ? 'checked' : '';
+    $c['title_admin'] = $site->title;
     $te->addArr('title_sites', $title_sites);
     $p['admin'] = show('site/admin');
 
@@ -69,6 +70,10 @@ switch ($do) {
         } else {
             $disp = msg(_change_failed);
         }
+        break;
+    case 'swap_prev_mode':
+        $_SESSION['prev_mode'] = $_SESSION['prev_mode'] ? 0 : 1;
+        goToWithMsg('back', 'Prev Mode Changed');
         break;
 }
 

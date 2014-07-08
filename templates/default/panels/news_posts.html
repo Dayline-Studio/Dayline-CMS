@@ -1,16 +1,8 @@
-<table class="width_full">
-        <colgroup>
-            <col />
-            <col style="width:80px;" />
-        </colgroup>
-        <tr>
-            <td><a href="../pages/news.php?id={id}">{headline}</a></td>
-            <td style="text-align: right;">{date}</td>
-        </tr>
-        <tr>
-            <td colspan="2">
-                {post}
-            </td>
-        </tr>
-    </table>
-    <hr />
+<table style="width:100%">
+    [array|news|
+    <tr>
+        <td><a href="../pages/news.php?id={id}">{headline}</a></td>
+        <td style="text-align: right; width:50%">{date}</td>
+    </tr>
+    ]
+</table>

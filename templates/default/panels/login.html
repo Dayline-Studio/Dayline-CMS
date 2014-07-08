@@ -1,4 +1,3 @@
-
 <form role="form" action="login.php?do=login" method="post">
     <div id="mail_case" class="form-group">
         <label for="InputEmail1">Email address</label>
@@ -8,5 +7,12 @@
         <label for="InputPassword1">Password</label>
         <input type="password" class="form-control input-sm" name="passwort" id="InputPassword1" placeholder="Password">
     </div>
-    <button type="submit" class="btn btn-default btn-xs">Submit</button>
+    <table style="width:100%">
+        <tr>
+            <td>
+                <button type="submit" class="btn btn-default btn-xs">Login</button>
+            </td>
+            <td><a href="../pages/login.php?show=lost_password">Passwort vergessen</a></td>
+        </tr>
+    </table>
 </form>

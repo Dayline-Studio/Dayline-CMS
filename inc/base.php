@@ -14,8 +14,15 @@ function classLoader($class)
     $filename = $classname . '.class.php';
     $path['core'] = '../inc/core/';
     $path['lib'] = '../inc/lib/';
-    $path['modules'] = '../inc/core/site_modules/';
-    $path['servermanager'] = '../inc/core/servermanager/';
+
+    $handle = opendir($path['core']);
+    while ($datei = readdir($handle)) {
+        if (is_dir($path['core'].$datei) && $datei != '.' || $datei != '..') {
+            $path[$datei] = $path['core'].$datei.'/';
+        }
+    }
+    closedir($handle);
+
     foreach ($path as $dir) {
         if (is_readable($dir . $filename)) {
             include $dir . $filename;
@@ -28,6 +35,11 @@ function classLoader($class)
     }
     return false;
 }
+
+date_default_timezone_set('Europe/Berlin');
+define('ENABLE_PHP_ERRORS', TRUE);
+
+Debug::init();
 
 Config::init();
 Db::init(Config::$sql);
@@ -90,7 +102,7 @@ function dbConnect()
             return $db_link;
         }
     } else {
-       // die("Es wurden nicht alle Datenbank Daten zur Verbindung angegeben");
+        // die("Es wurden nicht alle Datenbank Daten zur Verbindung angegeben");
     }
 }
 

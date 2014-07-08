@@ -25,11 +25,11 @@ class News
                 . 'ORDER BY date DESC'
                 , PDO::FETCH_OBJ);
 
-			if (!empty($news)) {
-				foreach ($news as $data) {
-					self::$post[$data->id] = new Post($data);
-				}
-			}				
+            if (!empty($news)) {
+                foreach ($news as $data) {
+                    self::$post[$data->id] = new Post($data);
+                }
+            }
         }
     }
 
@@ -43,7 +43,7 @@ class News
     {
         $res = array();
         foreach (self::$post as $group) {
-            if ($group->grp == $id) {
+            if ($group->grp == $id && $group->public_show) {
                 $res[$group->id] = $group;
             }
         }

@@ -1,7 +1,5 @@
 <?php
 function news(){
-
-    $posts = "";
     News::init();
     foreach (News::$post as $post) {
         if ($post->public_show == 1 && $post->grp == 2) {
@@ -9,15 +7,17 @@ function news(){
             if (strlen($post->title) > $length); {
                 $post->title = substr($post->title,0,$length)." ...";
             }
-            $posts .= show('panels/news_posts',
-                array(
+            $news[] = array(
                     'headline' => $post->title,
-                    'date' => date("d.m. H:i",$post->date),
+                    'date' => date("d.m.-H:i",$post->date),
                     'post' => substr($post->description,0,70).' ...',
                     'id' => $post->id
-                ));
+                );
         }
     }
+    $te = new TemplateEngine('panels/news_posts');
+    $te->addArr('news', $news);
+    $posts = $te->render();
     if ($posts != "") {
         return show("panels/box",
             array(

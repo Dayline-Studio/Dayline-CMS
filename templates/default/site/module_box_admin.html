@@ -1,9 +1,21 @@
 <div id="mod_{id}">
-    <div class="{module_name}" style="display: inline-block; width: 100%; vertical-align: top; border: 1px solid #F2F2F2; margin-bottom: 5px" >
+    <div class="{module_name}"
+         style="display: inline-block; width: 100%; vertical-align: top; border: 1px solid #F2F2F2; margin-bottom: 5px">
         <table width="100%" style="background-color: #bababa" class="table">
             <tr>
-                <td width="20%" style="color: #fff; padding: 5px;">{module_name}</td><td style="text-align: right;" onclick="toggle_admin_slide('mod_{id}')"><img width="16" src="{style}images/icons/icon_edit.png"></td>
-                <td width="20"><img width="16" src="{style}images/icons/icon_delete.png" onclick="delete_module('mod_{id}')"></td>
+                <td width="20%" style="color: #fff; padding: 5px;">{module_name}</td>
+                <td style="text-align: right;" onclick="toggle_admin_slide('mod_{id}')">
+                    <span class="glyphicon glyphicon-pencil"></span>
+                </td>
+                <td width="20">
+                    <span onclick="delete_module('mod_{id}')" class="glyphicon glyphicon-remove"></span>
+                </td>
+                <td width="20">
+                    <span onclick="move('up','mod_{id}')" class="glyphicon glyphicon-arrow-up"></span>
+                </td>
+                <td width="20">
+                    <span onclick="move('down','mod_{id}')" class="glyphicon glyphicon-arrow-down"></span>
+                </td>
             </tr>
         </table>
         <div class="slide_set">

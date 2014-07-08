@@ -14,10 +14,12 @@ class Auth
 
         session_start();
         if (!isset($_SESSION['loggedin']) || !$_SESSION['loggedin']) {
+            $_SESSION['prev_mode'] = false;
             $_SESSION['loggedin'] = false;
             $_SESSION['user'] = 'gast';
             $_SESSION['name'] = 'Gast';
             $_SESSION['group_main_id'] = '2';
+            $_SESSION['email'] = session_id();
             $_SESSION['group'] = 'gast';
             $_SESSION['userid'] = 0;
         }
@@ -41,9 +43,9 @@ class Auth
      * @since 0.4
      * @return string
      */
-    private static function getCurrentUrl()
+    public static function getCurrentUrl()
     {
-        return ((empty($_SERVER['HTTPS'])) ? 'http' : 'https') . "://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+        return self::get_clear_url() . $_SERVER['REQUEST_URI'];
     }
 
     /**
@@ -69,6 +71,11 @@ class Auth
         }
     }
 
+    public static function get_clear_url()
+    {
+        return (empty($_SERVER['HTTPS']) ? 'http' : 'https') . "://" . $_SERVER['HTTP_HOST'];
+    }
+
     /**
      * @param $user User Object for User Data
      * @since 0.4
@@ -76,6 +83,7 @@ class Auth
     private static function create_session($user)
     {
         setcookie('email', $user->email);
+        $_SESSION['prev_mode'] = false;
         $_SESSION['loggedin'] = true;
         $_SESSION['name'] = $user->name;
         $_SESSION['user'] = $user->user;
@@ -95,22 +103,24 @@ class Auth
      */
     public static function login($username, $password)
     {
-        if ($username != "" && $password != "") {
-            if (!check_email_address($username)) {
-                $sql = "user";
-            } else {
-                $sql = "email";
-            }
-            if (db("SELECT id FROM users WHERE " . $sql . " LIKE " . sqlString(strtolower($_POST['username'])), 'rows') == 1) {
-
-                $user = db('Select * From users Where ' . $sql . ' like ' . sqlString(strtolower($username)), 'object');
-
-                if (customHasher($password, $user->rounds) == $user->pass) {
-                    self::create_session($user);
-                    return true;
+        UserAgent::read();
+        $login_access = md5('PW-'.UserAgent::$ip);
+        $login_count = __c("files")->get($login_access);
+        if ($login_count == NULL || $login_count < 6) {
+            if ($username != "" && $password != "") {
+                $user = new User($username);
+                if ($user != NULL) {
+                    if (custom_verify($password, $user->pass)) {
+                        self::create_session($user);
+                        return true;
+                    }
                 }
             }
+        } else {
+            new Notification('Login blocked');
         }
+        if ($login_count === NULL) $login_count = 1;
+        __c('files')->set($login_access,$login_count+1,900);
         return false;
     }
 }

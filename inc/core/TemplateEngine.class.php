@@ -7,6 +7,7 @@ class TemplateEngine
     private $replace_content = array();
     private $single_replace = array();
     private $template_dir;
+    public $results;
 
     public function __construct($content = '')
     {
@@ -30,8 +31,9 @@ class TemplateEngine
     private function renderContent($content)
     {
         $content = preg_replace("/\s+/", " ", $content);
-        preg_match_all('/\[(.*)\|(.*)\|(.*)\]/', $content, $result);
+        preg_match_all('/\[(\w+)\|(\w+)\|(.*|(?R))\]/i', $content, $result);
         $result = $this->switchArrayPositions($result);
+        $this->results = $result;
         foreach ($result as $foreach) {
             $add = '';
             switch ($foreach[1]) {
@@ -50,7 +52,7 @@ class TemplateEngine
                             $add .= $out;
                         }
                     } else {
-                        die('Template-Engine->Error: Variable ' . $foreach[2] . ' not defined');
+                       // die('Template-Engine->Error: Variable ' . $foreach[2] . ' not defined');
                     }
                     break;
                 case 'include':
@@ -72,15 +74,7 @@ class TemplateEngine
 
     public function setHtml($html)
     {
-        if (!empty($this->template_dir)) {
-            if ($htm = file_get_contents($this->template_dir . $html)) {
-                $this->html = show($htm);
-            } else {
-                $this->html = show($html);
-            }
-        } else {
-            $this->html = show($html);
-        }
+        $this->html = show($html);
     }
 
     public function getHtml()

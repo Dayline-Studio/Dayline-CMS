@@ -70,12 +70,12 @@ class Disp
         self::display($init);
     }
 
-    private function display($content)
+    private static function display($content)
     {
         echo $content;
     }
 
-    private function loadingPanels($disp)
+    private static function loadingPanels($disp)
     {
         $panels = searchBetween('{panel_', $disp, '}');
         $new = array();
@@ -99,7 +99,7 @@ class Disp
         return $new;
     }
 
-    private function convertMatchDyn($matches)
+    private static function convertMatchDyn($matches)
     {
         $new = array();
         foreach ($matches as $value) {

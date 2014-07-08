@@ -1,0 +1,3 @@
+<?php
+define('_mail_password_reset_code', 'Es wurde ein neues Passwort für den Benutzter: {user} angefordert.<br/> Klicke auf Folgenen Link um ein Neues Passwort zu aktivieren, dieses wird dir per Mail zugesendet.<br /><br /><a href="{domain}/pages/login.php?do=activate_new_password&AMP;code={code}&amp;id={id}">Neues Passwort aktivieren</a><br />(Dieser Link ist 10 Minuten gültig)');
+define('_mail_new_password', 'Dein neues Passwort lautet: {password}<br />Logge dich mit diesem ein und setzte schnellstmöglich ein neues im <a href="{domain}/pages/ucp?show=profile_edit">Profil bereich</a>');

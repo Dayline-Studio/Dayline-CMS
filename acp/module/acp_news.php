@@ -27,15 +27,23 @@ if ($do == "")
                     'id' => $post->id,
                     'title' => $post->title,
                     'edit_link' => '?acp=acp_news&action=post_edit&id='.$post->id,
-                    'where' => $_GET['acp']
+                    'where' => $_GET['acp'],
+                    'visible' => $post->public_show
                 );
             } $te->addArr('rows', $news);
-            $te->setHtml("acp/acp_list");
+            $te->setHtml("acp/acp_news_list");
             $disp = $te->render();
     }
 } else {
     switch($do)
     {
+        case 'swap_visibility':
+            if (permTo('create_news')) {
+                News::init();
+                News::$post[$_GET['id']]->swap_visibility();
+                goToWithMsg('back',_change_sucessful, 'success');
+            }
+            break;
         case 'create_post':
             if (permTo('create_news')) {
                 if(News::createPost($_POST)) {
@@ -46,7 +54,6 @@ if ($do == "")
             } else { $disp = msg(_no_permissions); }
             break;
         case 'delete':
-
             if (permTo('delete_news')) {
                 News::init();
                 if(News::$post[$_GET['id']]->delete()) {

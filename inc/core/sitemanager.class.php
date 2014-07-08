@@ -110,7 +110,7 @@ class SiteManager
 
     public function get_subsites_from($id)
     {
-        $ret = false;
+        $ret = array();
         foreach ($this->sites as $site) {
             if ($site->subfrom == $id) {
                 if ($subsites = $this->get_subsites_from($site->id))

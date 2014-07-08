@@ -99,7 +99,6 @@ if ($do == "") {
             break;
         case 'update_menu':
             if (permTo('update_menu')) {
-                print_r($_POST);
                 foreach ($_POST as $id => $data) {
 
                     if (!up('UPDATE menu SET title = ' . sqlString($data['up_title']) . ', subfrom = ' . sqlInt($data['up_subfrom']) . ', link = ' . sqlString($data['up_link']) . ', newtab = ' . sqlInt($data['up_newtab']) . ' WHERE id = ' . $id)) {

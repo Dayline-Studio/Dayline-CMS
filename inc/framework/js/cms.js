@@ -1,4 +1,4 @@
-$(document).ready(function () {
+﻿$(document).ready(function () {
     load_create_function();
     load_form_function();
     init_tinymce();
@@ -20,6 +20,12 @@ function toggle_content(id, save) {
         } else {
             document.cookie = mainId + "=0";
         }
+    }
+}
+var url_edit = $(location).attr('href') + '&do=swap_prev_mode';
+document.onkeydown = function (event) {
+    if (event.keyCode == 117) {
+        window.location.assign(url_edit);
     }
 }
 
@@ -56,7 +62,10 @@ function setModulLoading(id) {
 
 function renderModule(id, modul) {
     sGet(id, 'prev').html(modul);
-    sGet(id, 'set').toggle();
+	$(this).ready(
+	function (){
+		sGet(id, 'set').toggle()
+	});
 }
 
 function cMN(id) {
@@ -96,6 +105,37 @@ function load_form_function() {
     });
 }
 
+function move(dir, div_id) {
+    var id = splModName(div_id)[1];
+    $.ajax({
+        url: 'ajax_handler.php',
+        type: 'POST',
+        data: [
+            {name: 'action', value: 'move_'+dir},
+            {name: "id", value: id}
+        ],
+        success: function (data) {
+            var result = JSON.parse(data);
+            if (result.error != undefined) {
+                alert(result.error);
+            } else {
+                $('#mod_'+result.this_id).remove();
+                var replace = '';
+                if (dir == 'up') {
+                    replace = result.this_content + result.target_content;
+                } else {
+                    replace = result.target_content + result.this_content;
+                }
+                $('#mod_'+result.target_id).replaceWith(replace);
+                load_form_function();
+                init_tinymce();
+                admin_toggler();
+            }
+        }
+    })
+	return false;
+}
+
 function load_create_function() {
     $('#create_mod').submit(function () {
         var action = 'create';
@@ -122,7 +162,7 @@ function load_create_function() {
 
 function delete_module(div_id) {
     if (confirm('Willst Du wirklich löschen?')) {
-        $('#'+div_id).slideUp('slow');
+        $('#' + div_id).slideUp('slow');
         var id = splModName(div_id)[2];
         var name = splModName(div_id)[1];
         $.ajax({
@@ -141,6 +181,7 @@ function delete_module(div_id) {
                 });
             }
         })
+		return false;
     }
 }
 
@@ -190,7 +231,7 @@ function get_cookie(tag) {
         }
     }
     var arr = false;
-    if(str) {
+    if (str) {
         arr = str.split('=');
         arr = decodeURIComponent(arr[1]);
     }
@@ -225,7 +266,7 @@ function add_cookie(name, value) {
     document.cookie = name + '=' + value;
 }
 
-function delete_cookie( name ) {
+function delete_cookie(name) {
     document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
 }
 
