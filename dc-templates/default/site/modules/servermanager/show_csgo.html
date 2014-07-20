@@ -1,0 +1,30 @@
+<div style="text-align: center"><h2>Server-ID: #{name}-{server-id} | Type: {type}</h2></div>
+<hr />
+<div class="inblock">
+    <img src="{style}images/servermanager/logo_{type}.png" width="200" alt="image" style="padding:3px;border-style:solid;border-width:2px;"/>
+</div>
+<div class="inblock">
+    <table class="table">
+    {dispModul1}
+    </table>
+</div>
+<div class="inblock" style="width: 100%;">
+    <table class="table table-hover">
+        <tr>
+            <td>{s_hostname}:</td>
+            <td>{hostname}</td>
+        </tr>
+        <tr>
+            <td>{s_server_ip}:{s_server_port}:</td>
+            <td>{ip}:{port}</td>
+        </tr>
+        <tr>
+            <td>{s_server_players}/{s_server_max_players}</td>
+            <td>{onlineplayers}/{maxplayers}</td>
+        </tr>
+        <tr>
+            <td>{s_server_mapname}:</td>
+            <td>{mapname}</td>
+        </tr>
+    </table>
+</div>

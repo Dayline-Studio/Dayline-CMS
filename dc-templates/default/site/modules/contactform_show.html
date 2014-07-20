@@ -1,0 +1,43 @@
+<form class="task" data-id="{id}">
+    <input name="module_task" value="send_message" type="hidden"/>
+    <table class="table table-hover">
+        <tr>
+            <td>
+                Email:
+            </td>
+            <td>
+                <input type="email" name="email" class="form-control"/>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Betreff:
+            </td>
+            <td>
+                <input type="text" name="subject" class="form-control"/>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Nachricht:
+            </td>
+            <td>
+                <textarea name="message" cols="50" rows="6" class="form-control">
+                </textarea>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <input class="btn btn-default" type="submit" value="Absenden"/>
+            </td>
+            <td>
+                <div class="QapTcha"></div>
+                <script type="text/javascript">
+                    $(document).ready(function () {
+                        $('.QapTcha').QapTcha();
+                    });
+                </script>
+            </td>
+        </tr>
+    </table>
+</form>

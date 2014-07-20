@@ -13,16 +13,21 @@ php_value post_max_size 20M
 php_value max_execution_time 200
 php_value max_input_time 200
 
-DirectoryIndex index.php
-
-Options All -Indexes
-
+DirectoryIndex dc-index.php news.php admin.php
+Options All -Indexes -MultiViews
 Options +FollowSymLinks
 RewriteEngine on
+
+ErrorDocument 500 REDIRECT_SERVER_NAME/error
 
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME}.php -f
 RewriteRule ^(.+)$ $1.php [L,QSA]
 
-RewriteRule ^acp/([0-9]+)$ acp/index.php$1
+RewriteCond %{REQUEST_URI} !^pages/.*
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d [OR]
+RewriteCond %{REQUEST_URI} ^/$
+RewriteRule ^(.*) /dc-pages/$1 [L]
+

@@ -1,0 +1,5 @@
+<?xml version='1.0' standalone='yes'?>
+<infos>
+    <title>Server Manager</title>
+    <class>ServerManagerModule</class>
+</infos>

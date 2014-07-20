@@ -1,0 +1,26 @@
+<h1>Meine Server</h1><hr>
+<table class="table table-hover" border="0" cellspacing="10" cellpadding="5" width=100%>
+    <tr>
+        <th>Server User</th>
+        <th>IP:Port</th>
+        <th>Interface:port</th>
+        <th>Server Art</th>
+        <th>Spiel</th>
+        <th></th>
+    </tr>
+    [array|server|
+    <tr>
+        <td>{name}</td>
+        <td>{ip}:{query_port}</td>
+        <td class="text"><a href="{interface_port}">{interface_port}</a></td>
+        <td>{kind}</td>
+        <td>{type}</td>
+        <td> 
+		<form class="task" data-id="{id}">
+			<input name="module_task" value="show_single_server" type="hidden"/>
+			<input name="server_id" type="hidden" value="{server_id}" class="form-control"/>
+			<input type="submit" value="Aktion" class="btn btn-default"/>
+		</form>
+    </tr>
+    ]
+</table>
