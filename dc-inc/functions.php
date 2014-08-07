@@ -5,8 +5,8 @@ phpFastCache::setup("path", Config::$path['cache']);
 
 function show($file_content = "", $tags = array(null => null))
 {
-    if (file_exists(Config::$path['template'] . "/" . $file_content . ".html")) {
-        $file_content = file_get_contents(Config::$path['template'] . "/" . $file_content . ".html");
+    if (file_exists(Config::$path['template_abs'] . "/" . $file_content . ".html")) {
+        $file_content = file_get_contents(Config::$path['template_abs'] . "/" . $file_content . ".html");
     } else if (file_exists(Config::$path['template_default'] . $file_content . ".html")) {
         $file_content = file_get_contents(Config::$path['template_default'] . $file_content . ".html");
     } else if (file_exists($file_content)) {
@@ -17,18 +17,20 @@ function show($file_content = "", $tags = array(null => null))
             $file_content = str_replace('{' . $name . '}', $value, $file_content);
         }
     }
-    return preg_replace("/\s+/", " ", $file_content);
+    //return preg_replace("/\s+/", " ", $file_content);
+    return $file_content;
 }
 
-function get_template_dir_from($path) {
-    if(file_exists(Config::$path['template'] . "/" . $path)) {
+function get_template_dir_from($path)
+{
+    if (file_exists(Config::$path['template'] . "/" . $path)) {
         return Config::$path['template'] . "/" . $path;
     } else if (file_exists(Config::$path['template_default'] . $path)) {
-        return Config::$path['template_default']. $path;
+        return Config::$path['template_default'] . $path;
     } else if (file_exists($path)) {
         return $path;
     } else {
-        Debug::log('Template file not found -> '. $path);
+        Debug::log('Template file not found -> ' . $path);
         return "";
     }
 }
@@ -52,15 +54,16 @@ function randomstring($length = 6)
     return $tmp;
 }
 
-function custom_verify($pw, $pw2) {
+function custom_verify($pw, $pw2)
+{
     global $config;
-    return password_verify($pw.$config['salt'],$pw2);
+    return password_verify($pw . $config['salt'], $pw2);
 }
 
 function customHasher($pw)
 {
     global $config;
-    return password_hash($pw.$config['salt'],PASSWORD_BCRYPT, array('cost' => 12));
+    return password_hash($pw . $config['salt'], PASSWORD_BCRYPT, array('cost' => 12));
 }
 
 function sqlString($param)
@@ -229,6 +232,12 @@ function searchBetween($start_tag, $String, $end_tag)
     return array();
 }
 
+function get_module_name($id)
+{
+    $mod = Db::npquery("SELECT module FROM modules WHERE id = $id", PDO::FETCH_OBJ);
+    return $mod[0]->module;
+}
+
 function backSideFix()
 {
     if (isset($_SESSION['last_site'])) {
@@ -305,6 +314,18 @@ function goToWithMsg($url, $msg, $type = 'info')
     }
 }
 
+function goToSite($url)
+{
+    if ($url == 'back') {
+        goBack();
+    } else if ($url == 'home') {
+        goToSite(Config::$settings->home);
+    } else {
+        header('Location: ' . $url);
+        exit();
+    }
+}
+
 function con_to_lang($str)
 {
     return '{s_' . $str . '}';
@@ -365,4 +386,13 @@ function sendMessage($sender, $receiver, $content, $title, $email = "")
         'title' => $title
     );
     return Db::insert('messages', $in);
+}
+
+function unset_array_keys($arr, $keys) {
+    foreach ($keys as $key) {
+        if (isset($arr[$key])) {
+            unset($arr[$key]);
+        }
+    }
+    return array_values($arr);
 }

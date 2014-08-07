@@ -1,0 +1,17 @@
+<div id="position_{position}">
+    {modules}
+    <a data-toggle="modal" data-target="#create_{position}"><img src="/dc-inc/images/add_module.png" alt="Absenden" /></a>
+    <div class="modal fade" role="dialog" id="create_{position}">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form class="create_mod" action="/ajax_handler">
+                    <select name="module" class="form-control">
+                        {available_modules}
+                    </select>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <input type="submit" class="btn btn-primary" value="{s_add}" />
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

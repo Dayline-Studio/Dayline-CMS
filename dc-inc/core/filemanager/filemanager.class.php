@@ -4,6 +4,7 @@ class FileManager
 {
     private $upload_path;
     private $current_path;
+    private $path_rel;
     public $dir;
     public $current_history;
     private $static_vars = '';
@@ -14,6 +15,7 @@ class FileManager
         $this->upload_path = Config::$path['upload'];
         $this->current_history = explode('/', $current_path);
         $this->current_path = $this->upload_path . $current_path;
+        $this->path_rel = Config::$path['upload_rel'];
         if (substr($this->current_path, -1, 1) != '/') {
             $this->current_path .= '/';
         }
@@ -34,7 +36,9 @@ class FileManager
 
     public function load_dir()
     {
-        $this->dir = new Fm_Folder($this->upload_path, $this->upload_path);
+        Fm_Folder::set_base($this->upload_path);
+        Fm_Folder::set_path_rel($this->path_rel);
+        $this->dir = new Fm_Folder($this->upload_path);
     }
 
     public function get_parent_folder_from_current()

@@ -9,7 +9,6 @@ $meta['page_id'] = 1;
 
 if ($_SESSION['loggedin']) {
     header('Location: ucp.php');
-    exit();
 }
 
 $disp = "";

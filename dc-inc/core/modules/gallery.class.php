@@ -7,12 +7,12 @@ class Gallery extends MainModule
 
     protected function render()
     {
-        if (is_readable($this->album_path)) {
+        if (!empty($this->album_path)) {
             $te = new TemplateEngine('site/modules/gallery_show');
-            $dir = scandir($this->album_path);
+            $dir = scandir(Config::$path['root_base'] . $this->album_path);
             $images = [];
             foreach ($dir as $image) {
-                if ($image != '..' && $image != '.' && is_file($this->album_path . $image)) {
+                if ($image != '..' && $image != '.' && is_file(Config::$path['root_base'] . $this->album_path . $image)) {
                     $images[] = array('path' => $this->album_path . $image, 'thumb' => $this->is_thumb($this->album_path . $image));
                 }
             }
@@ -25,7 +25,7 @@ class Gallery extends MainModule
 
     private function is_thumb($str)
     {
-        return str_replace(Config::$path['upload'], Config::$path['thumbs'], $str);
+        return str_replace(Config::$path['upload_rel'], Config::$path['thumbs_rel'], $str);
     }
 
     protected function render_admin()

@@ -1,4 +1,4 @@
-<form action="index.php?acp=acp_site&AMP;do=create_site" method="post">
+<form action="admin.php?acp=acp_site&AMP;do=create_site" method="post">
     <table class="table">
         <tr>
             <td>{s_title}:</td>
@@ -10,13 +10,13 @@
             <td>{s_keywords}:</td>
             <td><input name="keywords" type="text" class="form-control"></td>
             <td>{s_show_author}</td>
-            <td><input type="checkbox" name="show_author" value="1" /></td>
+            <td><input type="checkbox" name="show_author" value="1"/></td>
         </tr>
         <tr>
             <td>{s_description}:</td>
             <td><input name="description" type="text" class="form-control"></td>
             <td>{s_show_print}</td>
-            <td><input type="checkbox" name="show_print" value="1" /></td>
+            <td><input type="checkbox" name="show_print" value="1"/></td>
         </tr>
         <tr>
             <td>{s_addafter}:</td>
@@ -24,15 +24,15 @@
                 <select name="subfrom" class="form-control">
                     <option value="0">Keine Uebergeordnete Seite</option>
                     [array|options|
-                        <option value="{value}">{title}</option>
+                    <option value="{value}">{title}</option>
                     ]
                 </select>
             </td>
             <td>{s_show_headline}</td>
-            <td><input type="checkbox" name="show_headline" value="1" /></td>
+            <td><input type="checkbox" name="show_headline" value="1"/></td>
         </tr>
         <tr>
-            <td><input class="btn btn-default" type="submit" value="Annehmen" /></td>
+            <td><input class="btn btn-default" type="submit" value="Annehmen"/></td>
         </tr>
     </table>
 </form>

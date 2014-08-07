@@ -63,22 +63,15 @@ if ($do == "") {
     }
 } else {
     switch ($do) {
-        case 'update_settings':
-
-            break;
         case 'update_group':
-            $update = '';
-            $groups = Db::npquery('SELECT * FROM groups WHERE id = ' . $id . ' LIMIT 1');
-            foreach ($groups as $name => $value) {
-                if ($name != 'id' && $name != 'groupid') {
-                    $value = 0;
-                    if (isset($_POST[$name]) && $_POST[$name] = 1) $value = 1;
-                    $update .= ' ' . $name . ' = ' . $value . ',';
-                }
+            if (permTo('edit_group')) {
+                $groups = Db::query('SELECT * FROM groups WHERE id = :id LIMIT 1', array('id' => $_GET['id']));
+                $test = array_splice($groups, 0, 2);
+                print_r($test);
+                $form = new Form($_POST,$test);
+                Db::update('groups',$_GET['id'],$form->get_vars_raw());
+                goToWithMsg('back','Done');
             }
-            $update = substr($update, 0, -1) . ' ';
-
-            $disp = up('UPDATE groups SET ' . $update . 'WHERE id=' . $id) ? 'Update sucessful' : 'Update failed';
             break;
         case 'delete_group':
             if (permTo('delete_group')) {

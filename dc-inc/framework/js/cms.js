@@ -74,10 +74,6 @@ function setModulLoading(id) {
 
 function renderModule(id, modul) {
     sGet(id, 'prev').html(modul);
-    $(this).ready(
-        function () {
-            sGet(id, 'set').toggle()
-        });
 }
 
 function cMN(id) {
@@ -117,7 +113,7 @@ function reload_module(id, action, func, add_post) {
         send = $.merge(send, add_post);
     }
     $.ajax({
-        url: 'ajax_handler.php',
+        url: '/ajax_handler',
         type: 'POST',
         data: send,
         success: function (data) {
@@ -179,7 +175,7 @@ function load_form_function() {
     });
 
     $('form[class^="task"]').submit(function () {
-        setModulLoading(cMN($(this).data('id')));
+        // setModulLoading(cMN($(this).data('id')));
         var send = $(this).serializeArray();
         reload_module($(this).data('id'), 'get_post_result_render', function (id, result) {
             sGet('mod_' + id, 'prev').html(result.prev);
@@ -192,7 +188,7 @@ function load_form_function() {
         var module_id = splModName($(this).attr('id'))[1];
         var action = 'update';
         var div = cMN(module_id);
-        setModulLoading(div);
+        // setModulLoading(div);
         var postData = $(this).serializeArray();
         postData[5] = {name: "action", value: action};
         postData[6] = {name: "id", value: module_id};
@@ -206,12 +202,12 @@ function load_form_function() {
                 type: "POST",
                 data: postData,
                 success: function (data) {
+                    console.log(data);
                     $.bootstrapGrowl("Change Successful", {
                         type: 'success'
                     });
                     renderModule(div, data);
-                    init_tinymce();
-                    init_colorbox();
+                    init_module(0, 1, 1, 0);
                 }
             });
         return false;
@@ -221,7 +217,7 @@ function load_form_function() {
 function move(dir, div_id) {
     var id = splModName(div_id)[1];
     $.ajax({
-        url: 'ajax_handler.php',
+        url: '/ajax_handler',
         type: 'POST',
         data: [
             {name: 'action', value: 'move_' + dir},
@@ -260,18 +256,20 @@ function init_colorbox() {
 }
 
 function load_create_function() {
-    $('#create_mod').submit(function () {
+    $('.create_mod').submit(function () {
         var action = 'create';
         var postData = $(this).serializeArray();
+        var position = $(this).closest("[id^='position_']").attr('id');
         postData[10] = {name: "action", value: 'create'};
-        var formURL = $(this).attr("action");
+        postData[11] = {name: "position", value: position}
         $.ajax(
             {
-                url: formURL,
+                url: '/ajax_handler',
                 type: "POST",
                 data: postData,
                 success: function (data) {
-                    $('#modules').append(data);
+                    console.log(data);
+                    $('#' + position).children('a').before(data);
                     init_tinymce();
                     $.bootstrapGrowl("Modul added");
                     init_module(1, 1, 1, 1);
@@ -288,7 +286,7 @@ function delete_module(div_id) {
         var id = splModName(div_id)[2];
         var name = splModName(div_id)[1];
         $.ajax({
-            url: 'ajax_handler.php',
+            url: '/ajax_handler',
             type: 'POST',
             data: [
                 {name: 'action', value: 'delete'},
@@ -406,7 +404,7 @@ function init_tinymce() {
             "insertdatetime media table responsivefilemanager contextmenu paste"
         ],
         toolbar: "insertfile undo redo | styleselect | youtube | bold italic forecolor backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image",
-        external_filemanager_path: "../content/plugins/filemanager/",
+        external_filemanager_path: "/dc-content/plugins/filemanager/",
         filemanager_title: "Responsive Filemanager",
         external_plugins: { "filemanager": "../filemanager/plugin.min.js"},
         style_formats_merge: true,

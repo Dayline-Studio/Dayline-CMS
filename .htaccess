@@ -18,16 +18,23 @@ Options All -Indexes -MultiViews
 Options +FollowSymLinks
 RewriteEngine on
 
-ErrorDocument 500 REDIRECT_SERVER_NAME/error
-
+RewriteCond %{REQUEST_URI} !^/dc-pages/.*
 RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME}.php !-f
 RewriteCond %{REQUEST_FILENAME} !-d
-RewriteCond %{REQUEST_FILENAME}.php -f
-RewriteRule ^(.+)$ $1.php [L,QSA]
+RewriteRule ^(.+)$ /dc-pages/$1
 
-RewriteCond %{REQUEST_URI} !^pages/.*
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_FILENAME} !-d [OR]
-RewriteCond %{REQUEST_URI} ^/$
-RewriteRule ^(.*) /dc-pages/$1 [L]
+RewriteCond %{THE_REQUEST} ^GET\s(.*/)index\.php [NC]
+RewriteRule . %1 [NE,R=301,L]
 
+RewriteCond %{THE_REQUEST} ^GET\s.+\.php [NC]
+RewriteRule ^(.+)\.php$ /$1 [NE,R=301,L,NC]
+
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{DOCUMENT_ROOT}/$1.php -f
+RewriteRule ^(.*?)/?$ $1.php [L]
+
+RewriteRule ^dc-pages/([^\.]+)$ site.php?show=$1 [L,NC]
+RewriteRule ^dc-pages/([^\.]+)/([^\.]+)$ site.php?show=$2
+
+#ErrorDocument 404 /dc-pages/error.php?r=sitenotfound

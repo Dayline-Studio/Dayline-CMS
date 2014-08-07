@@ -5,7 +5,7 @@ class Render
 
     public static function navigation_back_from($id)
     {
-        $sm = new SiteManager('*');
+        $sm = new SiteManager('*', 'filter:visibility');
         if ($site = $sm->get_site_by_search('subfrom', $sm->filter_id($id))) {
             $id = $site->id;
         }
@@ -13,7 +13,7 @@ class Render
         $menu = '<ul>';
         if ($sites) {
             foreach ($sites as $site) {
-                $menu .= '<li><a href="../pages/site?show=' . $site->get_site_id() . '" >' . $site->title . self::get_menu($site) . '</a></li>';
+                $menu .= '<li><a href="'. $site->get_url() . '" >' . $site->title . '</a>' . self::get_menu($site) . '</li>';
             }
             $menu .= '</ul>';
             return $menu;
@@ -27,7 +27,7 @@ class Render
         if (isset($site->subsites)) {
             $menu .= '<ul>';
             foreach ($site->subsites as $subsite) {
-                $menu .= '<li><a href="../pages/site?show=' . $subsite->get_site_id() . '" >' . $subsite->title . self::get_menu($subsite) . '</a></li>';
+                $menu .= '<li><a href="'. $subsite->get_url() . '">' . $subsite->title . '</a>' . self::get_menu($subsite) . '</li>';
             }
             $menu .= '</ul>';
         }

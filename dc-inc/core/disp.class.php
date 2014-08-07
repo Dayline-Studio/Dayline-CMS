@@ -16,12 +16,9 @@ class Disp
     public static function render()
     {
         $disp = show('index');
-
         $init = show($disp, array_merge(array("content" => self::$content),self::loadingPanels($disp)));
         $init = show($init, self::convertMatchDyn(searchBetween("{dyn_", $init, "}")));
-        $init = preg_replace("/\s+/", " ", $init);
 
-        self::$meta['copyright'] = Config::$settings->copyright;
         self::$meta['google_analytics'] = Config::$settings->google_analytics;
         self::$meta['domain'] = $_SERVER['HTTP_HOST'];
         self::$meta['title'] .= ' | ' . Config::$settings->website_title;
@@ -35,9 +32,9 @@ class Disp
         $sn = !empty($_SESSION['simple_note']) ? $_SESSION['simple_note'] : '';
         $init = show($init, array('simple_note' => $sn));
         $_SESSION['simple_note'] = NULL;
-        $init = show($init, self::$meta);
-        $init = show($init, convertMatch(searchBetween("{s_", $init, "}")));
-        $init = preg_replace("/\{\w\}/", "", $init);
+
+        $init = self::read_modules($init);
+        $init = self::replace_paths($init);
         self::display($init);
     }
 
@@ -45,13 +42,15 @@ class Disp
     {
         self::$meta = array_merge(Config::$path, self::$meta);
         $init = show($init, self::$meta);
+        $init = show($init, self::convertMatchDyn(searchBetween("{dyn_", $init, "}")));
         $init = show($init, convertMatch(searchBetween("{s_", $init, "}")));
+        //$init = preg_replace("/\{\w\}/", "", $init);
         return $init;
     }
 
     public static function renderMin()
     {
-        $init = show(self::$content, convertMatch(searchBetween("{s_", self::$content, "}")));
+        $init = self::replace_paths(self::$content);
         $sn = !empty($_SESSION['simple_note']) ? $_SESSION['simple_note'] : '';
         $init = show($init, array('simple_note' => $sn));
         self::display($init);
@@ -66,7 +65,7 @@ class Disp
         $init = show($index, $meta);
         $sn = !empty($_SESSION['simple_note']) ? $_SESSION['simple_note'] : '';
         $init = show($init, array('simple_note' => $sn));
-        $init = preg_replace("/\{\w\}/", "", $init);
+        //$init = preg_replace("/\{\w\}/", "", $init);
         self::display($init);
     }
 
@@ -106,6 +105,16 @@ class Disp
             $new["dyn_" . $value] = show("allround/ajax_loading", array('panel_name' => $value));
         }
         return $new;
+    }
+
+    public static function read_modules($init) {
+        $positions = searchBetween('{position_',$init,'}');
+        $case = [];
+        foreach ($positions as $position) {
+            $modules = new ModuleManager($position);
+            $case['position_'.$position] = $modules->get_render();
+        }
+        return show($init, $case);
     }
 
 }

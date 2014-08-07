@@ -8,11 +8,13 @@ if ($do == "")
     switch ($action)
     {
         default:
-             
+            $te = new TemplateEngine('acp/acp_edit_settings');
+            $form = new Form(Config::$settings);
+            $te->add_vars($form->get_vars_out());
+            $disp = $te->render();
             break;
         case 'update_database': {
             include 'sql_updates.php';
-
             foreach ($sql_up as $ver => $update) {
                 $disp .= "Checking $ver <br/>";
                 if($ver > Config::$settings->version) {
@@ -32,6 +34,15 @@ if ($do == "")
 switch ($do)
 {
     case 'update_settings':
-        
+        if (permTo('edit_settings')) {
+            $form = new Form($_POST, array('force_https'));
+            if(Db::update('settings', 1, $form->get_vars_raw())) {
+                goToWithMsg('back', 'Done','success');
+            } else {
+                goToWithMsg('back', 'Failed','danger');
+            }
+        } else {
+            $disp = _no_permissions;
+        }
         break;
 }

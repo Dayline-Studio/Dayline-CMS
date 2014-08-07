@@ -17,11 +17,8 @@ if (!isset($_GET['id'])) {
     $te->render();
     Disp::$content = $te->getHtml();
 } else {
-    News::$post[$_GET['id']]->loadComments();
-    $te->addArr('comments', News::$post[$_GET['id']]->getComments());
     $te->setHtml(show('news/layout'));
-    $te->render();
-    Disp::$content = show($te->getHtml() . News::$post[$_GET['id']]->getCommentInput(), News::$post[$_GET['id']]);
+    Disp::$content = show($te->render(), News::$post[$_GET['id']]);
 }
 
 Disp::addMeta($meta);

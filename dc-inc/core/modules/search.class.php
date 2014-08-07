@@ -37,7 +37,7 @@ class Search extends MainModule
         $tag = $_POST['tags'];
         unset($_POST);
         $tags = explode(' ', $tag);
-        $sm = new SiteManager('*');
+        $sm = new SiteManager('*', 'filter:visibility');
         foreach ($tags as $tag) {
             $tag = preg_replace('/[^a-zA-Z0-9]/', '', $tag);
             foreach ($sm->sites as $site) {

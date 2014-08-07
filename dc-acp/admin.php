@@ -12,7 +12,6 @@ $error = "";
 $disp = "";
 $subsite = array();
 
-
 if (!permTo("menu_acp")) {
     $error = msg(_no_permissions);
 }
@@ -50,7 +49,7 @@ if ($error == "") {
     $submenu = "";
     $path['acp_settings'] = 'settings/' . $acp . '.xml';
     if (file_exists($path['acp_settings'])) {
-        $acp_settings = new SimpleXMLElement(file_get_contents($path['acp_settings']));
+        $acp_settings = new SimpleXMLElement($path['acp_settings'],0,true);
         if (isset($acp_settings->subsites[0])) {
             $li = "";
             foreach ($acp_settings->subsites[0] as $sub) {
@@ -63,7 +62,9 @@ if ($error == "") {
             $submenu = $li;
         }
     }
-    Disp::$content = show("acp/menu", array("menu" => $item_stack, "content" => $disp, "submenu" => $submenu));
+    $vc = new VersionControl();
+    $case = array("menu" => $item_stack, "content" => show($disp, array('where' => $acp)), "submenu" => $submenu);
+    Disp::$content = show("acp/menu", array_merge($case, $vc->get_vars()));
     Disp::addMeta($meta);
     Disp::render();
 } else {

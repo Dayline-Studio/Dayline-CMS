@@ -10,10 +10,10 @@ function navi()
             $content =  siteNaviBackward($sm->get_first_site()->id);
             break;
         default:
-            $content = '<a href="../pages/'.basename($_SERVER["PHP_SELF"]).'">'.ucfirst(substr(basename($_SERVER["PHP_SELF"]),0,-4))."</a>";
+            $content = '<a href="{pages}'.basename($_SERVER["PHP_SELF"]).'">'.ucfirst(substr(basename($_SERVER["PHP_SELF"]),0,-4))."</a>";
             break;
         case 'categories':
-            $content = '<a href="../pages/'.basename($_SERVER["PHP_SELF"]).'">'.ucfirst(substr(basename($_SERVER["PHP_SELF"]),0,-4))."</a>";
+            $content = '<a href="{pages}'.basename($_SERVER["PHP_SELF"]).'">'.ucfirst(substr(basename($_SERVER["PHP_SELF"]),0,-4))."</a>";
             break;
    }
    
@@ -36,5 +36,5 @@ function siteNaviBackward($id)
     {
         $oversite = siteNaviBackward($site->subfrom).' >> ';
     }
-    return $oversite.'<a href="../pages/site.php?show='.$site->get_site_id().'">'.$site->title.'</a>';
+    return $oversite.'<a href="'.$site->get_url().'">'.$site->title.'</a>';
 }

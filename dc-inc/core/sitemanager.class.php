@@ -4,19 +4,42 @@ class SiteManager
 {
 
     public $sites;
+    private static $active_site;
+
+    public static function get_current_site() {
+        $show = isset($_REQUEST['show']) ? $_REQUEST['show'] : NULL;
+        if ($show) {
+            $id = self::filter_id($show);
+            $sm = new self($id);
+            self::$active_site = $sm->get_first_site();
+        } return self::$active_site;
+    }
 
     public function __construct()
     {
+        $filter = '';
         $ids = func_get_args();
+        if (stristr($ids[sizeof($ids)-1],'filter')) {
+            $filter = explode(':',$ids[sizeof($ids)-1])[1];
+            unset($ids[sizeof($ids)-1]);
+        }
         if ($ids[0] !== 0) {
+            switch ($filter) {
+                case 'visibility':
+                    $add = ' WHERE public = 1 ';
+                    break;
+                default:
+                    $add = '';
+            }
             if ($ids[0] === '*') {
-                $sql = "select * from sites ORDER BY position";
+                $sql = "select * from sites $add ORDER BY position";
             } else {
+                $arr = [];
                 foreach ($ids as $id) {
-                    $this->filter_id($id);
+                    $id = self::filter_id($id);
                     $arr[] = "id = '$id'";
                 }
-                $sql = "select * from sites where (" . implode(' OR ', $arr) . ') ORDER BY position DESC';
+                $sql = "select * from sites where (" . implode(' OR ', $arr) . ") ORDER BY position DESC";
             }
             $result = Db::npquery($sql, PDO::FETCH_ASSOC);
             foreach ($result as $site) {
@@ -25,10 +48,17 @@ class SiteManager
         }
     }
 
-    public function filter_id($str)
+    public static function filter_id($str)
     {
         $tags = explode('-', $str);
-        return $tags[0];
+        $id = $tags[sizeof($tags)-1];
+        if (!is_numeric($id)) {
+            foreach ($tags as $tag) {
+                if(is_numeric($tag)) {
+                    return $tag;
+                }
+            }
+        } return $id;
     }
 
     public function wipe()
@@ -39,7 +69,7 @@ class SiteManager
 
     public function get_first_site()
     {
-        return reset($this->sites);
+        return sizeof($this->sites)>0 ? reset($this->sites) : false;
     }
 
     public function create_site($data)
@@ -85,7 +115,7 @@ class SiteManager
 
     public function get_backside_list_from($id)
     {
-        $id = $this->filter_id($id);
+        $id = self::filter_id($id);
         if (isset($this->sites[$id])) {
             return $this->get_site_list_from($this->sites[$id]);
         }

@@ -25,12 +25,12 @@ class Menu extends MainModule
 
     private function get_site_list($from, $select = -1)
     {
-        $sm = new SiteManager('*');
+        $sm = new SiteManager('*', 'filter:visibility');
         $list = [];
         foreach ($sm->sites as $site) {
             if ($site->subfrom == $from || $from < 0) {
                 $select = $site->id == $select ? 'selected' : '';
-                $list[] = array('title' => $site->title, 'id' => $site->id, 'select' => $select);
+                $list[] = array('title' => $site->title, 'id' => $site->id, 'select' => $select, 'url' => $site->get_url());
             }
         }
         return $list;

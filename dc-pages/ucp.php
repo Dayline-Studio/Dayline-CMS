@@ -65,10 +65,11 @@ if ($do == "") {
             break;
         case 'new_message':
             backSideFix();
+            $case['options'] = '';
             $case['input'] = show('allround/input_editor');
-            $qry = db("SELECT name,id FROM users WHERE id != " . $_SESSION['userid']);
-            while ($data = _assoc($qry)) {
-                $case['options'] .= show("allround/select_option", array('option' => $data['name'], 'value' => $data['id']));
+            $qry = Db::npquery("SELECT name,id FROM users WHERE id != " . $_SESSION['userid']);
+            foreach ($qry as $user) {
+                $case['options'] .= show("allround/select_option", array('option' => $user['name'], 'value' => $user['id']));
             }
             $case['content'] = '';
             $disp = show('ucp/msg_new', $case);

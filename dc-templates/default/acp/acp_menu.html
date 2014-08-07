@@ -1,26 +1,41 @@
 <form action="?acp=acp_menu&AMP;do=create_menu" method="post">
     <table style="width: 100%" class="table">
+        <thead>
         <tr>
-            <td>{s_name}</td>
-            <td>{s_submenu}</td>
-            <td>{s_type}</td>
-            <td>{s_link}</td>
-            <td>{s_newtab}</td>
+            <th>{s_name}</th>
+            <th>{s_submenu}</th>
+            <th>{s_type}</th>
+            <th>{s_link}</th>
+            <th>{s_newtab}</th>
         </tr>
+        </thead>
+        <tbody>
         {add}
+        <tr>
+            <td>
+                <input class="btn btn-default" type="submit" value="erstellen"/>
+            </td>
+        </tr>
+        </tbody>
     </table>
-    <input class="btn btn-default" type="submit" value="erstellen"/>
+
 </form>
 <form action="?acp=acp_menu&AMP;do=update_menu" method="post">
-    <table width="100%" class="table table-hover">
+    <table width="100%" class="table">
         <colgroup>
             <col/>
             <col/>
             <col/>
             <col width="20"/>
             <col width="20"/>
-            {list}
+        </colgroup>
+        {list}
+        <tr>
+            <td>
+                <input class="btn btn-default" type="submit" value="Update"/>
+            </td>
+        </tr>
     </table>
-    <input class="btn btn-default" type="submit" value="Update"/>
+
 </form>
 

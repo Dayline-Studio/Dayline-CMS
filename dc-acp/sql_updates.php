@@ -9,4 +9,16 @@ $sql_up[303][] = "ALTER TABLE `modules` CHANGE `params` `params` MEDIUMTEXT CHAR
 
 $sql_up[304][] = "ALTER TABLE `settings` ADD `construction_mode` INT( 1 ) NOT NULL DEFAULT '0'";
 $sql_up[305][] = "ALTER TABLE `menu` CHANGE `link` `link` VARCHAR( 500 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ";
-$sql_up[305][] = "UPDATE `menu` SET `link` = '../dc-acp/' WHERE title LIKE 'ACP' LIMIT 1 ";
+$sql_up[305][] = "UPDATE `menu` SET `link` = '../dc-acp/admin' WHERE title LIKE 'ACP' LIMIT 1 ";
+
+$sql_up[306][] = "ALTER TABLE `settings` ADD `home` VARCHAR( 500 ) NOT NULL DEFAULT '/news'";
+
+$sql_up[308][] = "ALTER TABLE `groups` ADD `edit_settings` INT( 1 ) NOT NULL DEFAULT '0'";
+$sql_up[308][] = "ALTER TABLE `settings` DROP `publisher` ,
+                    DROP `copyright` ,
+                    DROP `link_facebook` ,
+                    DROP `link_google` ,
+                    DROP `link_youtube` ,
+                    DROP `link_twitter` ;";
+
+$sql_up[309][] = "ALTER TABLE `groups` ADD `edit_group` INT( 1 ) NOT NULL DEFAULT '0'";

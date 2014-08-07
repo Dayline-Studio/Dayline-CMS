@@ -12,7 +12,7 @@ function slider() {
         {
             if ($image != ".." && $image != ".") 
             {
-                  $slider_images .= '<img src="'.Config::$path['upload'].'images/slider/'.$image.'" alt="" />';
+                  $slider_images .= '<img src="'.Config::$path['upload_rel'].'images/slider/'.$image.'" alt="" />';
             }
         }
         closedir($images);

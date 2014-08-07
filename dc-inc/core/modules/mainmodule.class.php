@@ -8,17 +8,24 @@ abstract class MainModule
     public function __construct($id, $create = false)
     {
         if ($create) {
+            $id = str_replace('position_', '', $id);
             $this->position = $id;
             $i['position'] = $id;
             $i['module'] = get_class($this);
             Db::insert("modules", $i);
             $this->id = Db::get_last_id();
             $this->set_order_position();
+            if (method_exists($this,'on_create')) {
+                $this->on_create();
+            }
             $this->update();
         } else {
             $this->id = $id;
         }
         $this->load_setup();
+        if (method_exists($this,'on_construct')) {
+            $this->on_construct();
+        }
     }
 
     public function load_setup()

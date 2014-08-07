@@ -13,6 +13,12 @@ class Auth
         self::check_header();
 
         session_start();
+
+        if (isset($_SESSION['go_home'])) {
+            unset($_SESSION['go_home']);
+            self::go_home();
+        }
+
         if (!isset($_SESSION['loggedin']) || !$_SESSION['loggedin']) {
             $_SESSION['prev_mode'] = false;
             $_SESSION['loggedin'] = false;
@@ -46,6 +52,10 @@ class Auth
     public static function getCurrentUrl()
     {
         return self::get_clear_url() . $_SERVER['REQUEST_URI'];
+    }
+
+    private static function go_home() {
+        goToSite('home');
     }
 
     /**
@@ -92,6 +102,7 @@ class Auth
         $_SESSION['login_time'] = time();
         $_SESSION['https'] = Config::$settings->foce_https ? TRUE : FALSE;
         $_SESSION['group_main_id'] = $user->main_group;
+        $_SESSION['prev_mode'] = true;
         if (permTo('fm_access')) $_SESSION['fm_access'] = TRUE;
     }
 

@@ -3,9 +3,7 @@
 include "../dc-inc/base.php";
 //------------------------------------------------
 
-$_POST = array_merge($_POST, $_GET);
-
-foreach ($_POST as $key => $value) {
+foreach ($_REQUEST as $key => $value) {
     switch ($key) {
         case 'module':
             $module = $value;
@@ -87,13 +85,6 @@ function get_post_result_render($id)
 function send_task($id)
 {
     echo get_module($id)->render();
-}
-
-function get_module_name($id)
-{
-
-    $mod = Db::npquery("SELECT module FROM modules WHERE id = $id", PDO::FETCH_OBJ);
-    return $mod[0]->module;
 }
 
 function get_module($id)

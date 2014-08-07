@@ -2,5 +2,6 @@
 <content>
     <subsites>
         <sub1>update_database</sub1>
+        <sub1>edit_settings</sub1>
     </subsites>
 </content>

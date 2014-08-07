@@ -4,6 +4,8 @@ if (file_exists("../dc-storage/config.php")) {
     include("../dc-storage/config.php");
 }
 
+$GLOBALS['base_dir'] = realpath(dirname(__FILE__).'/../');
+
 spl_autoload_register(null, false);
 spl_autoload_extensions('.class.php');
 spl_autoload_register('classLoader');
@@ -12,8 +14,8 @@ function classLoader($class)
 {
     $classname = strtolower($class);
     $filename = $classname . '.class.php';
-    $path['core'] = '../dc-inc/core/';
-    $path['lib'] = '../dc-inc/lib/';
+    $path['core'] = $GLOBALS['base_dir'].'/dc-inc/core/';
+    $path['lib'] = $GLOBALS['base_dir'].'/dc-inc/lib/';
 
     $handle = opendir($path['core']);
     while ($datei = readdir($handle)) {
@@ -49,23 +51,23 @@ if ($set = Db::npquery('SELECT * FROM settings LIMIT 1', PDO::FETCH_OBJ)) {
 }
 Config::loadSettings();
 Config::loadLanguage();
+
+
+include(Config::$path['functions']);
 Auth::checkStatus();
 
-//Parameter auslesen für allegemeine Settings
-if (isset($_GET['show'])) {
-    $show = $_GET['show'];
+if (isset($_REQUEST['show'])) {
+    $show = $_REQUEST['show'];
 } else {
     $show = "";
 }
-if (isset($_GET['do'])) {
-    $do = $_GET['do'];
+if (isset($_REQUEST['do'])) {
+    $do = $_REQUEST['do'];
 } else {
     $do = "";
 }
-if (isset($_GET['action'])) {
-    $action = $_GET['action'];
+if (isset($_REQUEST['action'])) {
+    $action = $_REQUEST['action'];
 } else {
     $action = "";
 }
-
-include(Config::$path['functions']);

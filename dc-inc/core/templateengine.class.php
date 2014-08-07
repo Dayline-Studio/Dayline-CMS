@@ -30,8 +30,8 @@ class TemplateEngine
 
     private function renderContent($content)
     {
-        $content = preg_replace("/\s+/", " ", $content);
-        preg_match_all('/\[(.+?)\|(.+?)\|(.+?|(?R))\]/', $content, $result,PREG_SET_ORDER);
+        //$content = preg_replace("/\s+/", " ", $content);
+        preg_match_all('/\[(.+?)\|(.+?)\|(.+?|(?R))\]/s', $content, $result,PREG_SET_ORDER);
         $this->results = $result;
         foreach ($result as $foreach) {
             $add = '';
@@ -88,12 +88,12 @@ class TemplateEngine
 
     public function add_vars($case)
     {
-        $this->single_replace = array_merge($this->single_replace, $case);
+        $this->single_replace = array_merge($this->single_replace, (array)$case);
     }
 
     public function addReplace($arr)
     {
-        $this->replace_content = array_merge($this->replace_content, $arr);
+        $this->replace_content = array_merge($this->replace_content, (array)$arr);
     }
 
     public function addArr($varname, $arr)

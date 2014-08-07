@@ -25,7 +25,7 @@ if ($do == "") {
             $sites = [];
             if (isset($sm->sites)) {
                 foreach ($sm->sites as $site) {
-                    $sites[] = array('id' => $site->id, 'title' => $site->title, 'edit_link' => '../pages/site?show=' . $site->get_site_id(), 'where' => $_GET['acp']);
+                    $sites[] = array('visible' => $site->public ? 'open' : 'close', 'id' => $site->id, 'title' => $site->title, 'edit_link' => '{pages}site?show=' . $site->get_site_id(), 'where' => $_GET['acp']);
                 }
             }
             $te->addArr('rows', $sites);
@@ -41,6 +41,14 @@ if ($do == "") {
                 header('Location: ?acp=acp_site&action=site_list');
             } else {
                 $disp = msg(_no_permissions);
+            }
+            break;
+        case 'swap_visibility':
+            if (permTo('site_edit')) {
+                $sm = new SiteManager($_GET['id']);
+                $site = $sm->get_first_site();
+                $site->swap_visibility();
+                goToWithMsg('back',_change_sucessful, 'success');
             }
             break;
         case 'delete':

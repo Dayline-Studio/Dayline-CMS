@@ -4,15 +4,32 @@
         <col>
         <col width="20">
         <col width="20">
+        <col width="20">
     </colgroup>
+    <thead>
     <tr>
-        <th>ID</th><th>Title</th><th></th><th></th>
+        <th>ID</th>
+        <th>Title</th>
+        <th></th>
+        <th></th>
     </tr>
+    </thead>
+    <tbody>
     [array|rows|
     <tr>
         <td>{id}</td>
         <td>{title}</td>
-        <td><a href="{edit_link}"><img src="{style}images/icons/icon_edit.png" alt="{s_edit}" width="15"/></a></td>
-        <td><a href="?acp={where}&AMP;do=delete&AMP;id={id}"><img src="{style}images/icons/icon_delete.png" alt="{s_delete}" width="15"/></a></td>
-    </tr>]
+        <td><a href="?acp={where}&AMP;do=swap_visibility&AMP;id={id}"><span data-toggle="tooltip" data-placement="top"
+                                                                   title="Sichtbar/Unsichtbar"
+                                                                   class="glyphicon glyphicon-eye-{visible} tooltip-init"></span></a>
+        </td>
+        <td><a href="{edit_link}"><span data-toggle="tooltip" data-placement="top" title="{s_edit}"
+                                        class="glyphicon glyphicon-pencil tooltip-init"></span></a></td>
+        <td><a href="?acp={where}&AMP;do=delete&AMP;id={id}"><span data-toggle="tooltip" data-placement="top"
+                                                                   title="{s_delete}"
+                                                                   class="glyphicon glyphicon-remove tooltip-init"></span></a>
+        </td>
+    </tr>
+    ]
+    </tbody>
 </table>

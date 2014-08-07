@@ -81,7 +81,6 @@ if ($do == "") {
         case 'update_menu':
             if (permTo('update_menu')) {
                 foreach ($_POST as $id => $data) {
-
                     if (!Db::nrquery('UPDATE menu SET title = ' . sqlString($data['up_title']) . ', subfrom = ' . sqlInt($data['up_subfrom']) . ', link = ' . sqlString($data['up_link']) . ', newtab = ' . sqlInt($data['up_newtab']) . ' WHERE id = ' . $id)) {
                         $disp = msg(_update_failed);
                         break;

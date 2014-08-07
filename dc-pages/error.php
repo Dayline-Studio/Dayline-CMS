@@ -1,13 +1,18 @@
 <?php
-include '../dc-inc/base';
+// Include CMS System
+/**--**/
+include "../dc-inc/base.php";
+//------------------------------------------------
+// Site Informations
+$meta['title'] = "Error";
+$meta['page_id'] = 13;
+//------------------------------------------------
 
-$meta['title'] = 'Error';
-switch($_REQUEST) {
+switch($_REQUEST['r']) {
     case 'sitenotfound':
-        $disp = show('error/sitenotfound');
+        $disp = show('allround/sitenotfound');
         break;
 }
-
 Disp::$content = $disp;
-DIsp::addMeta($meta);
+Disp::addMeta($meta);
 Disp::render();

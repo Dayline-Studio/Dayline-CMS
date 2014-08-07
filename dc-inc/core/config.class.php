@@ -17,15 +17,15 @@ class Config
     public static function init()
     {
         global $config;
-		if (isset($config)) {
-			self::$sql = array(
-				'host' => $config['sql_host'],
-				'user' => $config['sql_user'],
-				'db' => $config['sql_db'],
-				'pw' => $config['sql_pass'],
-				'salt' => $config['salt']
-			);
-	    }
+        if (isset($config)) {
+            self::$sql = array(
+                'host' => $config['sql_host'],
+                'user' => $config['sql_user'],
+                'db' => $config['sql_db'],
+                'pw' => $config['sql_pass'],
+                'salt' => $config['salt']
+            );
+        }
     }
 
     /**
@@ -33,44 +33,51 @@ class Config
      */
     public static function loadSettings()
     {
-		if (empty(self::$settings)) {
-			self::$settings = new ArrayObject();
-			self::$settings->force_domain = 0;
-			self::$settings->force_https = 0;
-			self::$settings->link_twitter = 'https://github.com/Dayline-Studio/CMS';
-			self::$settings->link_facebook = 'https://github.com/Dayline-Studio/CMS';
-			self::$settings->link_youtube = 'https://github.com/Dayline-Studio/CMS';
-			self::$settings->link_google = 'https://github.com/Dayline-Studio/CMS';
-		}
+        if (empty(self::$settings)) {
+            self::$settings = new ArrayObject();
+            self::$settings->force_domain = 0;
+            self::$settings->force_https = 0;
+            self::$settings->link_twitter = 'https://github.com/Dayline-Studio/CMS';
+            self::$settings->link_facebook = 'https://github.com/Dayline-Studio/CMS';
+            self::$settings->link_youtube = 'https://github.com/Dayline-Studio/CMS';
+            self::$settings->link_google = 'https://github.com/Dayline-Studio/CMS';
+        }
         self::$settings->language = 'de';
         if (isset($_GET['style'])) {
             self::$settings->style = $_GET['style'];
         }
+        $base = $GLOBALS['base_dir'];
+        $subfolder = ''; //Without end slash
 
         self::$path = array(
-            'dir' => './',
+            'subfolder' => $subfolder,
             'content' => "../dc-content/",
-            'cache' => "../dc-storage/_cache/",
-            'log' => "../dc-storage/_log/",
-            'upload' => '../dc-storage/_upload/',
+            'cache' => "$base/dc-storage/_cache/",
+            'pages' => "/",
+            'log' => "$base/dc-storage/_log/",
+            'upload_rel' => "$subfolder/dc-storage/_upload/",
+            'upload' => "$base/dc-storage/_upload/",
             'images' => '../dc-inc/images/',
-            'plugins' => '../dc-content/plugins/',
-            'thumbs' => '../dc-storage/_thumbs/',
-            'pages' => '../pages/',
+            'plugins' => "$subfolder/dc-content/plugins/",
+            'thumbs' => "$base/dc-storage/_thumbs/",
+            'thumbs_rel' => "$subfolder/dc-storage/_thumbs/",
             'rss' => '../dc-storage/_rss/',
-            'panels' => '../dc-inc/panels/',
+            'panels' => "$base/dc-inc/panels/",
             'panels_dyn' => '../dc-inc/panels_dyn/',
-            'modules-info' => '../dc-inc/modules/',
-            'acp' => '../dc-acp/',
-            'functions' => '../dc-inc/functions.php',
-            'filemanager' => '../dc-content/plugins/filemanager/dialog.php',
-            'gallery' => '../dc-storage/_upload/gallery/',
-            'language' => '../dc-content/language/',
-            'template' => '../dc-templates/' . self::$settings->style . '/',
-            'template_default' => '../dc-templates/default/',
-            'fw_js' => '../dc-inc/framework/js/',
-            'fw_css' => '../dc-inc/framework/css/'
+            'modules-info' => "$base/dc-inc/modules/",
+            'acp' => "$base/dc-acp/",
+            'functions' => "$base/dc-inc/functions.php",
+            'filemanager' => "$subfolder/dc-content/plugins/filemanager/dialog.php",
+            'gallery' => "$subfolder/dc-storage/_upload/gallery/",
+            'language' => "$base/dc-content/language/",
+            'template' => "$subfolder/dc-templates/" . self::$settings->style . '/',
+            'template_abs' => "$base/dc-templates/" . self::$settings->style . '/',
+            'template_default' => "$base/dc-templates/default/",
+            'fw_js' => "$subfolder/dc-inc/framework/js/",
+            'fw_css' => "$subfolder/dc-inc/framework/css/"
         );
+
+        self::$path['root_base'] = str_replace(self::$path['upload_rel'],'',self::$path['upload']);
 
         self::$path['css'] = self::$path['template'] . '_css/';
         self::$path['js'] = self::$path['template'] . '_js/';
@@ -81,7 +88,8 @@ class Config
         );
     }
 
-    public static function set_settings($settings) {
+    public static function set_settings($settings)
+    {
         self::$settings = $settings;
     }
 

@@ -4,7 +4,7 @@ class Site
 {
 
     public $id = NULL, $title, $userid, $keywords, $description, $subfrom, $position, $lastedit, $editby, $date;
-    public $show_lastedit, $show_author, $show_print, $show_headline, $show_socialbar;
+    public $show_lastedit, $show_author, $show_print, $show_headline, $show_socialbar, $public;
     protected $modules;
 
     public function __construct($data)
@@ -43,7 +43,12 @@ class Site
 
     public function get_site_id()
     {
-        return $this->id . '-' . str_replace(array(' ', '/', '.', '+'), '-', $this->title);
+        return $this->get_title() . '-' . $this->id;
+    }
+
+    public function get_title()
+    {
+        return str_replace(array(' ', '/', '.', '+'), '-', $this->title);
     }
 
     public function delete()
@@ -67,5 +72,35 @@ class Site
         $this->show_lastedit = 0;
         $this->show_print = 0;
         $this->show_socialbar = 0;
+    }
+
+    public function get_o_site()
+    {
+        if ($this->subfrom) {
+            $sm = new SiteManager($this->subfrom);
+            return $sm->get_first_site();
+        } else {
+            return false;
+        }
+    }
+
+    public function get_url_part($is_cat = false)
+    {
+        $str = '';
+        if ($cat = $this->get_o_site()) {
+            $str .= $cat->get_url_part(true) . '/';
+        }
+        $str .= !$is_cat ? $this->get_site_id() : $this->get_title();
+        return $str;
+    }
+
+    public function get_url()
+    {
+        return Config::$path['subfolder'] . '/' . $this->get_url_part();
+    }
+
+    public function swap_visibility() {
+        $this->public = $this->public ? 0 : 1;
+        return Db::update('sites', $this->id, array('public' => $this->public));
     }
 }
