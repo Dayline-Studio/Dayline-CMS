@@ -1,4 +1,5 @@
 <script>
+    <!--
     $(function () {
         $(".iframe").colorbox({iframe:true, width:"80%", height:"80%", onClosed:function(){reload_filemanager($(this).data('id'));}});
         $('a.folder').attr('href', "javascript:void(0)");
@@ -7,6 +8,7 @@
             $('#target-path').attr('value', val);
         });
     });
+    //-->
 </script>
 <p><a data-id="{id}" class='iframe' href="{plugins}filemanager/dialog.php?fldr=gallery"><span class="glyphicon glyphicon-new-window"></span>Dateien Bearbeiten</a></p>
 {filemanager}

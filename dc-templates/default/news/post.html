@@ -1,18 +1,20 @@
 <div id="news" class="text">
-    [array|posts|<div>
+    [array|posts|
+    <div>
         <div class="center"><h3>{title}</h3></div>
         <div style="text-align:right">{date_out}</div>
         <div>{content}</div>
-            <table class="width_full">
-                <tr>
-                    <td>
-                        <a class="btn" href="{pages}news.php?id={id}">{s_goto_news}</a>
-                    </td>
-                    <td class="right">
-                        <a class="btn" href="{pages}news.php?id={id}">Kommentare <span class="badge">{comment_count}</span></a>
-                    </td>
-                </tr>
-            </table>
-    <hr />
-    </div>]
+        <table class="width_full">
+            <tr>
+                <td>
+                    <a class="btn" href="{url}">{s_goto_news}</a>
+                </td>
+                <!-- <td class="right">
+                     <a class="btn" href="{url}">Kommentare <span class="badge">{comment_count}</span></a>
+               </td>-->
+            </tr>
+        </table>
+        <hr/>
+    </div>
+    ]
 </div>

@@ -22,7 +22,6 @@ if ($do == "") {
                 "street" => $user->street));
             break;
         case 'inbox':
-
             $msgbox = new Msgbox($_SESSION['userid']);
             $te = new TemplateEngine();
 
@@ -95,12 +94,7 @@ if ($do == "") {
             }
             break;
         default:
-            News::init();
-            $meta['title'] = _user_lobby;
-            $te = new TemplateEngine();
-            $te->setHtml('news/post');
-            $te->addArr('posts', News::get_news_from_group($_SESSION['group_main_id']));
-            $disp = $te->render();
+            $disp = '';
             break;
     }
 } else {

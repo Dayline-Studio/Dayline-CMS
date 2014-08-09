@@ -13,7 +13,7 @@ php_value post_max_size 20M
 php_value max_execution_time 200
 php_value max_input_time 200
 
-DirectoryIndex dc-index.php news.php admin.php
+DirectoryIndex dc-index.php admin.php
 Options All -Indexes -MultiViews
 Options +FollowSymLinks
 RewriteEngine on
@@ -37,4 +37,4 @@ RewriteRule ^(.*?)/?$ $1.php [L]
 RewriteRule ^dc-pages/([^\.]+)$ site.php?show=$1 [L,NC]
 RewriteRule ^dc-pages/([^\.]+)/([^\.]+)$ site.php?show=$2
 
-#ErrorDocument 404 /dc-pages/error.php?r=sitenotfound
+ErrorDocument 404 /dc-pages/error.php?r=sitenotfound

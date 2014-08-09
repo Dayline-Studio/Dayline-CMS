@@ -53,6 +53,9 @@ class Site
 
     public function delete()
     {
+        foreach ($this->modules as $module) {
+            $module->delete();
+        }
         return Db::delete('sites', $this->id);
     }
 
@@ -99,7 +102,8 @@ class Site
         return Config::$path['subfolder'] . '/' . $this->get_url_part();
     }
 
-    public function swap_visibility() {
+    public function swap_visibility()
+    {
         $this->public = $this->public ? 0 : 1;
         return Db::update('sites', $this->id, array('public' => $this->public));
     }

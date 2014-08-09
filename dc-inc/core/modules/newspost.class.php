@@ -2,10 +2,14 @@
 
 class NewsPost extends MainModule
 {
-    public $site_id;
+    public $site_id, $date_created;
 
-    protected function on__create() {
-        $this->site_id = explode('-',$this->position)[2];
+    protected function on_create()
+    {
+        $this->site_id = 0;
+        $this->site_id = SiteManager::filter_id($this->position);
+        $this->date_created = time();
+        //todo: rss load
     }
 
     protected function render()
@@ -15,6 +19,33 @@ class NewsPost extends MainModule
 
     protected function render_admin()
     {
-        return '';
+        return 'Dieses Modul ist unsichtbar und markiert diese Seite als News Post!';
+    }
+
+    protected function on_construct() {
+        $sm = new SiteManager($this->site_id);
+        $this->site = $sm->get_first_site();
+    }
+
+    private $site;
+
+    public function get_content($limit = 0)
+    {
+        return strip_tags($this->site->modules_render());
+    }
+
+    public function get_title() {
+        return $this->site->title;
+    }
+
+    public function get_date($output = false) {
+        if ($output) {
+            return date("F j, Y, G:i", $this->date_created);
+        }
+        return $this->date_created;
+    }
+
+    public function get_url() {
+        return $this->site->get_url();
     }
 }

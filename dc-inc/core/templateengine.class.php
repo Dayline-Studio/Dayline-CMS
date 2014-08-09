@@ -30,7 +30,6 @@ class TemplateEngine
 
     private function renderContent($content)
     {
-        //$content = preg_replace("/\s+/", " ", $content);
         preg_match_all('/\[(.+?)\|(.+?)\|(.+?|(?R))\]/s', $content, $result,PREG_SET_ORDER);
         $this->results = $result;
         foreach ($result as $foreach) {
@@ -50,8 +49,6 @@ class TemplateEngine
                             }
                             $add .= $out;
                         }
-                    } else {
-                       // die('Template-Engine->Error: Variable ' . $foreach[2] . ' not defined');
                     }
                     break;
                 case 'include':

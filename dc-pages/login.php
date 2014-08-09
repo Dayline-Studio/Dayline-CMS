@@ -32,7 +32,7 @@ if ($do == "") {
 switch ($do) {
     case 'login':
         if (Auth::login($_POST['username'], $_POST['passwort'])) {
-            header('Location: ' . Config::$path['pages'] . 'ucp.php');
+            goToWithMsg('back', _login_successful, 'success');
         } else {
             $disp = msg(_login_failed);
         }

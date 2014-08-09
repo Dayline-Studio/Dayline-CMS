@@ -109,25 +109,6 @@ function msg($msg, $kind = 'stock')
     return $msg;
 }
 
-function getNews($groupid = 0)
-{
-    $news_posts = db("Select * From news where public_show = 1 AND grp = " . $groupid . " ORDER BY date DESC");
-    $list_news = "";
-    while ($get_news = _assoc($news_posts)) {
-        $list_news .= show("news/post", array(
-            "news_headline" => $get_news['title'],
-            "news_date" => date("F j, Y, G:i", $get_news['date']),
-            "news_content" => $get_news['content'],
-            "id" => $get_news['id'],
-            "post_comment" => '<a href="../pages/news.php?id=' . $get_news['id'] . '#comments">Kommentare: ' . db("SELECT count(id) as counted FROM comments where site = 2 AND subsite = " . $get_news['id'], 'object')->counted . '</a>'
-        ));
-    }
-    if ($list_news == "") {
-        $list_news = _news_not_found;
-    }
-    return show("news/layout_posts", array("posts" => $list_news));
-}
-
 function permTo($permission)
 {
     if (isset($_SESSION['group_main_id'])) {

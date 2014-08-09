@@ -15,7 +15,7 @@ abstract class MainModule
             Db::insert("modules", $i);
             $this->id = Db::get_last_id();
             $this->set_order_position();
-            if (method_exists($this,'on_create')) {
+            if (method_exists($this, 'on_create')) {
                 $this->on_create();
             }
             $this->update();

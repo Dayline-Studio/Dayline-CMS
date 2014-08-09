@@ -288,8 +288,6 @@ pre {
     margin: 0 auto;
 }
 
-
-
 .inlineblock.part {
     width: 300px;
     height: auto;
@@ -339,7 +337,7 @@ pre {
 }
 
 #menu {
-    z-index: 1;
+    z-index: 999;
 }
 
 @media all and (max-width: 640px), only screen and (max-width: 640px), only screen and (max-width: 640px), only screen and (max-width: 640px), only screen and (min-resolution: 192dpi) and (max-width: 640px), only screen and (min-resolution: 2dppx) and (max-width: 640px) {

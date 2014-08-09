@@ -8,7 +8,7 @@ class EditableText extends MainModule
     protected function render()
     {
         $file = 'site/modules/editabletext_show';
-        return show($file, array('content' => $this->content));
+        return show($file, array('content' => Disp::read_modules($this->content)));
     }
 
     protected function render_admin()
