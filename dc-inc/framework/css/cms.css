@@ -18,10 +18,15 @@
     opacity: 0.5;
 }
 
+.add-module {
+    text-align: center;
+    width: 100%;
+    background: rgba(211, 211, 211, 0.27);
+}
+
 .gallery_overlay p img {
     height: 100px;
 }
-
 
 .QapTcha {
     float: left;
@@ -37,13 +42,13 @@
     width: 252px;
     height: 10px;
     float: left;
-    background: transparent url(../../../dc-inc/images/qaptcha/bg_qaptcha.png) no-repeat;
+    background: transparent url(/dc-inc/images/qaptcha/bg_qaptcha.png) no-repeat;
 }
 
 .QapTcha .Slider {
     width: 10px;
     height: 10px;
-    background: transparent url(../../../dc-inc/images/qaptcha/bg_draggable_qaptcha.png) no-repeat;
+    background: transparent url(/dc-inc/images/qaptcha/bg_draggable_qaptcha.png) no-repeat;
     cursor: e-resize;
     position: relative;
     top: 0;
@@ -88,6 +93,7 @@
 }
 
 #edit_site span {
-    margin-top: 30px; margin-left: 30px;
+    margin-top: 30px;
+    margin-left: 30px;
 }
 

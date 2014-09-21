@@ -1,0 +1,40 @@
+<div style="text-align: center"><h2>Server-ID: #{name}-{id} | Type: {type}</h2></div>
+<hr />
+<div class="inblock">
+    <img src="{style}images/servermanager/logo_{type}.png" width="200" alt="image" style="padding:3px;border-style:solid;border-width:2px;"/>
+</div>
+<div class="inblock">
+   <table class="tableStyle">
+        <tr>
+            <td>{s_username}:</td>
+            <td>{name}</td>
+        </tr>
+         <tr>
+            <td>{s_port}:</td>
+            <td>{port}</td>
+        </tr>
+        <tr>
+            <td>{s_quicklink}:</td>
+            <td><a href="ftp://{domain_name}:{port}">ftp://{domain_name}:{port}</a></td>
+        </tr>
+    </table>
+</div>
+<div class="inblock">
+    {dispModul1}
+</div>
+<div class="inblock" style="width: 100%;">
+    <table class="table table-hover">
+        <tr>
+            <td>{s_php_version}:</td>
+            <td>{php_version}</td>
+        </tr>
+         <tr>
+            <td>{s_openssl_version}:</td>
+            <td>{openssl_version}</td>
+        </tr>
+        <tr>
+            <td>{s_a2_version}:</td>
+            <td>{a2_version}</td>
+        </tr>
+    </table>
+</div>

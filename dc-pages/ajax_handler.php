@@ -3,6 +3,8 @@
 include "../dc-inc/base.php";
 //------------------------------------------------
 
+backSideFix();
+
 foreach ($_REQUEST as $key => $value) {
     switch ($key) {
         case 'module':

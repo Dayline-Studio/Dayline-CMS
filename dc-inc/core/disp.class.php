@@ -35,6 +35,7 @@ class Disp
 
         $init = self::read_modules($init);
         $init = self::replace_paths($init);
+
         self::display($init);
     }
 
