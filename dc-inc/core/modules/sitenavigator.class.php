@@ -1,78 +1,87 @@
 <?php
+
 class SiteNavigator extends MainModule
 {
-
     public $kind = 'list';
+    private $kinds = array('list','line', 'line-bootstrape', 'sitemap');
 
     protected function render()
     {
-        global $show, $meta;
-        switch (substr(basename($_SERVER["PHP_SELF"]), 0, -4)) {
-            case 'site':
-                $sm = new SiteManager($show);
-                $content = $this->siteNaviBackward($sm->get_first_site()->id);
-                break;
-            default:
-                $content = '<a href="{pages}' . basename($_SERVER["PHP_SELF"]) . '">' . ucfirst(substr(basename($_SERVER["PHP_SELF"]), 0, -4)) . "</a>";
-                break;
-            case 'categories':
-                $content = '<a href="{pages}' . basename($_SERVER["PHP_SELF"]) . '">' . ucfirst(substr(basename($_SERVER["PHP_SELF"]), 0, -4)) . "</a>";
-                break;
-        }
+     switch($this->kind) {
+         case 'list':
+             if ($cSite = SiteManager::get_current_site()) {
+                 $sm = new SiteManager('*', 'filter:visibility');
+                 $sites = $sm->get_backside_list_from($cSite->id);
+                 return $this->render_navi($sites);
+             }
+             break;
+         case 'line-bootstrape':
+             if ($cSite = SiteManager::get_current_site()) {
+                 $sm = new SiteManager('*', 'filter:visibility');
 
-        if (isset($meta['page_id']) && $meta['page_id'] == 3) {
-            $site_navi = $this->navigation_back_from($show);
+                return $this->generate_bootstrape_line($cSite, $sm, true);
+             }
+             break;
+         case 'line':
+             if ($cSite = SiteManager::get_current_site()) {
+                 $sm = new SiteManager('*', 'filter:visibility');
+
+                return $this->generate_line($cSite, $sm);
+             }
+             break;
+         case 'sitemap':
+             if ($cSite = SiteManager::get_current_site()) {
+                 $sm = new SiteManager('*', 'filter:visibility');
+                return $this->generate_sitemap($sm->get_subsites_from(0));
+             }
+             break;
+     }
+        return '';
+    }
+
+    private function generate_sitemap($sites) {
+        $add = '';
+        foreach ($sites as $site) {
+            $title = $site->get_link();
+            $add .= "<li>$title</li>";
+            if (!empty($site->subsites)) {
+                $add .= $this->generate_sitemap($site->subsites);
+            }
+        }
+        return "<ul>$add</ul>";
+    }
+
+    private function generate_line($site, $sm, $active = false) {
+        if ($site->subfrom != 0) {
+            return $this->generate_line($sm->sites[$site->subfrom],$sm).' >> '.$site->get_link();
         } else {
-            $site_navi = "";
+            return $site->get_link();
         }
+    }
 
-        return $site_navi;
+    private function generate_bootstrape_line($site, $sm, $active = false) {
+        return (!$site->subfrom ? "<ol class=\"breadcrumb\">" : $this->generate_bootstrape_line($sm->sites[$site->subfrom],$sm)) ."<li ".($active ? 'class="active"' : '').">".($active ? $site->title : $site->get_link())."</li>".($active ? '</ol>' : '');
+    }
+
+    private function render_navi($arr)
+    {
+        $ret = '<ul>';
+        foreach ($arr as $site) {
+            $add = "";
+            if (isset($site->subsites)) $add = $this->render_navi($site->subsites);
+            $ret .= '<li><a href="' . $site->get_url() . '">' . $site->title . '</a>' . $add . '</li>';
+        }
+        return $ret . '</ul>';
     }
 
     protected function render_admin()
     {
-
-    }
-
-    public function navigation_back_from($id)
-    {
-        $sm = new SiteManager('*', 'filter:visibility');
-        if ($site = $sm->get_site_by_search('subfrom', $sm->filter_id($id))) {
-            $id = $site->id;
+        $te = new TemplateEngine('site/modules/sitenavigator_admin');
+        $kinds = [];
+        foreach ($this->kinds as $kind) {
+            $kinds[] = array('kind' => $kind);
         }
-        $sites = $sm->get_backside_list_from($id);
-        $menu = '<ul>';
-        if ($sites) {
-            foreach ($sites as $site) {
-                $menu .= '<li><a href="'. $site->get_url() . '" >' . $site->title . '</a>' . $this->get_menu($site) . '</li>';
-            }
-            $menu .= '</ul>';
-            return $menu;
-        }
-        return $id;
-    }
-
-    private function get_menu($site)
-    {
-        $menu = '';
-        if (isset($site->subsites)) {
-            $menu .= '<ul>';
-            foreach ($site->subsites as $subsite) {
-                $menu .= '<li><a href="'. $subsite->get_url() . '">' . $subsite->title . '</a>' . $this->get_menu($subsite) . '</li>';
-            }
-            $menu .= '</ul>';
-        }
-        return $menu;
-    }
-
-    private function siteNaviBackward($id)
-    {
-        $sm = new SiteManager($id);
-        $site = $sm->get_first_site();
-        $oversite = "";
-        if ($site->subfrom != 0) {
-            $oversite = $this->siteNaviBackward($site->subfrom) . ' >> ';
-        }
-        return $oversite . '<a href="' . $site->get_url() . '">' . $site->title . '</a>';
+        $te->addArr('kinds', $kinds);
+        return $te->render();
     }
 }

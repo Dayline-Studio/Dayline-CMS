@@ -58,3 +58,4 @@ define ('_show_author', 'Author anzeigen');
 define ('_show_print', 'Drucker Symbol anzeigen');
 define ('_show_headline', 'Überschrift anzeigen');
 define ('_update_database', 'Datenbank Update');
+define ('_edit_settings', 'Globale Einstellungen');

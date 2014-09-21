@@ -47,7 +47,7 @@ switch ($do) {
             $nick = $_POST['username'];
             $firstname = $_POST['firstname'];
             $lastname = $_POST['lastname'];
-            $email = $_POST['mail'];
+            $email = strtolower($_POST['mail']);
 
             if ($_POST['password'] != $_POST['password2']) {
                 $disp = msg(_pass_dont_match);
@@ -56,18 +56,16 @@ switch ($do) {
                     $disp = msg(_mailcheck_failed);
                 } else
                     if (sizeof(Db::query(
-                                "Select id FROM users where user LIKE :nick OR email LIKE :email",
+                                "Select id FROM users where lower(name) LIKE :nick OR email LIKE :email",
                                 array(
-                                    'nick' => strtolower($nick),
+                                    'nick' => $nick,
                                     'email' => $email)
                             )
                         ) > 0
                     ) {
                         $disp = msg(_already_exists);
                     } else {
-                        //Passwort generieren
                         $group_id = $_SESSION['admin'] ? 1 : 3;
-                        //sql insert
                         $up = array(
                             'name' => $nick,
                             'pass' => customHasher($_POST['password']),
@@ -87,10 +85,10 @@ switch ($do) {
         break;
     case 'logout':
         Auth::logout();
-        header('Location: ../');
+        header('Location: /');
         break;
     case 'reset_password':
-        $user = Db::query('SELECT id FROM users WHERE email LIKE :email LIMIT 1', array('email' => $_POST['email']), PDO::FETCH_OBJ);
+        $user = new User($_POST['email']);
         if (isset($user->id)) {
             $user = new User($user->id);
             $activation_code = rand(10000000000000, 99999999999999);
@@ -101,7 +99,6 @@ switch ($do) {
         goToWithMsg('back', _password_resetcode_send_failed, 'danger');
         break;
     case 'activate_new_password':
-
         $activation_code = __c("files")->get('activation_' . $_GET['id']);
         if ($activation_code != NULL) {
             $new_password = randomstring(8);

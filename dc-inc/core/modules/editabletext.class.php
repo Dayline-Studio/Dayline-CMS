@@ -3,6 +3,8 @@
 class EditableText extends MainModule
 {
 
+    protected $javaClass = 'EditableText';
+
     public $content = '';
 
     protected function render()

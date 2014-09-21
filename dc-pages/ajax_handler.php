@@ -27,7 +27,7 @@ switch ($action) {
         if (permTo('site_edit')) update_module($id, $vars);
         break;
     case 'delete':
-        if (permTo('site_edit')) delete_module($module);
+        if (permTo('site_edit')) delete_module($id);
         break;
     case 'create':
         if (permTo('site_edit')) create_module($module, $vars);
@@ -69,7 +69,7 @@ function reload_module($id)
 function create_module($module, $vars)
 {
     $module = new $module($vars['position'], true);
-    echo $module->full_render();
+    echo $module->json_render();
 }
 
 function move($dir, $id)

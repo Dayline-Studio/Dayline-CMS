@@ -3,7 +3,7 @@
 abstract class MainModule
 {
 
-    protected $id, $position, $order_pos, $render, $render_admin;
+    protected $id, $position, $order_pos, $render, $render_admin, $javaClass = 'Module';
 
     public function __construct($id, $create = false)
     {
@@ -15,18 +15,17 @@ abstract class MainModule
             Db::insert("modules", $i);
             $this->id = Db::get_last_id();
             $this->set_order_position();
-            if (method_exists($this, 'on_create')) {
-                $this->on_create();
-            }
+            $this->on_construct();
             $this->update();
         } else {
             $this->id = $id;
         }
         $this->load_setup();
-        if (method_exists($this,'on_construct')) {
-            $this->on_construct();
-        }
+        $this->on_construct();
     }
+
+    protected function on_create() {}
+    protected function on_construct() {}
 
     public function load_setup()
     {
@@ -49,17 +48,17 @@ abstract class MainModule
         return isset($this->max_count) ? $this->max_count : -1;
     }
 
-    public function get_render()
+    public function get_render($force_user = 0)
     {
-        if ($this->render === NULL) {
+        if ($this->render === NULL & !$force_user) {
             $this->render = $this->render();
         }
         return $this->set_infos($this->render);
     }
 
-    public function get_render_admin()
+    public function get_render_admin($force_user = 0)
     {
-        if ($this->render_admin === NULL) {
+        if ($this->render_admin === NULL & !$force_user) {
             $this->render_admin = $this->render_admin();
         }
         return $this->set_infos($this->render_admin);
@@ -81,6 +80,7 @@ abstract class MainModule
     {
         $case['id'] = $this->id;
         $case['module_name'] = get_class($this);
+        $case['javaClass'] = $this->javaClass;
         return Disp::replace_paths(show($str, $case));
     }
 
@@ -130,17 +130,26 @@ abstract class MainModule
             $return['target_content'] = $module_obj->full_render();
             $return['this_id'] = $this->id;
             $return['this_content'] = $this->full_render();
-
         }
         return json_encode($return);
     }
 
     public function json_render()
     {
+        $return['id'] = $this->id;
+        $return['type'] = get_class($this);
+        $return['javaClass'] = $this->javaClass;
         $return['prev'] = $this->get_render();
         $return['set'] = $this->get_render_admin();
         $return['full'] = $this->full_render();
+        $return = array_merge($this->additional_json, $return);
         return json_encode($return);
+    }
+
+    private $additional_json = [];
+
+    public function add_json_output($name, $value) {
+        $this->additional_json = array_merge($this->additional_json, array($name => $value));
     }
 
     protected function save_as_default()

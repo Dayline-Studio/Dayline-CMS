@@ -3,6 +3,8 @@
 class Gallery extends MainModule
 {
 
+    protected $javaClass = 'Gallery';
+
     public $album_path = '';
 
     protected function render()

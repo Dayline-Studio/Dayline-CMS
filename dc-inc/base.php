@@ -4,7 +4,7 @@ if (file_exists("../dc-storage/config.php")) {
     include("../dc-storage/config.php");
 }
 
-$GLOBALS['base_dir'] = realpath(dirname(__FILE__).'/../');
+$GLOBALS['base_dir'] = realpath(dirname(__FILE__) . '/../');
 
 spl_autoload_register(null, false);
 spl_autoload_extensions('.class.php');
@@ -14,13 +14,13 @@ function classLoader($class)
 {
     $classname = strtolower($class);
     $filename = $classname . '.class.php';
-    $path['core'] = $GLOBALS['base_dir'].'/dc-inc/core/';
-    $path['lib'] = $GLOBALS['base_dir'].'/dc-inc/lib/';
+    $path['core'] = $GLOBALS['base_dir'] . '/dc-inc/core/';
+    $path['lib'] = $GLOBALS['base_dir'] . '/dc-inc/lib/';
 
     $handle = opendir($path['core']);
     while ($datei = readdir($handle)) {
-        if (is_dir($path['core'].$datei) && $datei != '.' || $datei != '..') {
-            $path[$datei] = $path['core'].$datei.'/';
+        if (is_dir($path['core'] . $datei) && $datei != '.' || $datei != '..') {
+            $path[$datei] = $path['core'] . $datei . '/';
         }
     }
     closedir($handle);

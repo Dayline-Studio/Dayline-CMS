@@ -68,12 +68,9 @@ if ($do == "") {
             break;
         case 'delete_menu':
             if (permTo('delete_menu')) {
-                if (Db::nrquery('DELETE FROM menu WHERE id = ' . sqlInt($_GET['id']))) {
+                Db::query('DELETE FROM menu WHERE id = :id', array('id' => $_GET['id']));
                     __c("files")->delete("menu");
                     goBack();
-                } else {
-                    $disp = msg(_delete_failed);
-                }
             } else {
                 $disp = msg(_no_permissions);
             }
@@ -81,7 +78,12 @@ if ($do == "") {
         case 'update_menu':
             if (permTo('update_menu')) {
                 foreach ($_POST as $id => $data) {
-                    if (!Db::nrquery('UPDATE menu SET title = ' . sqlString($data['up_title']) . ', subfrom = ' . sqlInt($data['up_subfrom']) . ', link = ' . sqlString($data['up_link']) . ', newtab = ' . sqlInt($data['up_newtab']) . ' WHERE id = ' . $id)) {
+                    if (!Db::update('menu', $id, array(
+                        'subfrom' => $data['up_subfrom'],
+                        'link' => $data['up_link'],
+                        'title' => $data['up_title'],
+                        'newtab' => isset($data['up_newtab']) ? 1 : 0
+                    ))) {
                         $disp = msg(_update_failed);
                         break;
                     }

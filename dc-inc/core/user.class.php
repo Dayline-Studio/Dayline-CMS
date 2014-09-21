@@ -2,20 +2,19 @@
 
 class User
 {
-
-    public $id, $gplus, $name, $pass, $email, $user, $street, $firstname, $lastname, $country, $main_group;
+    public $id, $gplus, $name, $pass, $email, $street, $firstname, $lastname, $country, $main_group;
 
     public function __construct($data)
     {
         if (is_array($data)) {
             $this->set_data($data);
         } else if (is_numeric($data)) {
-            if ($data = Db::npquery("SELECT * FROM users WHERE id = $data", PDO::FETCH_OBJ)) {
-                $this->set_data($data[0]);
+            if ($data = Db::query("SELECT * FROM users WHERE id = :id LIMIT 1",array('id' => $data), PDO::FETCH_OBJ)) {
+                $this->set_data($data);
             }
         } else if(is_string($data)) {
-            if ($data = Db::query("SELECT * FROM users WHERE name LIKE :name OR email LIKE :mail",array('name' => $data, 'mail' => $data), PDO::FETCH_OBJ)) {
-                $this->set_data($data[0]);
+            if ($data = Db::query("SELECT * FROM users WHERE lower(name) LIKE :query OR email LIKE :query LIMIT 1",array('query' => strtolower($data)), PDO::FETCH_OBJ)) {
+                $this->set_data($data);
             }
         } else unset($this);
     }

@@ -24,17 +24,11 @@ RewriteCond %{REQUEST_FILENAME}.php !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^(.+)$ /dc-pages/$1
 
-RewriteCond %{THE_REQUEST} ^GET\s(.*/)index\.php [NC]
-RewriteRule . %1 [NE,R=301,L]
-
-RewriteCond %{THE_REQUEST} ^GET\s.+\.php [NC]
-RewriteRule ^(.+)\.php$ /$1 [NE,R=301,L,NC]
-
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{DOCUMENT_ROOT}/$1.php -f
 RewriteRule ^(.*?)/?$ $1.php [L]
 
+RewriteRule ^dc-pages/([^\.]+)/([^\.]+)$ site.php?cat=$1&show=$2 [L,NC]
 RewriteRule ^dc-pages/([^\.]+)$ site.php?show=$1 [L,NC]
-RewriteRule ^dc-pages/([^\.]+)/([^\.]+)$ site.php?show=$2
 
 ErrorDocument 404 /dc-pages/error.php?r=sitenotfound

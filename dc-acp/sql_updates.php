@@ -22,3 +22,15 @@ $sql_up[308][] = "ALTER TABLE `settings` DROP `publisher` ,
                     DROP `link_twitter` ;";
 
 $sql_up[309][] = "ALTER TABLE `groups` ADD `edit_group` INT( 1 ) NOT NULL DEFAULT '0'";
+
+$sql_up[311][] = "DROP TABLE `news`, `subscribe`, `comments`";
+
+$sql_up[312][] = "ALTER TABLE `settings` ADD `use_site_id` INT( 1 ) NOT NULL DEFAULT '0'";
+
+$sql_up[313][] = "ALTER TABLE `sites` DROP `show_socialbar`";
+$sql_up[313][] = "ALTER TABLE `sites` ADD `group` INT( 10 ) NOT NULL DEFAULT '0'";
+
+$sql_up[314][] = "ALTER TABLE `users` DROP `user`";
+
+$sql_up[315][] = "ALTER TABLE `settings` CHANGE `domain` `domain` VARCHAR( 128 ) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL ";
+$sql_up[315][] = "ALTER TABLE `settings` CHANGE `website_title` `website_title` VARCHAR( 256 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ";

@@ -67,3 +67,27 @@
 .QapTcha .dropError {
     color: #bb2828;
 }
+
+#edit_site {
+    border-radius: 75px;
+    color: #505050;
+    background: #fff;
+    font-size: 30px;
+    width: 150px;
+    height: 150px;
+    display: block;
+    position: fixed;
+    bottom: -75px;
+    right: -75px;
+    transition: all .3s linear;
+}
+
+#edit_site:hover {
+    background: #505050;
+    color: #fff;
+}
+
+#edit_site span {
+    margin-top: 30px; margin-left: 30px;
+}
+

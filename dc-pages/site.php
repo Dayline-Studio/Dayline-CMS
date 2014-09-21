@@ -7,11 +7,9 @@ $meta['title'] = "Seite";
 $meta['page_id'] = 3;
 //------------------------------------------------
 $sm = new SiteManager($show);
-if($site = $sm->get_first_site()) {
-    $site_id  = $site->get_site_id();
-
-    if  (!stristr(urldecode($_SERVER['REQUEST_URI']),$site->get_url())) {
-        header("Location: ".$site->get_url());
+if ($site = $sm->get_first_site()) {
+    if (!stristr(urldecode($_SERVER['REQUEST_URI']), $site->get_url())) {
+        header("Location: " . $site->get_url());
         exit();
     }
 
@@ -40,7 +38,7 @@ if($site = $sm->get_first_site()) {
         "Last edit by " . $site->editby . " - " . date("F j, Y, g:i a", $site->lastedit) : '';
     $c['print'] = $site->show_print ? show('site/print') : '';
     $c['link'] = $site->get_site_id();
-    $c['modules'] = '{position_site-'.$site->id.'}';
+    $c['modules'] = '{position_site-' . $site->id . '}';
     $c['position'] = 'site-' . $site->id;
     $te->add_vars($c);
     $te->setHtml(show('site/main', $p));
@@ -56,6 +54,7 @@ if($site = $sm->get_first_site()) {
     switch ($do) {
         case  'update':
             if (permTo('site_edit')) {
+                echo 1;
                 $sm = new SiteManager($show);
                 $site = $sm->get_first_site();
                 $site->editby = $_SESSION['name'];
@@ -74,7 +73,7 @@ if($site = $sm->get_first_site()) {
             break;
     }
 } else {
-    goToSite('/error?r=sitenotfound');
+    //goToSite('/error?r=sitenotfound');
 }
 
 

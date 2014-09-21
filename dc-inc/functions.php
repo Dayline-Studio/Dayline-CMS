@@ -35,9 +35,8 @@ function get_template_dir_from($path)
     }
 }
 
-function getUserInformations($userid, $informations)
-{
-    return Db::npquery("SELECT $informations FROM users WHERE id = $userid LIMIT 1", PDO::FETCH_OBJ);
+function get_replace_array() {
+    return array(' ', '/', '.', '+');
 }
 
 function randomstring($length = 6)
@@ -64,21 +63,6 @@ function customHasher($pw)
 {
     global $config;
     return password_hash($pw . $config['salt'], PASSWORD_BCRYPT, array('cost' => 12));
-}
-
-function sqlString($param)
-{
-    return (NULL === $param ? "NULL" : "'" . mysql_real_escape_string($param) . "'");
-}
-
-function sqlStringCon($param)
-{
-    return (NULL === $param ? "NULL" : "'" . mysql_real_escape_string(con($param)) . "'");
-}
-
-function sqlInt($param)
-{
-    return (NULL === $param ? "NULL" : intVal($param));
 }
 
 function get_gravatar($email, $s = 80, $img = false)
@@ -312,26 +296,6 @@ function con_to_lang($str)
     return '{s_' . $str . '}';
 }
 
-function s_decode($str)
-{
-    $ret = new ArrayObject();
-    $vars = explode(';', $str);
-    foreach ($vars as $sstr) {
-        $ex = explode('=', $sstr);
-        $ret->$ex[0] = $ex[1];
-    }
-    return $ret;
-}
-
-function s_encode($str)
-{
-    $con = array();
-    foreach ($str as $key => $value) {
-        $con[] = "$key=$value";
-    }
-    return implode(';', $con);
-}
-
 function get_public_properties($object)
 {
     $result = get_object_vars($object);
@@ -357,7 +321,8 @@ function get_editor($content = '')
 
 function sendMessage($sender, $receiver, $content, $title, $email = "")
 {
-    sendmail($content, $title, getUserInformations($receiver, 'email')->email);
+    $rec_user = new User($receiver);
+    sendmail($content, $title, $rec_user->email);
     $in = array(
         'sender_id' => $sender,
         'receiver_id' => $receiver,

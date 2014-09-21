@@ -35,7 +35,7 @@ switch ($do)
 {
     case 'update_settings':
         if (permTo('edit_settings')) {
-            $form = new Form($_POST, array('force_https'));
+            $form = new Form($_POST, array('force_https', 'use_site_id', 'force_domain'));
             if(Db::update('settings', 1, $form->get_vars_raw())) {
                 goToWithMsg('back', 'Done','success');
             } else {

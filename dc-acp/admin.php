@@ -42,7 +42,7 @@ closedir($items);
 if ($file_exist) {
     include 'module/' . $acp . ".php";
 } else {
-    $disp = show("acp/welcome");
+    $disp = show("acp/welcome").' <a href="/login?do=logout">Logout</a>';
 }
 
 if ($error == "") {

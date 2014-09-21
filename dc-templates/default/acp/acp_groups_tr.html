@@ -1,5 +1,11 @@
     <tr>
         {infos}
-        <td><a href="?acp=acp_user&AMP;action=edit_group&AMP;id={id}"><img src="{style}images/icons/icon_edit.png" alt="{s_edit}" width="15"/></a></td>
-        <td><a href="?acp=acp_user&AMP;do=delete_group&AMP;id={id}"><img src="{style}images/icons/icon_delete.png" alt="{s_delete}" width="15"/></a></td>
+        <td><a href="?acp=acp_user&AMP;action=edit_group&AMP;id={id}"><span data-toggle="tooltip" data-placement="top"
+                                                                            title="{s_edit}"
+                                                                            class="glyphicon glyphicon-pencil tooltip-init"></span></a></td>
+        <td>
+            <a href="?acp=acp_user&AMP;do=delete_group&AMP;id={id}"><span data-toggle="tooltip" data-placement="top"
+                                                                   title="{s_delete}"
+                                                                   class="glyphicon glyphicon-remove tooltip-init"></span></a>
+        </td>
     </tr>

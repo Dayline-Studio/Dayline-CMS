@@ -1,27 +1,27 @@
-<div id="mod_{id}">
+<div id="dMod_{id}" class="dMod" data-id="{id}"  data-class="{javaClass}">
     <div class="{module_name}"
          style="display: inline-block; width: 100%; vertical-align: top; border: 1px solid #F2F2F2; margin-bottom: 5px">
         <table width="100%" style="background-color: #bababa" class="table">
             <tr>
                 <td width="20%" style="color: #fff; padding: 5px;">{module_name}</td>
-                <td style="text-align: right;" onclick="toggle_admin_slide('mod_{id}')">
-                    <span data-toggle="tooltip" data-placement="top" title="{s_edit_module}" class="glyphicon glyphicon-pencil tooltip-init"></span>
+                <td style="text-align: right;">
+                    <span data-toggle="tooltip" data-placement="top" title="{s_edit_module}" class="module_edit glyphicon glyphicon-pencil tooltip-init"></span>
                 </td>
                 <td width="20">
-                    <span data-toggle="tooltip" data-placement="top" title="{s_delete_module}" onclick="delete_module('mod_{id}')" class="glyphicon glyphicon-remove tooltip-init"></span>
+                    <span data-toggle="tooltip" data-placement="top" title="{s_delete_module}" class="module_delete glyphicon glyphicon-remove tooltip-init"></span>
                 </td>
                 <td width="20">
-                    <span data-toggle="tooltip" data-placement="top" title="{s_move_module_up}" onclick="move('up','mod_{id}')" class="glyphicon glyphicon-arrow-up tooltip-init"></span>
+                    <span data-toggle="tooltip" data-placement="top" title="{s_move_module_up}" class="module_move_up glyphicon glyphicon-arrow-up tooltip-init"></span>
                 </td>
                 <td width="20">
-                    <span data-toggle="tooltip" data-placement="top" title="{s_move_module_down}" onclick="move('down','mod_{id}')" class="glyphicon glyphicon-arrow-down tooltip-init"></span>
+                    <span data-toggle="tooltip" data-placement="top" title="{s_move_module_down}" class="module_move_down glyphicon glyphicon-arrow-down tooltip-init"></span>
                 </td>
             </tr>
         </table>
-        <div class="slide_set">
+        <div class="module_settings">
             {module_render_admin}
         </div>
-        <div class="slide_prev">
+        <div class="module_preview">
             {module_render}
         </div>
     </div>

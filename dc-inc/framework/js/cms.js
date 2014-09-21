@@ -1,9 +1,10 @@
-﻿$(document).ready(function () {
-    load_create_function();
+﻿var myModuleManager;
+$(document).ready(function () {
     init_tinymce();
     set_menu_from_cookie();
     cookie_mail();
-    init_module(1, 1, 1, 1);
+    init_tooltip()
+    myModuleManager = ModuleManager();
 });
 
 function init_tooltip() {
@@ -31,284 +32,339 @@ function toggle_content(id, save) {
         }
     }
 }
-var url_edit = $(location).attr('href') + '&do=swap_prev_mode';
-document.onkeydown = function (event) {
-    if (event.keyCode == 117) {
-        window.location.assign(url_edit);
-    }
-}
 
-function toggle_content_instand(id) {
-    id = '.' + id;
-    $(id).toggle();
-}
+function ModuleManager() {
 
-function admin_toggler() {
-    var divs = $('div[class^="slide_set"]');
-    for (var i = 0; i < divs.length; i++) {
-        $(divs[i]).slideUp(0);
-    }
-    var divs = $('div[class^="slide_prev"]');
-    for (var i = 0; i < divs.length; i++) {
-        $(divs[i]).slideDown(0);
-    }
-}
+    var that = {};
 
-function toggle_admin_slide(id) {
-    sGet(id, 'set').slideToggle('slow');
-    sGet(id, 'prev').slideToggle('slow');
-}
+    that.modules = [];
 
-function sGet(id, type) {
-    return $('#' + id).find('.slide_' + type);
-}
+    that.init = function () {
+        that.readModules();
+    };
 
-function setModulLoading(id) {
-    sGet(id, 'set').slideUp(0);
-    sGet(id, 'prev').slideDown(0);
-    $.get('../../dc-inc/images/ajax/ajax.html')
-        .success(function (data) {
-            sGet(id, 'prev').html(data);
+    that.readModules = function () {
+        $('.dMod').each(function () {
+            that.modules.push(window[$(this).data('class')]($(this).data('id')));
         });
-}
+    };
 
-function renderModule(id, modul) {
-    sGet(id, 'prev').html(modul);
-}
-
-function cMN(id) {
-    return 'mod_' + id;
-}
-
-function reload_filemanager(id) {
-    reload_module(id, 'reload_module', function (id, result) {
-        sGet('mod_' + id, 'set').html(result.set);
-        init_module(0, 0, 1, 1);
-    });
-    toggle_admin_slide(id);
-}
-
-function s_module_task(id) {
-    var task = $('#' + cMN(id)).data('task');
-    reload_module(id, task, function (id, result) {
-        $.bootstrapGrowl(result.msg, {
-            type: 'info'
+    $('.create_mod').submit(function (e) {
+        var action = 'create';
+        var postRequest = $(this).serializeArray();
+        var position = $(this).closest("[id^='position_']").attr('id');
+        postRequest.push({name: "action", value: 'create'});
+        postRequest.push({name: "position", value: position});
+        $.ajax({
+            url: '/ajax_handler.php',
+            type: "POST",
+            data: postRequest,
+            success: function (data) {
+                data = JSON.parse(data);
+                $('#' + position).children('a').before(data.full);
+                $.bootstrapGrowl("Modul added");
+                that.modules.push(window[data.javaClass](data.id));
+            }
         });
+        e.preventDefault();
     });
-}
 
-function s_reload_module(id) {
-    reload_module(id, 'reload_module', function (id, result) {
-        sGet('mod_' + id, 'prev').html(result.prev);
-        init_module(0, 0, 1, 1);
-    });
-}
-
-function reload_module(id, action, func, add_post) {
-    var send = [
-        {name: 'action', value: action},
-        {name: "id", value: id}
-    ];
-    if (add_post != undefined) {
-        send = $.merge(send, add_post);
-    }
-    $.ajax({
-        url: '/ajax_handler',
-        type: 'POST',
-        data: send,
-        success: function (data) {
-            console.log(data);
-            var result = JSON.parse(data);
-            if (result.error != undefined) {
-                alert(result.error);
-            } else {
-                func(id, result);
+    that.getModuleById = function (queryID) {
+        for (var i = 0; i < that.modules.length; i++) {
+            if (that.modules[i].id == queryID) {
+                return that.modules[i];
             }
         }
-    });
-    return false;
+    };
+
+    that.init();
+
+    return that;
 }
 
+function MainModule(id) {
 
-/*   var ModuleCall = function (id) {
+    var that = {};
 
- this.id = id;
- this.url = 'ajax_handler.php';
- this.method = 'POST'
- this.params = {};
+    that.id = id;
+    that.jqID = '#dMod_' + id;
 
- this.SendData = function () {
- $.ajax(
- {
- url: this.url,
- type: this.method,
- data: this.params,
- success: function (data) {
- this.onSuccess();
- }
- });
- return false;
- }
+    that.ajax_handler = '/ajax_handler.php';
 
- this.onSuccess = function () {
- };
+    that.init = function () {
+        that.clickBar();
+        that.loadSettings();
+        that.getModulePart('settings').hide();
 
- this.getPostParams = function () {
- $(this).serializeArray();
- }
- }
-
- var Module = function (id) {
-
- this.id = id;
-
- }*/
-
-
-function load_form_function() {
-    $('form[class^="s_call"]').submit(function () {
-        var send = $(this).serializeArray();
-        reload_module(id, 'send_task', function (id, result) {
-            alert(result.msg);
-        })
-        return false;
-    });
-
-    $('form[class^="task"]').submit(function () {
-        // setModulLoading(cMN($(this).data('id')));
-        var send = $(this).serializeArray();
-        reload_module($(this).data('id'), 'get_post_result_render', function (id, result) {
-            sGet('mod_' + id, 'prev').html(result.prev);
-            init_module(0, 0, 1, 1);
-        }, send);
-        return false;
-    });
-
-    $('form[id^="mod_"]').submit(function () {
-        var module_id = splModName($(this).attr('id'))[1];
-        var action = 'update';
-        var div = cMN(module_id);
-        // setModulLoading(div);
-        var postData = $(this).serializeArray();
-        postData[5] = {name: "action", value: action};
-        postData[6] = {name: "id", value: module_id};
-        if ($(this).data('tiny')) {
-            postData[8] = {name: "content", value: tinyMCE.get(postData[0]["name"])['bodyElement']['innerHTML']};
+        if (that.additionalInit != undefined) {
+            that.additionalInit();
         }
-        var formURL = $(this).attr("action");
-        $.ajax(
-            {
-                url: formURL,
+
+        if (that.loadPreview != undefined) {
+            that.loadPreview();
+        }
+    };
+
+    that.loadPreview = function() {};
+
+    that.additionalInit = function() {};
+
+    that.initTooltip = function () {
+        $(that.jqID).find('.tooltip-init').hover(
+            function () {
+                $(this).tooltip('show');
+            }, function () {
+                $(this).tooltip('destroy');
+            });
+        $(that.jqID).find('.tooltip-init').css('cursor', 'pointer');
+    };
+
+    that.clickBar = function () {
+
+        that.initTooltip();
+
+        that.getModulePart('edit').on('click', function () {
+            that.toggleEdit();
+        });
+
+        that.getModulePart('delete').on('click', function () {
+            if (confirm('Willst Du wirklich löschen?')) {
+                that.delete();
+            }
+        });
+
+        that.getModulePart('move_up').on('click', function () {
+            that.move('up');
+        });
+
+        that.getModulePart('move_down').on('click', function () {
+            that.move('down');
+        });
+
+        that.getModulePart('reload').on('click', function () {
+            that.reloadPreSet('reload', function(result) {
+                console.log(result);
+                $(that.jqID).html(result.full);
+            });
+        });
+    };
+
+    that.move = function (direction) {
+        $.ajax({
+            url: that.ajax_handler,
+            type: 'POST',
+            data: [
+                {name: 'action', value: 'move_' + direction},
+                {name: "id", value: that.id}
+            ],
+            success: function (data) {
+                var result = JSON.parse(data);
+                if (result.error != undefined) {
+                    alert(result.error);
+                } else {
+                    $(that.jqID).remove();
+                    var replace = '';
+                    if (direction == 'up') {
+                        replace = result.this_content + result.target_content;
+                    } else if (direction == 'down') {
+                        replace = result.target_content + result.this_content;
+                    }
+                    var targetModule = myModuleManager.getModuleById(result.target_id);
+                    $(targetModule.jqID).replaceWith(replace);
+                    targetModule.init();
+                    that.init();
+                }
+            }
+        });
+    };
+
+    that.getModulePart = function (name, first) {
+        if (first == undefined) first = true;
+        if (first) {
+            return $(that.jqID).find('.module_' + name + ':first');
+        } else {
+            return $(that.jqID).find('.module_' + name);
+        }
+    };
+
+    that.openSettings = function () {
+        that.getModulePart('settings').slideDown('fast');
+        that.getModulePart('preview').slideUp('fast');
+    };
+
+    that.openPreview = function () {
+        that.getModulePart('settings').slideUp('fast');
+        that.getModulePart('preview').slideDown('fast');
+    };
+
+    that.toggleEdit = function () {
+        if (that.getModulePart('settings').is(':visible')) {
+            that.openPreview();
+        } else {
+            that.openSettings();
+        }
+    };
+
+    that.loadSettings = function () {
+        $(that.jqID).find('.module_task').on('submit', function (e) {
+            if ($(this).data('id') == that.id) {
+                var send = $(this).serializeArray();
+                that.reloadPreSet('get_post_result_render', function (result) {
+                    console.log(result);
+                    if (result.isNote != undefined) {
+                        $.bootstrapGrowl(result.NoteContent, {
+                            type: result.NoteKind
+                        });
+                    } else {
+                        that.getModulePart('preview').html(result.prev);
+                        that.loadSettings();
+                        that.clickBar();
+                    }
+                }, send);
+            }
+            e.preventDefault();
+        });
+
+        that.getModulePart('apply').on('submit' ,function (e) {
+            var action = 'update';
+            var requestData = $(this).serializeArray();
+            requestData.push({name: "action", value: action});
+            requestData.push({name: "id", value: that.id});
+
+            $.ajax({
+                url: that.ajax_handler,
                 type: "POST",
-                data: postData,
+                data: requestData,
                 success: function (data) {
-                    console.log(data);
                     $.bootstrapGrowl("Change Successful", {
                         type: 'success'
                     });
-                    renderModule(div, data);
-                    init_module(0, 1, 1, 0);
+                    that.reloadPreview();
                 }
             });
-        return false;
-    })
-}
+            e.preventDefault();
+        });
+    };
 
-function move(dir, div_id) {
-    var id = splModName(div_id)[1];
-    $.ajax({
-        url: '/ajax_handler',
-        type: 'POST',
-        data: [
-            {name: 'action', value: 'move_' + dir},
-            {name: "id", value: id}
-        ],
-        success: function (data) {
-            var result = JSON.parse(data);
-            if (result.error != undefined) {
-                alert(result.error);
-            } else {
-                $('#mod_' + result.this_id).remove();
-                var replace = '';
-                if (dir == 'up') {
-                    replace = result.this_content + result.target_content;
-                } else {
-                    replace = result.target_content + result.this_content;
-                }
-                $('#mod_' + result.target_id).replaceWith(replace);
-                init_tinymce();
-                init_module(1, 1, 1, 1);
-            }
+    that.reloadPreSet = function (action, func, add_post) {
+        var send = [
+            {name: 'action', value: action},
+            {name: "id", value: that.id}
+        ];
+        if (add_post != undefined) {
+            send = $.merge(send, add_post);
         }
-    })
-    return false;
-}
 
-function init_module(admin_toggle, tooltip, colorbox, form) {
-    if (admin_toggle) admin_toggler();
-    if (tooltip) init_tooltip();
-    if (colorbox) init_colorbox();
-    if (form) load_form_function();
-}
+        $.ajax({
+            url: that.ajax_handler,
+            type: 'POST',
+            data: send,
+            success: function (data) {
+                var result = JSON.parse(data);
+                func(result);
+            }
+        });
+    };
 
-function init_colorbox() {
-    $('a[class^="imagebox_"]').colorbox({rel: 'imagebox', transition: "fade", width: "75%", height: "75%"});
-}
+    that.reloadPreview = function () {
+        that.reloadPreSet('reload_module', function (result) {
+            that.getModulePart('preview').html(result.prev);
+            that.loadPreview();
+        });
+    };
 
-function load_create_function() {
-    $('.create_mod').submit(function () {
-        var action = 'create';
-        var postData = $(this).serializeArray();
-        var position = $(this).closest("[id^='position_']").attr('id');
-        postData[10] = {name: "action", value: 'create'};
-        postData[11] = {name: "position", value: position}
-        $.ajax(
-            {
+    that.reloadSettings = function () {
+        that.reloadPreSet('reload_module', function (result) {
+            that.getModulePart('settings').html(result.set);
+        });
+    };
+
+    that.delete = function () {
+        $(that.jqID).slideUp('slow', function () {
+            $(this).remove();
+            console.log(that.id);
+            $.ajax({
                 url: '/ajax_handler',
-                type: "POST",
-                data: postData,
+                type: 'POST',
+                data: [
+                    {name: 'action', value: 'delete'},
+                    {name: "id", value: that.id}
+                ],
                 success: function (data) {
-                    console.log(data);
-                    $('#' + position).children('a').before(data);
-                    init_tinymce();
-                    $.bootstrapGrowl("Modul added");
-                    init_module(1, 1, 1, 1);
+                    $.bootstrapGrowl("Modul deleted", {
+                        type: 'danger'
+                    });
                 }
             });
-        return false;
-    });
+        });
+    };
+
+    return that;
 }
 
+function Module(id) {
 
-function delete_module(div_id) {
-    if (confirm('Willst Du wirklich löschen?')) {
-        $('#' + div_id).slideUp('slow');
-        var id = splModName(div_id)[2];
-        var name = splModName(div_id)[1];
-        $.ajax({
-            url: '/ajax_handler',
-            type: 'POST',
-            data: [
-                {name: 'action', value: 'delete'},
-                {name: "id", value: id},
-                {name: 'module', value: name}
-            ],
-            success: function (data) {
-                init_tinymce();
-                if (data == '1') $('#' + div_id).remove();
-                $.bootstrapGrowl("Modul deleted", {
-                    type: 'danger'
-                });
-            }
-        })
-        return false;
-    }
+    var that = MainModule(id);
+
+    that.init();
+
+    return that;
 }
 
-function splModName(id) {
-    var ex = id.split('_');
-    return ex;
+function Gallery(id) {
+
+    var that = MainModule(id);
+
+    that.loadPreview = function() {
+        that.initColorbox();
+    };
+
+    that.initColorbox = function() {
+        $('a[class^="imagebox_"]').colorbox({rel: 'imagebox', transition: "fade", width: "75%", height: "75%"});
+    };
+
+    that.init();
+
+    return that;
 }
+
+function EditableText(id) {
+
+    var that = MainModule(id);
+
+    that.loadSettings = function () {
+        init_tinymce();
+        that.getModulePart('apply').submit(function (e) {
+            var action = 'update';
+            var requestData = $(this).serializeArray();
+            requestData.push({name: "action", value: action});
+            requestData.push({name: "id", value: that.id});
+            requestData[requestData.length] =
+                {
+                    name: "content",
+                    value: tinyMCE.get(requestData[0]["name"])['bodyElement']['innerHTML'].replace(/(data-mce-(.+?)="(.+?)")|(mce-(.[a-z]*))|(id="mce(.+?"))/g, '')
+                };
+
+            $.ajax({
+                url: that.ajax_handler,
+                type: "POST",
+                data: requestData,
+                success: function (data) {
+                    $.bootstrapGrowl("Change Successful", {
+                        type: 'success'
+                    });
+                    that.reloadPreview();
+                }
+            });
+            e.preventDefault();
+        });
+    };
+
+    that.init();
+
+    return that;
+}
+
 
 function set_menu_from_cookie() {
     var divs = get_toggle_cookie('open_');
@@ -418,20 +474,6 @@ function init_tinymce() {
     });
 }
 
-$(function () {
-    $('a[href*=#]:not([href=#])').click(function () {
-        if (location.pathname.replace(/^\//, '') == this.pathname.replace(/^\//, '') && location.hostname == this.hostname) {
-            var target = $(this.hash);
-            target = target.length ? target : $('[name=' + this.hash.slice(1) + ']');
-            if (target.length) {
-                $('html,body').animate({
-                    scrollTop: target.offset().top
-                }, 1000);
-                return false;
-            }
-        }
-    });
-});
 
 (function (i, s, o, g, r, a, m) {
     i['GoogleAnalyticsObject'] = r;

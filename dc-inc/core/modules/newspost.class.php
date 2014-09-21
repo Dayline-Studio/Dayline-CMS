@@ -31,7 +31,7 @@ class NewsPost extends MainModule
 
     public function get_content($limit = 0)
     {
-        return strip_tags($this->site->modules_render());
+        return strip_tags($this->site->modules_render(1));
     }
 
     public function get_title() {

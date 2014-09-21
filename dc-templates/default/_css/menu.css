@@ -1,21 +1,19 @@
-@import url(http://fonts.googleapis.com/css?family=Metrophobic);
-#cssmenu {
+#menu {
   background: #4cb6ea;
   margin: 0;
-  width: auto;
+  width: 100%;
   padding: 0;
   line-height: 1;
   display: block;
   position: relative;
-  font-family: 'Metrophobic', sans-serif;
 }
-#cssmenu ul {
+#menu ul {
   list-style: none;
   margin: 0;
   padding: 0;
   display: block;
 }
-#cssmenu ul:after {
+#menu ul:after {
   content: ' ';
   display: block;
   font-size: 0;
@@ -23,30 +21,30 @@
   clear: both;
   visibility: hidden;
 }
-#cssmenu ul li {
+#menu ul li {
   margin: 0;
   padding: 0;
   display: block;
   position: relative;
 }
-#cssmenu ul li a {
+#menu ul li a {
   text-decoration: none;
   display: block;
   margin: 0;
   transition: color .2s ease;
 }
-#cssmenu ul li ul {
+#menu ul li ul {
   position: absolute;
   left: -9999px;
   top: auto;
 }
-#cssmenu ul li ul li {
+#menu ul li ul li {
   max-height: 0;
   position: absolute;
   background: #4cb6ea;
   transition: all 0.4s ease-out;
 }
-#cssmenu ul li ul li.has-sub:after {
+#menu ul li ul li.has-sub:after {
   display: block;
   position: absolute;
   content: '';
@@ -58,7 +56,7 @@
   top: 13px;
   right: 15px;
 }
-#cssmenu ul li ul li.has-sub:before {
+#menu ul li ul li.has-sub:before {
   display: block;
   position: absolute;
   content: '';
@@ -70,7 +68,7 @@
   top: 15px;
   right: 15px;
 }
-#cssmenu ul li ul li a {
+#menu ul li ul li a {
   font-size: 14px;
   font-weight: 400;
   text-transform: none;
@@ -80,31 +78,31 @@
   width: 140px;
   padding: 11px 10px 11px 20px;
 }
-#cssmenu ul li ul li:hover > a,
-#cssmenu ul li ul li.active > a {
+#menu ul li ul li:hover > a,
+#menu ul li ul li.active > a {
   color: #4cb6ea;
 }
-#cssmenu ul li ul li:hover{
+#menu ul li ul li:hover{
     background: #fff;
     box-shadow: 3px 5px 8px grey;
 }
 
-#cssmenu ul li ul li:hover:after,
-#cssmenu ul li ul li.active:after {
+#menu ul li ul li:hover:after,
+#menu ul li ul li.active:after {
   background: #4cb6ea;
 }
-#cssmenu ul li ul li:hover > ul {
+#menu ul li ul li:hover > ul {
   left: 170px;
   top: 0;
 }
-#cssmenu ul li ul li:hover > ul > li {
+#menu ul li ul li:hover > ul > li {
   max-height: 72px;
   position: relative;
 }
-#cssmenu > ul > li {
+#menu > ul > li {
   float: left;
 }
-#cssmenu > ul > li:after {
+#menu > ul > li:after {
   content: '';
   display: block;
   position: absolute;
@@ -115,10 +113,10 @@
   background: #ffffff;
   transition: height .2s;
 }
-#cssmenu > ul > li.has-sub > a {
+#menu > ul > li.has-sub > a {
   padding-right: 40px;
 }
-#cssmenu > ul > li.has-sub > a:after {
+#menu > ul > li.has-sub > a:after {
   display: block;
   content: '';
   background: #ffffff;
@@ -129,7 +127,7 @@
   right: 14px;
   top: 16px;
 }
-#cssmenu > ul > li.has-sub > a:before {
+#menu > ul > li.has-sub > a:before {
   display: block;
   content: '';
   border: 4px solid transparent;
@@ -141,7 +139,7 @@
   right: 16px;
   top: 21px;
 }
-#cssmenu > ul > li > a {
+#menu > ul > li > a {
   color: #ffffff;
   padding: 15px 20px;
   font-weight: 700;
@@ -150,86 +148,86 @@
   z-index: 2;
   position: relative;
 }
-#cssmenu > ul > li:hover:after,
-#cssmenu > ul > li.active:after {
+#menu > ul > li:hover:after,
+#menu > ul > li.active:after {
   height: 100%;
 }
-#cssmenu > ul > li:hover > a,
-#cssmenu > ul > li.active > a {
+#menu > ul > li:hover > a,
+#menu > ul > li.active > a {
   color: #000000;
 }
-#cssmenu > ul > li:hover > a:after,
-#cssmenu > ul > li.active > a:after {
+#menu > ul > li:hover > a:after,
+#menu > ul > li.active > a:after {
   background: #000000;
 }
-#cssmenu > ul > li:hover > a:before,
-#cssmenu > ul > li.active > a:before {
+#menu > ul > li:hover > a:before,
+#menu > ul > li.active > a:before {
   border-top-color: #ffffff;
 }
-#cssmenu > ul > li:hover > ul {
+#menu > ul > li:hover > ul {
   left: 0;
 }
-#cssmenu > ul > li:hover > ul > li {
+#menu > ul > li:hover > ul > li {
   max-height: 72px;
   position: relative;
 }
-#cssmenu #menu-button {
+#menu #menu-button {
   display: none;
 }
 @media all and (max-width: 768px), only screen and (max-width: 1024px), only screen and (max-width: 1024px), only screen and (max-width: 1024px), only screen and (min-resolution: 192dpi) and (max-width: 1024px), only screen and (min-resolution: 2dppx) and (max-width: 1024px) {
-  #cssmenu > ul {
+  #menu > ul {
     max-height: 0;
     overflow: hidden;
     transition: max-height 0.35s ease-out;
   }
-  #cssmenu > ul.open {
+  #menu > ul.open {
     max-height: 1000px;
     border-top: 1px solid rgba(110, 110, 110, 0.25);
   }
-  #cssmenu ul {
+  #menu ul {
     width: 100%;
   }
-  #cssmenu ul > li {
+  #menu ul > li {
     float: none;
   }
-  #cssmenu ul li a {
+  #menu ul li a {
     box-sizing: border-box;
     width: 100%;
     padding: 12px 20px;
   }
-  #cssmenu ul > li:after {
+  #menu ul > li:after {
     display: none;
   }
-  #cssmenu ul li.has-sub > a:after,
-  #cssmenu ul li.has-sub > a:before,
-  #cssmenu ul li ul li.has-sub:after,
-  #cssmenu ul li ul li.has-sub:before {
+  #menu ul li.has-sub > a:after,
+  #menu ul li.has-sub > a:before,
+  #menu ul li ul li.has-sub:after,
+  #menu ul li ul li.has-sub:before {
     display: none;
   }
-  #cssmenu ul li ul,
-  #cssmenu ul li ul li ul,
-  #cssmenu ul li ul li:hover > ul {
+  #menu ul li ul,
+  #menu ul li ul li ul,
+  #menu ul li ul li:hover > ul {
     left: 0;
     position: relative;
   }
-  #cssmenu ul li ul li,
-  #cssmenu ul li:hover > ul > li {
+  #menu ul li ul li,
+  #menu ul li:hover > ul > li {
     max-height: 999px;
     position: relative;
     background: none;
   }
-  #cssmenu ul li ul li a {
+  #menu ul li ul li a {
     padding: 8px 20px 8px 35px;
     color: #ffffff;
     width: auto;
   }
-  #cssmenu ul li ul ul li a {
+  #menu ul li ul ul li a {
     padding: 8px 20px 8px 50px;
   }
-  #cssmenu ul li ul li:hover > a {
+  #menu ul li ul li:hover > a {
     color: #000000;
   }
-  #cssmenu #menu-button {
+  #menu #menu-button {
     display: block;
     box-sizing: border-box;
     width: auto;
@@ -241,7 +239,7 @@
     color: #ffffff;
     cursor: pointer;
   }
-  #cssmenu #menu-button:after {
+  #menu #menu-button:after {
     display: block;
     content: '';
     position: absolute;
@@ -252,7 +250,7 @@
     right: 20px;
     top: 16px;
   }
-  #cssmenu #menu-button:before {
+  #menu #menu-button:before {
     display: block;
     content: '';
     position: absolute;

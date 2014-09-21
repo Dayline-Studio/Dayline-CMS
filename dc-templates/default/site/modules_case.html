@@ -1,6 +1,11 @@
 <div id="position_{position}">
     {modules}
-    <a data-toggle="modal" data-target="#create_{position}"><img src="/dc-inc/images/add_module.png" alt="Absenden" /></a>
+    <a data-toggle="modal" data-target="#create_{position}">
+    <div style="text-align: center;width:100%;background: rgba(211, 211, 211, 0.27);" class="tooltip-init"
+         data-toggle="tooltip" data-placement="top"
+         title="{s_add}">
+        <span class="glyphicon glyphicon-plus"> </span>
+    </div></a>
     <div class="modal fade" role="dialog" id="create_{position}">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -9,7 +14,7 @@
                         {available_modules}
                     </select>
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <input type="submit" class="btn btn-primary" value="{s_add}" />
+                    <input type="submit" class="btn btn-primary" value="{s_add}"/>
                 </form>
             </div>
         </div>

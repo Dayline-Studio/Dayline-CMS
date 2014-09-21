@@ -4,7 +4,7 @@ class Site
 {
 
     public $id = NULL, $title, $userid, $keywords, $description, $subfrom, $position, $lastedit, $editby, $date;
-    public $show_lastedit, $show_author, $show_print, $show_headline, $show_socialbar, $public;
+    public $show_lastedit, $show_author, $show_print, $show_headline, $public;
     protected $modules;
 
     public function __construct($data)
@@ -26,6 +26,12 @@ class Site
         }
     }
 
+    public function get_link() {
+        $title = $this->title;
+        $url = $this->get_url();
+        return "<a href=\"$url\">$title</a>";
+    }
+
     public function modules_render($force_user = 0)
     {
         $this->modules_load();
@@ -43,12 +49,20 @@ class Site
 
     public function get_site_id()
     {
-        return $this->get_title() . '-' . $this->id;
+        if (Config::$settings->use_site_id) {
+            return $this->get_title() . '-' . $this->id;
+        } else {
+            return $this->get_title();
+        }
     }
 
     public function get_title()
     {
-        return str_replace(array(' ', '/', '.', '+'), '-', $this->title);
+        return str_replace(get_replace_array(), '-', $this->title);
+    }
+
+    public function get_clear_title() {
+
     }
 
     public function delete()
@@ -74,7 +88,6 @@ class Site
         $this->show_headline = 0;
         $this->show_lastedit = 0;
         $this->show_print = 0;
-        $this->show_socialbar = 0;
     }
 
     public function get_o_site()

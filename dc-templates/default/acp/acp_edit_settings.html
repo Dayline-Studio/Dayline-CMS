@@ -1,7 +1,7 @@
 <form role="form" action="?acp={where}&AMP;do=update_settings" method="POST">
     <div class="form-group">
         <label for="website_title">Website title</label>
-        <input type="text" class="form-control" id="website_title" name="website_title" value="{website_title}" />
+        <input type="text" class="form-control" id="website_title" name="website_title" value="{website_title}"/>
     </div>
     <div class="form-group">
         <label for="language">Language</label>
@@ -9,11 +9,11 @@
     </div>
     <div class="form-group">
         <label for="google_analytics">Google Analytics</label>
-        <input type="text" class="form-control" id="google_analytics" name="language" value="{google_analytics}" />
+        <input type="text" class="form-control" id="google_analytics" name="language" value="{google_analytics}"/>
     </div>
     <div class="form-group">
         <label for="domain">Main-Domain</label>
-        <input type="text" class="form-control" id="domain" value="{domain}" name="domain" />
+        <input type="text" class="form-control" id="domain" value="{domain}" name="domain"/>
     </div>
     <div class="form-group">
         <label for="home">Startseite</label>
@@ -22,6 +22,17 @@
     <div class="checkbox">
         <label>
             <input type="checkbox" value="1" name="force_https" {force_https}> Https erzwingen
+        </label>
+    </div>
+    <div class="checkbox">
+        <label>
+            <input type="checkbox" value="1" name="force_domain" {force_domain}> Domain erzwingen
+        </label>
+    </div>
+    <div class="checkbox">
+        <label>
+            <input type="checkbox" value="1" name="use_site_id" {use_site_id}> Seiten ID in der URL benutzten (Titel
+            können mehrfach verwendet werden).
         </label>
     </div>
     <button type="submit" class="btn btn-default">Submit</button>

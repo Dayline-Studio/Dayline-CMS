@@ -32,7 +32,7 @@ pre{font-family:'Source Code Pro', sans-serif;border:1px solid #F0F0F0;backgroun
 .right{text-align:right}
 .half{width:50%}
 #right{float:right;width:300px;background:#FAFAFA;margin-bottom:20px}
-#cssmenu a, #cssmenu a:link, #cssmenu a:visited, #cssmenu a:hover, #cssmenu a:active{color:#fff;font-weight:700;text-decoration:none}
+#menu a, #menu a:link, #menu a:visited, #menu a:hover, #menu a:active{color:#fff;font-weight:700;text-decoration:none}
 #content a,#content a:link,#content a:visited,#content a:active{text-decoration:none;color:#4CB6EA;transition:color .3s linear}
 #content a:hover{color:#E6E6E6}
 input[type=text],textarea{transition:all .3s ease-in-out}

@@ -21,7 +21,7 @@ class Form {
     }
 
     public function get_vars_out() {
-        return $this->convert_checkboxes($this->fields);
+        return $this->convert_checkboxes($this->get_vars_raw());
     }
 
     private function convert_checkboxes($arr) {
@@ -31,6 +31,8 @@ class Form {
                 $arr[$key] = 'checked';
             } else if ($val === '0') {
                 $arr[$key] = '';
+            } else {
+                $arr[$key] = $val;
             }
         }
         return $arr;
