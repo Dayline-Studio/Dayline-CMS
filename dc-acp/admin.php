@@ -13,7 +13,7 @@ $disp = "";
 $subsite = array();
 
 if (!permTo("menu_acp")) {
-    $error = msg(_no_permissions);
+    goToWithMsg('home', _no_permissions);
 }
 
 if (isset($_GET['acp'])) {
@@ -37,6 +37,8 @@ while ($item = readdir($items)) {
         }
     }
 }
+
+$item_stack .= '<a class="btn btn-default" href="/dc-content/support/dayline_cms_help.pdf"  target=\'_blank\'>?</a>';
 closedir($items);
 
 if ($file_exist) {
@@ -65,10 +67,6 @@ if ($error == "") {
     $vc = new VersionControl();
     $case = array("menu" => $item_stack, "content" => show($disp, array('where' => $acp)), "submenu" => $submenu);
     Disp::$content = show("acp/menu", array_merge($case, $vc->get_vars()));
-    Disp::addMeta($meta);
-    Disp::render();
-} else {
-    Disp::$content = $error;
     Disp::addMeta($meta);
     Disp::render();
 }

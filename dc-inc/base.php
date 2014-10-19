@@ -6,36 +6,53 @@ if (file_exists("../dc-storage/config.php")) {
 
 $GLOBALS['base_dir'] = realpath(dirname(__FILE__) . '/../');
 
-spl_autoload_register(null, false);
-spl_autoload_extensions('.class.php');
-spl_autoload_register('classLoader');
+$myClassLoader = new dcAutoLoader();
 
-function classLoader($class)
-{
-    $classname = strtolower($class);
-    $filename = $classname . '.class.php';
-    $path['core'] = $GLOBALS['base_dir'] . '/dc-inc/core/';
-    $path['lib'] = $GLOBALS['base_dir'] . '/dc-inc/lib/';
+class dcAutoLoader {
 
-    $handle = opendir($path['core']);
-    while ($datei = readdir($handle)) {
-        if (is_dir($path['core'] . $datei) && $datei != '.' || $datei != '..') {
-            $path[$datei] = $path['core'] . $datei . '/';
-        }
+    private $path = [];
+
+    public function __construct() {
+        $this->path[] = $GLOBALS['base_dir'] . '/dc-inc/core/';
+        $this->path[] = $GLOBALS['base_dir'] . '/dc-additional/core/';
+        $this->path[] = $GLOBALS['base_dir'] . '/dc-inc/lib/';
+        $this->path[] = $GLOBALS['base_dir'] . '/dc-additional/lib/';
+
+        $this->setRegister($this->path[0]);
+        $this-> setRegister($this->path[1]);
+
+        $this->loadRegister();
     }
-    closedir($handle);
 
-    foreach ($path as $dir) {
-        if (is_readable($dir . $filename)) {
-            include $dir . $filename;
-            return true;
-        } else if (is_readable($dir . $classname . '/' . $classname . '.php')) {
+    private function loadRegister() {
+        spl_autoload_register(function ($class)
+        {
+            $classname = strtolower($class);
+            $filename = $classname . '.class.php';
 
-            include $dir . $classname . '/' . $classname . '.php';
-            return true;
-        }
+            foreach ($this->path as $dir) {
+                if (is_readable($dir . $filename)) {
+                    include_once $dir . $filename;
+                    return true;
+                } else if (is_readable($dir . $classname . '/' . $classname . '.php')) {
+                    include_once $dir . $classname . '/' . $classname . '.php';
+                    return true;
+                }
+            }
+            return false;
+        });
+
     }
-    return false;
+
+    private function setRegister($reg_path) {
+        $handle = opendir($reg_path);
+        while ($datei = readdir($handle)) {
+            if (is_dir($reg_path . $datei) && $datei != '.' && $datei != '..') {
+                $this->path[] = $reg_path . $datei . '/';
+            }
+        }
+        closedir($handle);
+    }
 }
 
 date_default_timezone_set('Europe/Berlin');
@@ -52,8 +69,8 @@ if ($set = Db::npquery('SELECT * FROM settings LIMIT 1', PDO::FETCH_OBJ)) {
 Config::loadSettings();
 Config::loadLanguage();
 
+include_once(Config::$path['functions']);
 
-include(Config::$path['functions']);
 Auth::checkStatus();
 
 if (isset($_REQUEST['show'])) {

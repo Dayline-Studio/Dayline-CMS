@@ -175,8 +175,13 @@ function MainModule(id){
             type: 'POST',
             data: send,
             success: function (data) {
-                var result = JSON.parse(data);
-                func(result);
+                try {
+                    var result = JSON.parse(data);
+                    func(result);
+                } catch(e) {
+                    console.log('Parse Error:');
+                    console.log(data);
+                }
             }
         });
     };

@@ -17,7 +17,6 @@ function show($file_content = "", $tags = array(null => null))
             $file_content = str_replace('{' . $name . '}', $value, $file_content);
         }
     }
-    //return preg_replace("/\s+/", " ", $file_content);
     return $file_content;
 }
 
@@ -35,7 +34,8 @@ function get_template_dir_from($path)
     }
 }
 
-function get_replace_array() {
+function get_replace_array()
+{
     return array(' ', '/', '.', '+');
 }
 
@@ -87,6 +87,9 @@ function msg($msg, $kind = 'stock')
     }
 
     $meta['title'] = $msg;
+    if (!isset($_SESSION['last_site'])) {
+        $_SESSION['last_site'] = Config::$path['pages'];
+    }
     $msg = show($file, array("msg" => $msg,
         "link" => $_SESSION['last_site']));
     backSideFix();
@@ -273,6 +276,8 @@ function goToWithMsg($url, $msg, $type = 'info')
     new Notification($msg, $type);
     if ($url == 'back') {
         goBack();
+    }  else if ($url == 'home') {
+        goToSite(Config::$settings->home);
     } else {
         header('Location: ' . $url);
         exit();
@@ -334,7 +339,8 @@ function sendMessage($sender, $receiver, $content, $title, $email = "")
     return Db::insert('messages', $in);
 }
 
-function unset_array_keys($arr, $keys) {
+function unset_array_keys($arr, $keys)
+{
     foreach ($keys as $key) {
         if (isset($arr[$key])) {
             unset($arr[$key]);

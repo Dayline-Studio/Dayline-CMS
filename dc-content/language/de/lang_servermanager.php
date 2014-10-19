@@ -19,3 +19,4 @@ define ('_hostname', 'Hostname');
 define ('_username', 'Benutzername');
 define ('_port', 'Port');
 define ('_quicklink', 'Direktlink');
+define ('_server_command', 'Sende Server Befehl');

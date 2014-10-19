@@ -74,4 +74,24 @@ define('lang_Zip_No_Extract', 'Zip Datei konnte nicht entpackt werden. Die Datei
 define('lang_Zip_Invalid', 'Dieses Dateiformat wird nicht unterst&uuml;zt. Zugelassene Formate: zip, gz und tar.');
 define('lang_Dir_No_Write', 'Dieses Dateiverzeichis ist schreibgesch&uuml;tzt.');
 define('lang_Function_Disabled', 'Die Funktion %s ist serverseitig deaktiviert.'); // %s = cut or copy
+define('lang_File_Permission', 'Datei Berechtigung');
+define('lang_File_Permission_Not_Allowed', 'Changing %s permissions are not allowed.'); // %s = files or folders
+define('lang_File_Permission_Recursive', 'Rekursiv anwenden?');
+define('lang_File_Permission_Wrong_Mode', "The supplied permission mode is incorrect.");
+define('lang_User', 'Benutzer');
+define('lang_Group', 'Gruppe');
+define('lang_Yes', 'Ja');
+define('lang_No', 'Nein');
+define('lang_Lang_Not_Found', 'Sprache wurde nicht gefunden.');
+define('lang_Lang_Change', 'Sprache wechseln');
+define('lang_File_Not_Found', 'Datei wurde nicht gefunden.');
+define('lang_File_Open_Edit_Not_Allowed', 'Sie sind nicht berechtigt diese Datei zu %.'); // %s = open or edit
+define('lang_Edit', 'Bearbeiten');
+define('lang_Edit_File', "Dateiinhalt bearbeiten");
+define('lang_File_Save_OK', "Datei erfolgreich gespeichert.");
+define('lang_File_Save_Error', "Beim Speichern der Datei ist ein Fehler aufgetreten.");
+define('lang_New_File','Neue Datei');
+define('lang_No_Extension','Dateiendung muss hinzugef&uuml;gt werden.'); 
+define('lang_Valid_Extensions','Erlaubte Dateiendungen: %s'); // %s = txt,log etc.
+
 ?>

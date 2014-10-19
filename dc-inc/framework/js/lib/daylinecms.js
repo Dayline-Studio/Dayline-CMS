@@ -1,13 +1,11 @@
-
-
 function init_tooltip() {
-    $('.add-module .tooltip-init').hover(
+    $('.add-module.tooltip-init').hover(
         function () {
             $(this).tooltip('show');
         }, function () {
             $(this).tooltip('destroy');
         });
-    $('.add-module .tooltip-init').css('cursor', 'pointer');
+    $('.add-module.tooltip-init').css('cursor', 'pointer');
 }
 
 function toggle_content(id, save) {
@@ -25,6 +23,11 @@ function toggle_content(id, save) {
     }
 }
 
+function toggle_content_instand(id) {
+    id = '.' + id;
+    $(id).toggle();
+}
+
 function set_menu_from_cookie() {
     var divs = get_toggle_cookie('open_');
     for (var i = 0; i < divs.length; i++) {
@@ -32,7 +35,6 @@ function set_menu_from_cookie() {
         var value = split[1];
         var tag = split[0];
         if (value == 1) {
-            console.log('close ' + tag);
             toggle_content_instand(tag);
         }
     }
@@ -109,6 +111,7 @@ function init_tinymce() {
     tinymce.init({
         selector: "div.edit",
         inline: true,
+        skin: "dayline",
 
         plugins: [
             "advlist textcolor autolink youtube lists link image charmap print preview anchor",
@@ -118,7 +121,7 @@ function init_tinymce() {
         toolbar: "insertfile undo redo | styleselect | youtube | bold italic forecolor backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image",
         external_filemanager_path: "/dc-content/plugins/filemanager/",
         filemanager_title: "Responsive Filemanager",
-        external_plugins: { "filemanager": "../filemanager/plugin.min.js"},
+        external_plugins: {"filemanager": "../filemanager/plugin.min.js"},
         style_formats_merge: true,
         style_formats: [
             {

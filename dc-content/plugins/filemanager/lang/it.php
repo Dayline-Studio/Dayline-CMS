@@ -53,7 +53,7 @@ define('lang_Sorting','ordina');
 define('lang_Show_url','mostra URL');
 define('lang_Extract','estrai qui');
 define('lang_File_info','informazioni file');
-define('lang_Edit_image','modifica immagine');
+define('lang_Edit_image','Modifica immagine');
 define('lang_Duplicate','Duplica');
 define('lang_Folders', 'Folders');
 define('lang_Copy','Copia');
@@ -74,4 +74,24 @@ define('lang_Zip_No_Extract', 'Non si può estrarre il pacchetto perchè sembra 
 define('lang_Zip_Invalid', 'Questa estensione non è supportata. Le estensioni valide sono: zip, gz, tar.');
 define('lang_Dir_No_Write', 'La cartella selezionata non è scrivibile.');
 define('lang_Function_Disabled', 'La funzione %s è stata disabilitata.'); // %s = cut or copy
+define('lang_File_Permission', 'Permessi file');
+define('lang_File_Permission_Not_Allowed', 'Il cambiamento dei permessi di %s non è permesso.'); // %s = files or folders
+define('lang_File_Permission_Recursive', 'Applica ricorsivamente?');
+define('lang_File_Permission_Wrong_Mode', "La modalità di autorizzazione non è corretta.");
+define('lang_User', 'Utente');
+define('lang_Group', 'Gruppo');
+define('lang_Yes', 'Si');
+define('lang_No', 'No');
+define('lang_Lang_Not_Found', 'La lingua non è stata trovata.');
+define('lang_Lang_Change', 'Cambia la lingua');
+define('lang_File_Not_Found', 'Il file non è stato trovato.');
+define('lang_File_Open_Edit_Not_Allowed', 'Non hai il permesso di %s questo file.'); // %s = open or edit
+define('lang_Edit', 'Modifica');
+define('lang_Edit_File', "Modifica il contenuto di questo file");
+define('lang_File_Save_OK', "Il file è stato salvato con successo.");
+define('lang_File_Save_Error', "C'è stato un errore nel salvataggio del file.");
+define('lang_New_File','Nuovo file');
+define('lang_No_Extension',"Non hai inserito l'estensione del file."); 
+define('lang_Valid_Extensions','Estensioni valide: %s'); // %s = txt,log etc.
+
 ?>

@@ -73,7 +73,7 @@ if ($site = $sm->get_first_site()) {
             break;
     }
 } else {
-    //goToSite('/error?r=sitenotfound');
+    goToWithMsg('home', 'Seite nicht gefunden');
 }
 
 

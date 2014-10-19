@@ -16,7 +16,7 @@ function duplicate_file($old_path,$name){
     if(file_exists($old_path)){
 	$info=pathinfo($old_path);
 	$new_path=$info['dirname']."/".$name.".".$info['extension'];
-	if(file_exists($new_path)) return false;
+	if(file_exists($new_path) && $old_path == $new_path) return false;
 	return copy($old_path,$new_path);
     }
 }
@@ -26,7 +26,7 @@ function rename_file($old_path,$name,$transliteration){
     if(file_exists($old_path)){
 	$info=pathinfo($old_path);
 	$new_path=$info['dirname']."/".$name.".".$info['extension'];
-	if(file_exists($new_path)) return false;
+	if(file_exists($new_path) && $old_path == $new_path) return false;
 	return rename($old_path,$new_path);
     }
 }
@@ -35,32 +35,24 @@ function rename_folder($old_path,$name,$transliteration){
     $name=fix_filename($name,$transliteration);
     if(file_exists($old_path)){
 	$new_path=fix_dirname($old_path)."/".$name;
-	if(file_exists($new_path)) return false;
+	if(file_exists($new_path) && $old_path == $new_path) return false;
 	return rename($old_path,$new_path);
     }
 }
 
-function create_img_gd($imgfile, $imgthumb, $newwidth, $newheight="") {
+function create_img($imgfile, $imgthumb, $newwidth, $newheight="",$option="crop") {
+    $timeLimit= ini_get('max_execution_time');
+    set_time_limit(30);
+    $result= false;
     if(image_check_memory_usage($imgfile,$newwidth,$newheight)){
-	require_once('php_image_magician.php');
-	$magicianObj = new imageLib($imgfile);
-	$magicianObj -> resizeImage($newwidth, $newheight, 'crop');
-	$magicianObj -> saveImage($imgthumb,80);
-	return true;
+        require_once('php_image_magician.php');
+        $magicianObj = new imageLib($imgfile);
+        $magicianObj -> resizeImage($newwidth, $newheight, $option);
+        $magicianObj -> saveImage($imgthumb,80);
+        $result= true;
     }
-    return false;
-}
-
-function create_img($imgfile, $imgthumb, $newwidth, $newheight="") {
-    if(image_check_memory_usage($imgfile,$newwidth,$newheight)){
-	require_once('php_image_magician.php');  
-	$magicianObj = new imageLib($imgfile);
-	$magicianObj -> resizeImage($newwidth, $newheight, 'auto');  
-	$magicianObj -> saveImage($imgthumb,80);
-	return true;
-    }else{
-	return false;
-    }
+    set_time_limit($timeLimit);
+    return $result;
 }
 
 function makeSize($size) {
@@ -119,9 +111,9 @@ function filescount($path) {
 function create_folder($path=false,$path_thumbs=false){
     $oldumask = umask(0);
     if ($path && !file_exists($path))
-        mkdir($path, 0777, true); // or even 01777 so you get the sticky bit set 
+        mkdir($path, 0755, true); // or even 01777 so you get the sticky bit set 
     if($path_thumbs && !file_exists($path_thumbs)) 
-        mkdir($path_thumbs, 0777, true) or die("$path_thumbs cannot be found"); // or even 01777 so you get the sticky bit set 
+        mkdir($path_thumbs, 0755, true) or die("$path_thumbs cannot be found"); // or even 01777 so you get the sticky bit set 
     umask($oldumask);
 }
 
@@ -160,7 +152,11 @@ function fix_get_params($str){
     return strip_tags(preg_replace( "/[^a-zA-Z0-9\.\[\]_| -]/", '', $str));
 }
 
-function fix_filename($str,$transliteration){
+function fix_filename($str,$transliteration,$convert_spaces=false){
+    if ($convert_spaces) {
+        $str=str_replace(' ', '_', $str);
+    }
+
     if($transliteration){
     	if( function_exists( 'transliterator_transliterate' ) )
     	{
@@ -207,10 +203,10 @@ function fix_strtolower($str){
 	return strtolower($str);
 }
 
-function fix_path($path,$transliteration){
+function fix_path($path,$transliteration,$convert_spaces=false){
     $info=pathinfo($path);
     $tmp_path = $info['dirname'];
-	$str=fix_filename($info['filename'],$transliteration);
+	$str=fix_filename($info['filename'],$transliteration,$convert_spaces);
     if($tmp_path!="")
 		return $tmp_path.DIRECTORY_SEPARATOR.$str;
     else
@@ -272,8 +268,8 @@ function endsWith($haystack, $needle)
     return $needle === "" || substr($haystack, -strlen($needle)) === $needle;
 }
 
-function new_thumbnails_creation($targetPath,$targetFile,$name,$current_path,$relative_image_creation,$relative_path_from_current_pos,$relative_image_creation_name_to_prepend,$relative_image_creation_name_to_append,$relative_image_creation_width,$relative_image_creation_height,$fixed_image_creation,$fixed_path_from_filemanager,$fixed_image_creation_name_to_prepend,$fixed_image_creation_to_append,$fixed_image_creation_width,$fixed_image_creation_height){
-    //create relative _thumbs
+function new_thumbnails_creation($targetPath,$targetFile,$name,$current_path,$relative_image_creation,$relative_path_from_current_pos,$relative_image_creation_name_to_prepend,$relative_image_creation_name_to_append,$relative_image_creation_width,$relative_image_creation_height,$relative_image_creation_option,$fixed_image_creation,$fixed_path_from_filemanager,$fixed_image_creation_name_to_prepend,$fixed_image_creation_to_append,$fixed_image_creation_width,$fixed_image_creation_height,$fixed_image_creation_option){
+    //create relative thumbs
     $all_ok=true;
     if($relative_image_creation){
 	foreach($relative_path_from_current_pos as $k=>$path){
@@ -281,19 +277,19 @@ function new_thumbnails_creation($targetPath,$targetFile,$name,$current_path,$re
 	    if (!file_exists($targetPath.$path)) create_folder($targetPath.$path,false);
 	    $info=pathinfo($name);
 	    if(!endsWith($targetPath,$path))
-		if(!create_img($targetFile, $targetPath.$path.$relative_image_creation_name_to_prepend[$k].$info['filename'].$relative_image_creation_name_to_append[$k].".".$info['extension'], $relative_image_creation_width[$k], $relative_image_creation_height[$k]))
+		if(!create_img($targetFile, $targetPath.$path.$relative_image_creation_name_to_prepend[$k].$info['filename'].$relative_image_creation_name_to_append[$k].".".$info['extension'], $relative_image_creation_width[$k], $relative_image_creation_height[$k], $relative_image_creation_option[$k]))
 		    $all_ok=false;
 	}
     }
     
-    //create fixed _thumbs
+    //create fixed thumbs
     if($fixed_image_creation){
 	foreach($fixed_path_from_filemanager as $k=>$path){
 	    if($path!="" && $path[strlen($path)-1]!="/") $path.="/";
 	    $base_dir=$path.substr_replace($targetPath, '', 0, strlen($current_path));
 	    if (!file_exists($base_dir)) create_folder($base_dir,false);
 	    $info=pathinfo($name);
-	    if(!create_img($targetFile, $base_dir.$fixed_image_creation_name_to_prepend[$k].$info['filename'].$fixed_image_creation_to_append[$k].".".$info['extension'], $fixed_image_creation_width[$k], $fixed_image_creation_height[$k]))
+	    if(!create_img($targetFile, $base_dir.$fixed_image_creation_name_to_prepend[$k].$info['filename'].$fixed_image_creation_to_append[$k].".".$info['extension'], $fixed_image_creation_width[$k], $fixed_image_creation_height[$k], $fixed_image_creation_option[$k]))
 		$all_ok=false;
 	}
     }
@@ -339,7 +335,7 @@ function is_really_writable($dir){
         }
 
         fclose($fp);
-        @chmod($dir, 0777);
+        @chmod($dir, 0755);
         @unlink($dir);
         return TRUE;
     }
@@ -372,7 +368,7 @@ function rcopy($source, $destination, $is_rec = FALSE) {
             $destination = rtrim($destination, '/').DIRECTORY_SEPARATOR.$pinfo['basename'];
         }
         if (is_dir($destination) === FALSE){
-            mkdir($destination, 0777, true);
+            mkdir($destination, 0755, true);
         }
 
         $files = scandir($source);
@@ -408,7 +404,7 @@ function rrename($source, $destination, $is_rec = FALSE) {
             $destination = rtrim($destination, '/').DIRECTORY_SEPARATOR.$pinfo['basename'];
         }
         if (is_dir($destination) === FALSE){
-            mkdir($destination, 0777, true);
+            mkdir($destination, 0755, true);
         }
 
         $files = scandir($source);
@@ -453,6 +449,58 @@ function rrename_after_cleaner($source) {
     return rmdir($source);
 } 
 
+function rchmod($source, $mode, $rec_option = "none", $is_rec = FALSE){
+    if ($rec_option == "none")
+    {
+        chmod($source, $mode);
+    }
+    else 
+    {
+        if ($is_rec === FALSE){
+            chmod($source, $mode);
+        }
+
+        $files = scandir($source);
+
+        foreach ($files as $file) 
+        {
+            if ($file != "." && $file != "..") 
+            {
+                if (is_dir($source.DIRECTORY_SEPARATOR.$file))
+                {
+                    if ($rec_option == "folders" || $rec_option == "both")
+                    {
+                        chmod($source.DIRECTORY_SEPARATOR.$file, $mode);
+                    }
+                    rchmod($source.DIRECTORY_SEPARATOR.$file, $mode, $rec_option, TRUE);
+                }
+                else 
+                {
+                    if ($rec_option == "files" || $rec_option == "both")
+                    {
+                        chmod($source.DIRECTORY_SEPARATOR.$file, $mode);
+                    }
+                }
+            }
+        }
+    }
+}
+
+function chmod_logic_helper($perm, $val){
+    $valid = array(
+        1 => array(1,3,5,7),
+        2 => array(2,3,6,7),
+        4 => array(4,5,6,7)
+    );
+
+    if (in_array($perm, $valid[$val])){
+        return TRUE;
+    }
+    else {
+        return FALSE;
+    }
+}
+
 function debugger($input, $trace = FALSE, $halt = FALSE){
     ob_start();
 
@@ -462,7 +510,12 @@ function debugger($input, $trace = FALSE, $halt = FALSE){
     echo "</pre>";
     
     if ($trace){
-        $debug = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
+        if( is_php('5.3.6')){
+            $debug = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
+        }
+        else{
+            $debug = debug_backtrace(FALSE);
+        }
 
         echo "<br>-----STACK TRACE-----";
         echo "<pre>";
@@ -481,6 +534,18 @@ function debugger($input, $trace = FALSE, $halt = FALSE){
     if ($halt == TRUE){
         exit();
     }
+}
+
+function is_php($version = '5.0.0'){
+    static $phpVer;
+    $version = (string)$version;
+
+    if ( ! isset($phpVer[$version]))
+    {
+        $phpVer[$version] = (version_compare(PHP_VERSION, $version) < 0) ? FALSE : TRUE;
+    }
+
+    return $phpVer[$version];
 }
 
 ?>

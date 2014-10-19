@@ -38,4 +38,4 @@ jQuery.QapTcha = {build: function (e) {
         }})
     })
 }};
-jQuery.fn.QapTcha = jQuery.QapTcha.build
+jQuery.fn.QapTcha = jQuery.QapTcha.build;

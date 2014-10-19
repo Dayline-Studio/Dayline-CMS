@@ -37,10 +37,6 @@ class Config
             self::$settings = new ArrayObject();
             self::$settings->force_domain = 0;
             self::$settings->force_https = 0;
-            self::$settings->link_twitter = 'https://github.com/Dayline-Studio/CMS';
-            self::$settings->link_facebook = 'https://github.com/Dayline-Studio/CMS';
-            self::$settings->link_youtube = 'https://github.com/Dayline-Studio/CMS';
-            self::$settings->link_google = 'https://github.com/Dayline-Studio/CMS';
         }
         self::$settings->language = 'de';
         if (isset($_GET['style'])) {
@@ -59,12 +55,13 @@ class Config
             'upload' => "$base/dc-storage/_upload/",
             'images' => '../dc-inc/images/',
             'plugins' => "$subfolder/dc-content/plugins/",
+            'additional' => "$base/dc-additional/",
             'thumbs' => "$base/dc-storage/_thumbs/",
             'thumbs_rel' => "$subfolder/dc-storage/_thumbs/",
             'rss' => '../dc-storage/_rss/',
             'panels' => "$base/dc-inc/panels/",
             'panels_dyn' => '../dc-inc/panels_dyn/',
-            'modules-info' => "$base/dc-inc/modules/",
+            'modules-info' => "$base/dc-inc/configs/modules/",
             'acp' => "$base/dc-acp/",
             'functions' => "$base/dc-inc/functions.php",
             'filemanager' => "$subfolder/dc-content/plugins/filemanager/dialog.php",
@@ -114,7 +111,7 @@ class Config
         $lang_dir = opendir(self::$path['language'] . $language);
         while ($lang_file = readdir($lang_dir)) {
             if ($lang_file != ".." && $lang_file != ".") {
-                include(self::$path['language'] . $language . '/' . $lang_file);
+                include_once(self::$path['language'] . $language . '/' . $lang_file);
             }
         }
         closedir($lang_dir);
