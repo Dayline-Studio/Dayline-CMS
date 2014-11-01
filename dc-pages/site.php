@@ -6,7 +6,10 @@ include "../dc-inc/base.php";
 $meta['title'] = "Seite";
 $meta['page_id'] = 3;
 //------------------------------------------------
-$sm = new SiteManager($show);
+$sm = new SiteController($show);
+
+
+
 if ($site = $sm->get_first_site()) {
     if (!stristr(urldecode($_SERVER['REQUEST_URI']), $site->get_url())) {
         header("Location: " . $site->get_url());
@@ -16,7 +19,7 @@ if ($site = $sm->get_first_site()) {
     $p = array();
     $te = new TemplateEngine();
     if (permTo('site_edit') && !$_SESSION['prev_mode']) {
-        $sites = new SiteManager('*');
+        $sites = new SiteController('*');
         foreach ($sites->sites as $s) {
             $selected = $s->id == $site->subfrom ? 'selected' : '';
             $title_sites[] = array('title' => $s->title, 'value' => $s->id, 'select' => $selected);
@@ -31,7 +34,7 @@ if ($site = $sm->get_first_site()) {
     } else {
         $p['admin'] = '';
     }
-    $user = new User($site->userid);
+    $user = new UserModel($site->userid);
     $c['author'] = $site->show_author ? "Written by " . $user->name . " - " . date("F j, Y, g:i a", $site->date) : '';
     $c['title'] = $site->show_headline ? $site->title : '';
     $c['edited'] = $site->lastedit != "" && $site->show_lastedit ?
@@ -44,8 +47,6 @@ if ($site = $sm->get_first_site()) {
     $te->setHtml(show('site/main', $p));
     $disp = $te->render();
 
-    $_SESSION['print_content'] = Disp::replace_paths(Disp::read_modules($te->getHtml()));
-
     $meta['title'] = $site->title;
     $meta['author'] = $user->firstname . ' ' . $user->lastname;
     $meta['keywords'] = $site->keywords;
@@ -55,7 +56,7 @@ if ($site = $sm->get_first_site()) {
         case  'update':
             if (permTo('site_edit')) {
                 echo 1;
-                $sm = new SiteManager($show);
+                $sm = new SiteController($show);
                 $site = $sm->get_first_site();
                 $site->editby = $_SESSION['name'];
                 $site->lastedit = time();
@@ -76,7 +77,7 @@ if ($site = $sm->get_first_site()) {
     goToWithMsg('home', 'Seite nicht gefunden');
 }
 
-
-Disp::$content = $disp;
-Disp::addMeta($meta);
-Disp::render();
+$myDisplay = new Display($meta);
+$myDisplay->setContent($disp);
+$_SESSION['print_content'] = $myDisplay->replace_paths(ModuleController::scanModules($te->getHtml()));
+$myDisplay->render();

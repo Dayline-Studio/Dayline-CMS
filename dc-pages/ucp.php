@@ -14,7 +14,7 @@ if ($do == "") {
     $meta['title'] = "{s_" . $show . "}";
     switch ($show) {
         case  "profile_edit":
-            $user = new User($_SESSION['userid']);
+            $user = new UserModel($_SESSION['userid']);
             $disp = show("ucp/edit_profile", array("firstname" => $user->firstname,
                 "email" => $user->email,
                 "lastname" => $user->lastname,
@@ -22,7 +22,7 @@ if ($do == "") {
                 "street" => $user->street));
             break;
         case 'inbox':
-            $msgbox = new Msgbox($_SESSION['userid']);
+            $msgbox = new MsgBox($_SESSION['userid']);
             $te = new TemplateEngine();
 
             $case['inbox'] = "";
@@ -63,7 +63,7 @@ if ($do == "") {
             $disp = show('ucp/inbox', $case);
             break;
         case 'new_message':
-            backSideFix();
+            Auth::backSideFix();
             $case['options'] = '';
             $case['input'] = show('allround/input_editor');
             $qry = Db::npquery("SELECT name,id FROM users WHERE id != " . $_SESSION['userid']);
@@ -74,7 +74,7 @@ if ($do == "") {
             $disp = show('ucp/msg_new', $case);
             break;
         case 'msg_viewer':
-            $msgbox = new Msgbox($_SESSION['userid']);
+            $msgbox = new MsgBox($_SESSION['userid']);
             if (isset($msgbox->inbox[$_GET['id']])) {
                 $msg = $msgbox->inbox[$_GET['id']];
                 $msg_case['user_info'] = _to . ': ' . $msg->sender_name;
@@ -102,7 +102,7 @@ if ($do == "") {
 }
 switch ($do) {
     case 'update_profile':
-        $user = new User($_SESSION['userid']);
+        $user = new UserModel($_SESSION['userid']);
         $update = true;
         if (custom_verify($_POST['pass'],$user->pass)) {
             if (!empty($_POST['cpasswd'])) {
@@ -151,7 +151,7 @@ switch ($do) {
         break;
     case 'delete_msg':
         if (isset($_GET['id'])) {
-            $msgbox = new Msgbox($_SESSION['userid']);
+            $msgbox = new MsgBox($_SESSION['userid']);
             $msg = $msgbox->get_message_by_id($_GET['id']);
             $msg->delete();
             goToWithMsg('back', _msg_delete_sucessful, 'success');
@@ -162,6 +162,6 @@ switch ($do) {
 }
 
 //Seite Rendern
-Disp::$content = $disp;
-Disp::addMeta($meta);
-Disp::render();
+$myDisplay = new Display($meta);
+$myDisplay->setContent($disp);
+$myDisplay->render();

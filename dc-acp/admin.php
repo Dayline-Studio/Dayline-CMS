@@ -66,7 +66,8 @@ if ($error == "") {
     }
     $vc = new VersionControl();
     $case = array("menu" => $item_stack, "content" => show($disp, array('where' => $acp)), "submenu" => $submenu);
-    Disp::$content = show("acp/menu", array_merge($case, $vc->get_vars()));
-    Disp::addMeta($meta);
-    Disp::render();
+
+    $myDisplay = new Display($meta);
+    $myDisplay->setContent(show("acp/menu", array_merge($case, $vc->get_vars())));
+    $myDisplay->render();
 }

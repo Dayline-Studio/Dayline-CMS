@@ -13,6 +13,6 @@ switch($_REQUEST['r']) {
         $disp = show('allround/sitenotfound');
         break;
 }
-Disp::$content = $disp;
-Disp::addMeta($meta);
-Disp::render();
+$myDisplay = new Display($meta);
+$myDisplay->setContent($disp);
+$myDisplay->render();

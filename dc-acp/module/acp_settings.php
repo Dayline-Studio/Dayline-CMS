@@ -9,7 +9,7 @@ if ($do == "")
     {
         default:
             $te = new TemplateEngine('acp/acp_edit_settings');
-            $form = new Form(Config::$settings);
+            $form = new FormModel(Config::$settings);
             $te->add_vars($form->get_vars_out());
             $disp = $te->render();
             break;
@@ -35,7 +35,7 @@ switch ($do)
 {
     case 'update_settings':
         if (permTo('edit_settings')) {
-            $form = new Form($_POST, array('force_https', 'use_site_id', 'force_domain'));
+            $form = new FormModel($_POST, array('force_https', 'use_site_id', 'force_domain'));
             if(Db::update('settings', 1, $form->get_vars_raw())) {
                 goToWithMsg('back', 'Done','success');
             } else {

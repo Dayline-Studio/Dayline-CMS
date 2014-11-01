@@ -66,7 +66,7 @@ if ($do == "") {
         case 'update_group':
             if (permTo('edit_group')) {
                 $groups = Db::query('SELECT * FROM groups WHERE id = :id LIMIT 1', array('id' => $_GET['id']));
-                $form = new Form($_POST,array_keys(array_slice($groups, 2)));
+                $form = new FormModel($_POST,array_keys(array_slice($groups, 2)));
                 Db::update('groups',$_GET['id'],$form->get_vars_raw());
                 goToWithMsg('back','Done');
             }

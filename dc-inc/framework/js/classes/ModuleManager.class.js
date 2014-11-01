@@ -25,6 +25,7 @@ function ModuleManager() {
             type: "POST",
             data: postRequest,
             success: function (data) {
+                console.log(data);
                 data = JSON.parse(data);
                 $('#' + position).children('a').before(data.full);
                 $.bootstrapGrowl("Modul added");

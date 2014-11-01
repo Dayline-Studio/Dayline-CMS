@@ -1,14 +1,11 @@
 <?php
 
-phpFastCache::$storage = "auto";
-phpFastCache::setup("path", Config::$path['cache']);
-
 function show($file_content = "", $tags = array(null => null))
 {
     if (file_exists(Config::$path['template_abs'] . "/" . $file_content . ".html")) {
         $file_content = file_get_contents(Config::$path['template_abs'] . "/" . $file_content . ".html");
-    } else if (file_exists(Config::$path['template_default'] . $file_content . ".html")) {
-        $file_content = file_get_contents(Config::$path['template_default'] . $file_content . ".html");
+    } else if (file_exists(Config::$path['template_default_abs'] . $file_content . ".html")) {
+        $file_content = file_get_contents(Config::$path['template_default_abs'] . $file_content . ".html");
     } else if (file_exists($file_content)) {
         $file_content = file_get_contents($file_content);
     }
@@ -18,20 +15,6 @@ function show($file_content = "", $tags = array(null => null))
         }
     }
     return $file_content;
-}
-
-function get_template_dir_from($path)
-{
-    if (file_exists(Config::$path['template'] . "/" . $path)) {
-        return Config::$path['template'] . "/" . $path;
-    } else if (file_exists(Config::$path['template_default'] . $path)) {
-        return Config::$path['template_default'] . $path;
-    } else if (file_exists($path)) {
-        return $path;
-    } else {
-        Debug::log('Template file not found -> ' . $path);
-        return "";
-    }
 }
 
 function get_replace_array()
@@ -92,7 +75,7 @@ function msg($msg, $kind = 'stock')
     }
     $msg = show($file, array("msg" => $msg,
         "link" => $_SESSION['last_site']));
-    backSideFix();
+    Auth::backSideFix();
     return $msg;
 }
 
@@ -105,21 +88,6 @@ function permTo($permission)
         }
     }
     return 0;
-}
-
-function con($txt)
-{
-    $txt = stripslashes($txt);
-    $txt = str_replace("& ", "&amp; ", $txt);
-    $txt = str_replace("[", "&#91;", $txt);
-    $txt = str_replace("]", "&#93;", $txt);
-    $txt = str_replace("\"", "&#34;", $txt);
-    $txt = str_replace("<", "&#60;", $txt);
-    $txt = str_replace(">", "&#62;", $txt);
-    $txt = str_replace("(", "&#40;", $txt);
-    $txt = str_replace("'", "&lsquo;", $txt);
-    $txt = str_replace("(", "&#40;", $txt);
-    return str_replace(")", "&#41;", $txt);
 }
 
 function check_email_address($str_email_address)
@@ -179,47 +147,13 @@ function updateRSS()
     return false;
 }
 
-function convertMatch($matches)
-{
-    $new = array();
-    foreach ($matches as $value) {
-        if (defined("_" . $value)) {
-            $new["s_" . $value] = constant("_" . $value);
-        } else {
-            $new["s_" . $value] = "STRING_NOT_FOUND_" . strtoupper($value);
-        }
-    }
-    return $new;
-}
 
-function searchBetween($start_tag, $String, $end_tag)
-{
-    if (preg_match_all('/' . preg_quote($start_tag) . '(.*?)' . preg_quote($end_tag) . '/s', $String, $matches)) {
-        return $matches[1];
-    }
-    return array();
-}
+
 
 function get_module_name($id)
 {
     $mod = Db::npquery("SELECT module FROM modules WHERE id = $id", PDO::FETCH_OBJ);
     return $mod[0]->module;
-}
-
-function backSideFix()
-{
-    if (isset($_SESSION['last_site'])) {
-        $_SESSION['current_site'] = $_SESSION['last_site'];
-    }
-}
-
-function tagConverter($tags)
-{
-    $tags = str_replace("/", ",", $tags);
-    $tags = str_replace(" , ", ",", $tags);
-    $tags = str_replace(" ,", ",", $tags);
-    $tags = str_replace(", ", ",", $tags);
-    return explode(",", $tags);
 }
 
 function sendmail($content, $subject, $receiver)
@@ -247,22 +181,6 @@ function sendmail($content, $subject, $receiver)
         return true;
     }
     return false;
-}
-
-function convertDateOutput($datein)
-{
-    $date = ((time() - $datein) / 60);
-    if ($date * 60 < 60) {
-        return (int)($date * 60) . " sec ago";
-    } else if ($date < 60) {
-        return (int)$date . " min ago";
-    } else if ($date > 59 && $date / 60 < 24) {
-        return "vor " . (int)($date / 60) . "h at " . date("h:i A", $datein);
-    } else if ($date / 60 > 23 && $date / 60 / 24 < 4) {
-        return (int)($date / 60 / 24) . " day(s) ago at " . date("h:i A", $datein);
-    } else {
-        return date("F j, g:i a", $datein);
-    }
 }
 
 function goBack()
@@ -310,23 +228,10 @@ function get_public_properties($object)
     return $result;
 }
 
-function get_options($arr)
-{
-    $ret = "";
-    foreach ($arr as $array) {
-        $ret .= '<option value="' . $array['value'] . '">' . $array['title'] . '</option>';
-    }
-    return $ret;
-}
-
-function get_editor($content = '')
-{
-    return show('allround/input_editor', array('content' => $content));
-}
 
 function sendMessage($sender, $receiver, $content, $title, $email = "")
 {
-    $rec_user = new User($receiver);
+    $rec_user = new UserModel($receiver);
     sendmail($content, $title, $rec_user->email);
     $in = array(
         'sender_id' => $sender,
@@ -337,14 +242,4 @@ function sendMessage($sender, $receiver, $content, $title, $email = "")
         'title' => $title
     );
     return Db::insert('messages', $in);
-}
-
-function unset_array_keys($arr, $keys)
-{
-    foreach ($keys as $key) {
-        if (isset($arr[$key])) {
-            unset($arr[$key]);
-        }
-    }
-    return array_values($arr);
 }

@@ -126,8 +126,8 @@ function init_tinymce() {
         style_formats: [
             {
                 title: 'ImageBox',
-                selector: 'a',
-                classes: 'imagebox'
+                selector: 'img',
+                classes: 'dcImage'
             }
         ]
     });

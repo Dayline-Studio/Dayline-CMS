@@ -3,7 +3,7 @@
 include "../dc-inc/base.php";
 //------------------------------------------------
 
-backSideFix();
+Auth::backSideFix();
 
 $ret = NULL;
 

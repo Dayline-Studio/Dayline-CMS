@@ -13,10 +13,10 @@ class dcAutoLoader {
     private $path = [];
 
     public function __construct() {
-        $this->path[] = $GLOBALS['base_dir'] . '/dc-inc/core/';
-        $this->path[] = $GLOBALS['base_dir'] . '/dc-additional/core/';
+        $this->path[] = $GLOBALS['base_dir'] . '/dc-inc/classes/';
+        $this->path[] = $GLOBALS['base_dir'] . '/dc-storage/include/classes/';
         $this->path[] = $GLOBALS['base_dir'] . '/dc-inc/lib/';
-        $this->path[] = $GLOBALS['base_dir'] . '/dc-additional/lib/';
+        $this->path[] = $GLOBALS['base_dir'] . '/dc-storage/include/lib/';
 
         $this->setRegister($this->path[0]);
         $this-> setRegister($this->path[1]);
@@ -25,23 +25,21 @@ class dcAutoLoader {
     }
 
     private function loadRegister() {
-        spl_autoload_register(function ($class)
+        spl_autoload_register(function ($className)
         {
-            $classname = strtolower($class);
-            $filename = $classname . '.class.php';
+            $filename = $className . '.class.php';
 
             foreach ($this->path as $dir) {
                 if (is_readable($dir . $filename)) {
                     include_once $dir . $filename;
                     return true;
-                } else if (is_readable($dir . $classname . '/' . $classname . '.php')) {
-                    include_once $dir . $classname . '/' . $classname . '.php';
+                } else if (is_readable($dir . strtolower($className) . '/' . $className . '.php')) {
+                    include_once $dir . strtolower($className) . '/' . $className . '.php';
                     return true;
                 }
             }
             return false;
         });
-
     }
 
     private function setRegister($reg_path) {
@@ -70,6 +68,9 @@ Config::loadSettings();
 Config::loadLanguage();
 
 include_once(Config::$path['functions']);
+
+phpFastCache::$storage = "auto";
+phpFastCache::setup("path", Config::$path['cache']);
 
 Auth::checkStatus();
 

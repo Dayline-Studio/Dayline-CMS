@@ -24,7 +24,7 @@ $base_url =
 	((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] && !in_array(strtolower($_SERVER['HTTPS']),array('off','no'))) ? 'https' : 'http').
 	'://'.
 	// Get domain portion
-	$_SERVER['HTTP_HOST']; // DON'T TOUCH (base url (only domain) of site (without final /)).
+$_SERVER['HTTP_HOST']; // DON'T TOUCH (base url (only domain) of site (without final /)).
 $upload_dir = '/dc-storage/_upload/'; // pat from base_url to base of upload folder (with start and final /)
 $current_path = '../../../dc-storage/_upload/'; // relative path from filemanager folder to upload folder (with final /)
 //thumbs folder can't put inside upload folder

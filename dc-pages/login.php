@@ -88,9 +88,9 @@ switch ($do) {
         header('Location: /');
         break;
     case 'reset_password':
-        $user = new User($_POST['email']);
+        $user = new UserModel($_POST['email']);
         if (isset($user->id)) {
-            $user = new User($user->id);
+            $user = new UserModel($user->id);
             $activation_code = rand(10000000000000, 99999999999999);
             __c("files")->set('activation_' . $user->id, $activation_code, 600);
             sendMessage(0, $user->id, show(_mail_password_reset_code, array('id' => $user->id, 'code' => $activation_code, 'user' => $user->name, 'domain' => Auth::get_clear_url())), 'Passwort reset');
@@ -102,7 +102,7 @@ switch ($do) {
         $activation_code = __c("files")->get('activation_' . $_GET['id']);
         if ($activation_code != NULL) {
             $new_password = randomstring(8);
-            $user = new User($_GET['id']);
+            $user = new UserModel($_GET['id']);
             $user->set_new_password($new_password);
             $user->update_changes();
             sendMessage(0, $user->id, show(_mail_new_password, array('password' => $new_password, 'domain' => Auth::get_clear_url())), 'New Password');
@@ -113,6 +113,6 @@ switch ($do) {
 }
 
 
-Disp::$content = $disp;
-Disp::addMeta($meta);
-Disp::render();
+$myDisplay = new Display($meta);
+$myDisplay->setContent($disp);
+$myDisplay->render();

@@ -34,3 +34,27 @@ $sql_up[314][] = "ALTER TABLE `users` DROP `user`";
 
 $sql_up[315][] = "ALTER TABLE `settings` CHANGE `domain` `domain` VARCHAR( 128 ) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL ";
 $sql_up[315][] = "ALTER TABLE `settings` CHANGE `website_title` `website_title` VARCHAR( 256 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ";
+
+$sql_up[330][] = "ALTER TABLE `groups` DROP `comment`;";
+$sql_up[330][] = "ALTER TABLE `groups` DROP `create_news`;";
+$sql_up[330][] = "ALTER TABLE `groups` DROP `update_socialnetwork`;";
+$sql_up[330][] = "ALTER TABLE `groups` DROP `mail_abo`;";
+$sql_up[330][] = "ALTER TABLE `groups` DROP `delete_news`;";
+$sql_up[330][] = "ALTER TABLE `groups` DROP `reset_counter`;";
+$sql_up[330][] = "ALTER TABLE `groups` CHANGE `create_site` `create_site` TINYINT( 1 ) NOT NULL DEFAULT '0';
+ALTER TABLE `groups` CHANGE `menu_acp` `menu_acp` TINYINT( 1 ) NOT NULL DEFAULT '0';
+ALTER TABLE `groups` CHANGE `delete_site` `delete_site` TINYINT( 1 ) NOT NULL DEFAULT '0';
+ALTER TABLE `groups` CHANGE `msg_send` `msg_send` TINYINT( 1 ) NOT NULL DEFAULT '0';
+ALTER TABLE `groups` CHANGE `delete_group` `delete_group` TINYINT( 1 ) NOT NULL DEFAULT '0';
+ALTER TABLE `groups` CHANGE `create_menu` `create_menu` TINYINT( 1 ) NOT NULL DEFAULT '0';
+ALTER TABLE `groups` CHANGE `delete_menu` `delete_menu` TINYINT( 1 ) NOT NULL DEFAULT '0';
+ALTER TABLE `groups` CHANGE `update_menu` `update_menu` TINYINT( 1 ) NOT NULL DEFAULT '0';
+ALTER TABLE `groups` CHANGE `fm_access` `fm_access` TINYINT( 1 ) NOT NULL DEFAULT '0';
+ALTER TABLE `groups` CHANGE `edit_settings` `edit_settings` TINYINT( 1 ) NOT NULL DEFAULT '0';
+ALTER TABLE `groups` CHANGE `edit_group` `edit_group` TINYINT( 1 ) NOT NULL DEFAULT '0';
+ALTER TABLE `users` CHANGE `main_group` `main_group` SMALLINT( 5 ) NOT NULL DEFAULT '0';
+ALTER TABLE `sites` CHANGE `show_lastedit` `show_lastedit` TINYINT( 1 ) NOT NULL DEFAULT '0';
+ALTER TABLE `sites` CHANGE `show_author` `show_author` TINYINT( 1 ) NOT NULL DEFAULT '0';
+ALTER TABLE `sites` CHANGE `show_print` `show_print` TINYINT( 1 ) NOT NULL DEFAULT '0';
+ALTER TABLE `sites` CHANGE `show_headline` `show_headline` TINYINT( 1 ) NOT NULL DEFAULT '0';
+ALTER TABLE `sites` CHANGE `public` `public` TINYINT( 1 ) NOT NULL DEFAULT '0';";

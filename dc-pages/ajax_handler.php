@@ -3,7 +3,11 @@
 include "../dc-inc/base.php";
 //------------------------------------------------
 
-backSideFix();
+if (isset($_REQUEST['refresh'])) {
+    die();
+}
+
+Auth::backSideFix();
 
 foreach ($_REQUEST as $key => $value) {
     switch ($key) {

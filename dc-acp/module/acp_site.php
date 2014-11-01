@@ -7,7 +7,7 @@ $meta['title'] = _acp_site;
 if ($do == "") {
     switch ($action) {
         case 'site_add':
-            $sm = new SiteManager('*');
+            $sm = new SiteController('*');
             $te = new TemplateEngine();
             $options = [];
             if (isset($sm->sites)) {
@@ -20,7 +20,7 @@ if ($do == "") {
             $disp = $te->render();
             break;
         default:
-            $sm = new SiteManager('*');
+            $sm = new SiteController('*');
             $te = new TemplateEngine();
             $sites = [];
             if (isset($sm->sites)) {
@@ -35,7 +35,7 @@ if ($do == "") {
 } else {
     switch ($do) {
         case 'create_site':
-            $sm = new SiteManager(0);
+            $sm = new SiteController(0);
             if (permTo('create_site')) {
                 $sm->create_site($_POST);
                 header('Location: ?acp=acp_site&action=site_list');
@@ -45,7 +45,7 @@ if ($do == "") {
             break;
         case 'swap_visibility':
             if (permTo('site_edit')) {
-                $sm = new SiteManager($_GET['id']);
+                $sm = new SiteController($_GET['id']);
                 $site = $sm->get_first_site();
                 $site->swap_visibility();
                 goToWithMsg('back',_change_sucessful, 'success');
@@ -53,7 +53,7 @@ if ($do == "") {
             break;
         case 'delete':
             if (permTo("delete_site")) {
-                $sm = new SiteManager($_GET['id']);
+                $sm = new SiteController($_GET['id']);
                 $site = $sm->get_first_site();
                 if ($site->delete()) {
                     goBack();

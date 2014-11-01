@@ -3,6 +3,11 @@ var myModuleManager;
 var lowRecources = false;
 
 $(document).ready(function () {
+
+    setInterval(function() {
+        $.ajax('/ajax_handler.php?refresh=true');
+    }, 200000);
+
     $.getJSON('/getJson.php?r=pageInformations', function(response) {
         var config = response;
 
@@ -15,14 +20,6 @@ $(document).ready(function () {
         cookie_mail();
         init_tooltip();
         myModuleManager = ModuleManager();
-
-        if ($('#socialshareprivacy').length > 0) {
-            $(this).socialSharePrivacy({
-                "css_path": config.path.fw_js+"socialshareprivacy.css",
-                "lang_path": config.path.fw_js+"lang/",
-                "language": "de"
-            });
-        }
 
         ga('create', config.settings.google_analytics, config.settings.domain);
         ga('send', 'pageview');

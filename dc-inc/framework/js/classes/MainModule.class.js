@@ -175,6 +175,7 @@ function MainModule(id){
             type: 'POST',
             data: send,
             success: function (data) {
+                console.log(data);
                 try {
                     var result = JSON.parse(data);
                     func(result);

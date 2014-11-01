@@ -81,14 +81,14 @@ if (!file_exists($current_path.$rfm_subfolder.$subdir))
 
 if (trim($rfm_subfolder) == "")
 {
-    $cur_dir 	 = $upload_dir . $subdir;
+    $cur_dir 	 = '/'.$upload_dir . $subdir;
     $cur_path 	 = $current_path . $subdir;
     $thumbs_path = $thumbs_base_path;
     $parent 	 = $subdir;
 } 
 else
 {
-    $cur_dir 	 = $upload_dir . $rfm_subfolder.$subdir;
+    $cur_dir 	 = '/'.$upload_dir . $rfm_subfolder.$subdir;
     $cur_path 	 = $current_path . $rfm_subfolder.$subdir;
     $thumbs_path = $thumbs_base_path. $rfm_subfolder;
     $parent 	 = $rfm_subfolder.$subdir;

@@ -1,3 +1,9 @@
 {
-    "list": ["jquery", "bootstrap"]
+    "list": [
+        "jquery",
+        "bootstrap",
+        "jquery.md5",
+        "jquery.colorbox",
+        "bootstrap.growl"
+    ]
 }
