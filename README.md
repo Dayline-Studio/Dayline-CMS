@@ -1,6 +1,5 @@
 ##Dayline-CMS (DC)
 
-* Author: Sascha Wäschle
 * Projekt start: Dezember 2013
 
 #Beschreibung:
